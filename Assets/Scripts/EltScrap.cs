@@ -1,0 +1,33 @@
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
+
+public class EltScrap : MonoBehaviour
+{
+    public Image imgScrap;
+    public UnityAction<int> funcClick;
+    public GameObject objSelect;
+
+    int type = -1;
+    int grade = -1;
+    int idx = -1;
+    public void Set(int typeIdx, int idx)
+    {
+        this.idx = idx;
+
+        type = typeIdx;
+        if (typeIdx == 0)
+            imgScrap.sprite = null;
+        imgScrap.color = type == 1 ? Color.red : Color.yellow;
+    }
+
+    public virtual void OnClick()
+    {
+        funcClick?.Invoke(idx);
+    }
+
+    public int GetScrapType()
+    {
+        return type;
+    }
+}
