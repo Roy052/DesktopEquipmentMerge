@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TaskbarInfo : MonoBehaviour
 {
+    public static int taskBarHeight = 0;
+#if !UNITY_EDITOR
     // SHAppBarMessage 관련 상수와 구조체
     private const int ABM_GETTASKBARPOS = 0x00000005;
 
@@ -27,7 +29,6 @@ public class TaskbarInfo : MonoBehaviour
     [DllImport("shell32.dll", CallingConvention = CallingConvention.StdCall)]
     static extern uint SHAppBarMessage(uint dwMessage, ref APPBARDATA pData);
 
-    public static int taskBarHeight = 0;
 
     void Awake()
     {
@@ -51,6 +52,7 @@ public class TaskbarInfo : MonoBehaviour
             Debug.LogWarning("작업 표시줄 정보를 가져올 수 없습니다.");
         }
     }
+#endif
 }
 
 

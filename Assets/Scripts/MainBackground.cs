@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class CanvasChange : MonoBehaviour
+public class MainBackground : MonoBehaviour
 {
     const float FallTime = 3f;
     const float RandomGap = 0.5f;
@@ -19,9 +19,7 @@ public class CanvasChange : MonoBehaviour
 
     public void Start()
     {
-#if !UNITY_EDITOR
         rt.offsetMin = new Vector2( rt.offsetMin.x, TaskbarInfo.taskBarHeight);
-#endif
         int[,] scraps = new int[3, 3];
         for (int i = 0; i < scraps.GetLength(0); i++)
             for (int j = 0; j < scraps.GetLength(1); j++)

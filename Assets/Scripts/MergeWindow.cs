@@ -56,7 +56,7 @@ public class MergeWindow : MonoBehaviour
 
     public void OnClickChest()
     {
-        CanvasChange cc = FindAnyObjectByType<CanvasChange>();
+        MainBackground cc = FindAnyObjectByType<MainBackground>();
         if (cc.storedScrapList.Count == 0)
         {
             Debug.Log("Not Exist Stored Scrap");
