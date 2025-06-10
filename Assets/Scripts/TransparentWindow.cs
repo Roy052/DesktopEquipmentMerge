@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 
 public class TransparentWindow : MonoBehaviour
 {
+#if !UNITY_EDITOR
     [DllImport("user32.dll")]
     public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
 
@@ -43,7 +44,6 @@ public class TransparentWindow : MonoBehaviour
     private IntPtr hWnd;
     private void Start()
     {
-#if !UNITY_EDITOR_
         try
         {
             //MessageBox(new IntPtr(0), "Hello World", "Hello Dialog", default);
@@ -58,7 +58,6 @@ public class TransparentWindow : MonoBehaviour
         {
             Debug.Log(ex);
         }
-#endif
     }
 
     private void Update()
@@ -105,4 +104,5 @@ public class TransparentWindow : MonoBehaviour
         EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
         return results.Count > 0;
     }
+#endif
 }
