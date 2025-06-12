@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 [Serializable]
-public class DataBattle : IRegistrable
+public class DataExpedition : IRegistrable
 {
-    public static Dictionary<short, DataBattle> dictDataBattles;
+    public static Dictionary<short, DataExpedition> dictDataBattles;
 
     public short id;
     public string tagName;
@@ -15,5 +16,10 @@ public class DataBattle : IRegistrable
     public void Register()
     {
         dictDataBattles.Add(id, this);
+    }
+
+    public static List<DataExpedition> GetAll()
+    {
+        return dictDataBattles.Values.ToList();
     }
 }

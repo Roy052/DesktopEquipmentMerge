@@ -4,18 +4,9 @@ using UnityEngine.UI;
 
 public class MainBackground : MonoBehaviour
 {
-    const float FallTime = 3f;
-    const float RandomGap = 0.5f;
-
     public RectTransform rt;
-
     public GameObject objHouse;
-
     public MergeWindow mergeWindow;
-
-    public EltFallingScrap fallingScrapPrefab;
-
-    public List<int> storedScrapList = new List<int>();
 
     public void Start()
     {
@@ -25,26 +16,6 @@ public class MainBackground : MonoBehaviour
             for (int j = 0; j < scraps.GetLength(1); j++)
                 scraps[i, j] = Random.Range(0, 2);
         mergeWindow.Set(scraps);
-        currentTime = FallTime + Random.Range(-RandomGap, RandomGap);
-    }
-
-    float time = 0f;
-    float currentTime = 0f;
-    public void Update()
-    {
-        if (time >= currentTime)
-        {
-            time = 0f;
-            currentTime = FallTime + Random.Range(-RandomGap, RandomGap);
-            EltFallingScrap tempElt = Instantiate(fallingScrapPrefab, fallingScrapPrefab.transform.parent).GetComponent<EltFallingScrap>();
-            tempElt.Set(1, 1);
-            tempElt.OnFalling();
-            tempElt.funcClick = (value) =>
-            {
-                storedScrapList.Add(value);
-            };
-        }
-        time += Time.deltaTime;
     }
 
     public void OnClickOpenMergeWindow()

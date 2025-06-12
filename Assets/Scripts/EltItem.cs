@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class EltScrap : MonoBehaviour
+public class EltItem : MonoBehaviour
 {
     public Image imgScrap;
     public UnityAction<int> funcClick;
@@ -18,6 +18,8 @@ public class EltScrap : MonoBehaviour
         type = typeIdx;
         if (typeIdx == 0)
             imgScrap.sprite = null;
+        else
+            imgScrap.sprite = Singleton.resourceManager.dicEquipmentSprites[typeIdx];
         imgScrap.color = type == 1 ? Color.red : Color.yellow;
     }
 

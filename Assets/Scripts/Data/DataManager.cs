@@ -47,7 +47,7 @@ public class DataManager : Singleton
         LoadFromJson<DataBuilding>(SheetName.Building);
         LoadFromJson<DataTrader>(SheetName.Trader);
         LoadFromJson<DataTextTag>(SheetName.TextTag);
-        LoadFromJson<DataBattle>(SheetName.Battle);
+        LoadFromJson<DataExpedition>(SheetName.Battle);
         LoadFromJson<DataRewardProb>(SheetName.RewardProb);
     }
 
