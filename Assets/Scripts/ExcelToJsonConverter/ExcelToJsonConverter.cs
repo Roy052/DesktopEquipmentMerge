@@ -110,7 +110,7 @@ public class ExcelToJsonConverter
             {
                 // The file name is the sheet name with spaces removed
                 string fileName = excelData.Tables[i].TableName.Replace(" ", string.Empty);
-                WriteTextToFile(spreadSheetJson, outputPath + "/" + fileName + ".hpm");
+                WriteTextToFile(spreadSheetJson, outputPath + "/" + fileName + ".dem");
                 Debug.Log("Excel To Json Converter: " + excelData.Tables[i].TableName + " successfully written to file.");
             }
         }

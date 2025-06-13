@@ -2,14 +2,23 @@ using System;
 using System.Collections.Generic;
 
 [Serializable]
-public class DataMission : IRegistrable
+public class DataQuest : IRegistrable
 {
-    public static Dictionary<short, DataMission> dictDataMissions;
+    public static Dictionary<short, DataQuest> dictDataQuests = new Dictionary<short, DataQuest>();
 
     public short id;
-    public short beforeMissionId;
+    public int traderId;
     public string tagName;
     public string tagDesc;
+    public ConditionType conditionType1;
+    public int condition1Value1;
+    public int condition1Value2;
+    public ConditionType conditionType2;
+    public int condition2Value1;
+    public int condition2Value2;
+    public ConditionType conditionType3;
+    public int condition3Value1;
+    public int condition3Value2;
     public int requireItemId1;
     public int requireItemCount1;
     public int requireItemId2;
@@ -25,6 +34,6 @@ public class DataMission : IRegistrable
 
     public void Register()
     {
-        dictDataMissions.Add(id, this);
+        dictDataQuests.Add(id, this);
     }
 }

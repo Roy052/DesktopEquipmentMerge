@@ -12,28 +12,29 @@ public enum BuildingType
 [Serializable]
 public class DataBuilding : IRegistrable
 {
-    public static Dictionary<BuildingType, DataBuilding> dictDataBuildings;
+    public static Dictionary<int, DataBuilding> dictDataBuildings = new Dictionary<int, DataBuilding>();
 
+    public int id;
     public BuildingType type;
+    public int lv;
     public string tagName;
-    public BuildingConditionType conditionType1;
+    public ConditionType conditionType1;
     public int condition1Value1;
     public int condition1Value2;
-    public BuildingConditionType conditionType2;
+    public ConditionType conditionType2;
     public int condition2Value1;
     public int condition2Value2;
-    public BuildingConditionType conditionType3;
+    public ConditionType conditionType3;
     public int condition3Value1;
     public int condition3Value2;
-    public int goldCount;
 
     public void Register()
     {
-        dictDataBuildings.Add(type, this);
+        dictDataBuildings.Add(id, this);
     }
 }
 
-public enum BuildingConditionType
+public enum ConditionType
 {
     ItemCount,
     TraderLv,
@@ -42,7 +43,7 @@ public enum BuildingConditionType
 
 public class BuildingCondition
 {
-    public BuildingConditionType conditionType1;
+    public ConditionType conditionType1;
     public int value1;
     public int value2;
 }
@@ -51,13 +52,13 @@ public class TempDataBuilding
 {
     public BuildingType type;
     public string tagName;
-    public BuildingConditionType conditionType1;
+    public ConditionType conditionType1;
     public int condition1Value1;
     public int condition1Value2;
-    public BuildingConditionType conditionType2;
+    public ConditionType conditionType2;
     public int condition2Value1;
     public int condition2Value2;
-    public BuildingConditionType conditionType3;
+    public ConditionType conditionType3;
     public int condition3Value1;
     public int condition3Value2;
     public int goldCount;

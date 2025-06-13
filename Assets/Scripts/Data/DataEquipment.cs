@@ -4,7 +4,7 @@ using System.Collections.Generic;
 [Serializable]
 public class DataEquipment : IRegistrable
 {
-    public static Dictionary<short, DataEquipment> dictDataEquipments;
+    public static Dictionary<short, DataEquipment> dictDataEquipments = new Dictionary<short, DataEquipment>();
 
     public short id;
     public string tagName;

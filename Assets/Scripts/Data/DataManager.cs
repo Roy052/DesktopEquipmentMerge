@@ -14,7 +14,8 @@ public class DataManager : Singleton
         Building,
         Trader,
         TextTag,
-        Battle,
+        Quest,
+        Expedition,
         RewardProb,
     }
 
@@ -47,7 +48,8 @@ public class DataManager : Singleton
         LoadFromJson<DataBuilding>(SheetName.Building);
         LoadFromJson<DataTrader>(SheetName.Trader);
         LoadFromJson<DataTextTag>(SheetName.TextTag);
-        LoadFromJson<DataExpedition>(SheetName.Battle);
+        LoadFromJson<DataQuest>(SheetName.Quest);
+        LoadFromJson<DataExpedition>(SheetName.Expedition);
         LoadFromJson<DataRewardProb>(SheetName.RewardProb);
     }
 
@@ -64,6 +66,32 @@ public class DataManager : Singleton
 
             foreach (var item in dataList.data)
                 item.Register();
+        }
+        catch (Exception e) when (
+            e is FileNotFoundException ||
+            e is DirectoryNotFoundException ||
+            e is IOException)
+        {
+            Debug.Log($"[JSON Load Error] {e.Message}");
+        }
+    }
+
+    void LoadFromJson<T, U>(SheetName sheet) where T : IRegistrable
+    {
+        string filePath = $"{pathHead}{sheet}{pathTail}";
+
+        try
+        {
+            if (!File.Exists(filePath)) return;
+
+            string jsonText = File.ReadAllText(filePath);
+            var dataList = JsonUtility.FromJson<DataList<U>>($"{{\"data\":{jsonText}}}");
+
+            foreach (var item in dataList.data)
+            {
+                T convertedItem = item.ConvertTo<T>();
+                convertedItem.Register();
+            }
         }
         catch (Exception e) when (
             e is FileNotFoundException ||
