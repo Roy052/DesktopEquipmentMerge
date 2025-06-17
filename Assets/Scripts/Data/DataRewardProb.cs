@@ -7,6 +7,18 @@ public class DataRewardProb : IRegistrable
     public static Dictionary<short, DataRewardProb> dictDataRewardProbs = new Dictionary<short, DataRewardProb>();
 
     public short id;
+    public List<int> probs;
+
+    public void Register()
+    {
+        dictDataRewardProbs.Add(id, this);
+    }
+}
+
+[Serializable]
+public class TempDataRewardProb : IConvertable<DataRewardProb>
+{
+    public short id;
     public int prob1;
     public int prob2;
     public int prob3;
@@ -20,8 +32,28 @@ public class DataRewardProb : IRegistrable
     public int prob11;
     public int prob12;
 
-    public void Register()
+    public DataRewardProb ConvertTo()
     {
-        dictDataRewardProbs.Add(id, this);
+        DataRewardProb temp = new DataRewardProb()
+        {
+            id = id,
+            probs = new List<int>()
+            {
+                prob1,
+                prob2,
+                prob3,
+                prob4,
+                prob5,
+                prob6,
+                prob7,
+                prob8,
+                prob9,
+                prob10,
+                prob11,
+                prob12,
+            }
+        };
+
+        return temp;
     }
 }

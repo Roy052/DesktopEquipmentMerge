@@ -7,7 +7,24 @@ public class DataQuest : IRegistrable
     public static Dictionary<short, DataQuest> dictDataQuests = new Dictionary<short, DataQuest>();
 
     public short id;
-    public int traderId;
+    public TraderType traderType;
+    public string tagName;
+    public string tagDesc;
+    public List<ConditionTypeValue> conditions;
+    public List<ItemIdCount> requireItems;
+    public List<ItemIdCount> rewardItems;
+
+    public void Register()
+    {
+        dictDataQuests.Add(id, this);
+    }
+}
+
+[Serializable]
+public class TempDataQuest : IConvertable<DataQuest>
+{
+    public short id;
+    public TraderType traderType;
     public string tagName;
     public string tagDesc;
     public ConditionType conditionType1;
@@ -32,8 +49,76 @@ public class DataQuest : IRegistrable
     public int rewardItemId3;
     public int rewardItemCount3;
 
-    public void Register()
+    public DataQuest ConvertTo()
     {
-        dictDataQuests.Add(id, this);
+        DataQuest temp = new DataQuest()
+        {
+            id = id,
+            traderType = traderType,
+            tagName = tagName,
+            tagDesc = tagDesc,
+        };
+
+        temp.conditions = new List<ConditionTypeValue>
+            {
+                new ConditionTypeValue()
+                {
+                    type = conditionType1,
+                    value1 = condition1Value1,
+                    value2 = condition1Value2,
+                },
+                new ConditionTypeValue()
+                {
+                    type = conditionType2,
+                    value1 = condition2Value1,
+                    value2 = condition2Value2,
+                },
+                new ConditionTypeValue()
+                {
+                    type = conditionType3,
+                    value1 = condition3Value1,
+                    value2 = condition3Value2,
+                }
+            };
+
+        temp.requireItems = new List<ItemIdCount>()
+            {
+                new ItemIdCount()
+                {
+                    itemId = requireItemId1,
+                    itemCount = requireItemCount1,
+                },
+                new ItemIdCount()
+                {
+                    itemId = requireItemId2,
+                    itemCount = requireItemCount2,
+                },
+                new ItemIdCount()
+                {
+                    itemId = requireItemId3,
+                    itemCount = requireItemCount3,
+                }
+            };
+
+        temp.rewardItems = new List<ItemIdCount>()
+            {
+                new ItemIdCount()
+                {
+                    itemId = rewardItemId1,
+                    itemCount = rewardItemCount1,
+                },
+                new ItemIdCount()
+                {
+                    itemId = rewardItemId2,
+                    itemCount = rewardItemCount2,
+                },
+                new ItemIdCount()
+                {
+                    itemId = rewardItemId3,
+                    itemCount = rewardItemCount3,
+                }
+            };
+
+        return temp;
     }
 }

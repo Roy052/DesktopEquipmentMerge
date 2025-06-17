@@ -10,13 +10,15 @@ public class DataManager : Singleton
 {
     enum SheetName
     {
-        Equipment,
+        Item,
+        MergeItem,
         Building,
         Trader,
         TextTag,
         Quest,
         Expedition,
         RewardProb,
+        Hero,
     }
 
     const string pathHead = "./Assets/Data/";
@@ -44,13 +46,15 @@ public class DataManager : Singleton
 
     public void SetDatas()
     {
-        LoadFromJson<DataEquipment>(SheetName.Equipment);
-        LoadFromJson<DataBuilding>(SheetName.Building);
-        LoadFromJson<DataTrader>(SheetName.Trader);
+        LoadFromJson<DataItem>(SheetName.Item);
+        LoadFromJson<DataMergeItem>(SheetName.MergeItem);
+        LoadFromJson<DataBuilding, TempDataBuilding>(SheetName.Building);
+        LoadFromJson<DataTrader, TempDataTrader>(SheetName.Trader);
         LoadFromJson<DataTextTag>(SheetName.TextTag);
-        LoadFromJson<DataQuest>(SheetName.Quest);
-        LoadFromJson<DataExpedition>(SheetName.Expedition);
-        LoadFromJson<DataRewardProb>(SheetName.RewardProb);
+        LoadFromJson<DataQuest, TempDataQuest>(SheetName.Quest);
+        LoadFromJson<DataExpedition, TempDataExpedition>(SheetName.Expedition);
+        LoadFromJson<DataRewardProb, TempDataRewardProb>(SheetName.RewardProb);
+        LoadFromJson<DataHero>(SheetName.Hero);
     }
 
     void LoadFromJson<T>(SheetName sheet) where T : IRegistrable
@@ -76,7 +80,7 @@ public class DataManager : Singleton
         }
     }
 
-    void LoadFromJson<T, U>(SheetName sheet) where T : IRegistrable
+    void LoadFromJson<T, U>(SheetName sheet) where T : IRegistrable where U : IConvertable<T>
     {
         string filePath = $"{pathHead}{sheet}{pathTail}";
 
@@ -89,7 +93,7 @@ public class DataManager : Singleton
 
             foreach (var item in dataList.data)
             {
-                T convertedItem = item.ConvertTo<T>();
+                T convertedItem = item.ConvertTo();
                 convertedItem.Register();
             }
         }

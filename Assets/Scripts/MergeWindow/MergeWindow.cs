@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class MergeWindow : MonoBehaviour
+public class MergeWindow : GameWindow
 {
     public GameObject objPrefab;
     public GameObject[,] panel;

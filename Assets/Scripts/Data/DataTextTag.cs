@@ -14,4 +14,10 @@ public class DataTextTag : IRegistrable
     {
         dictDataTexts.Add(textTag, this);
     }
+
+    public static string FindText(string tag)
+    {
+        dictDataTexts.TryGetValue(tag, out var value);
+        return value.tagKor;
+    }
 }

@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExpeditionWindow : MonoBehaviour
+public class HeroExpeditionWindow : GameWindow
 {
     public GameObject objPrefab;
     List<EltExpedition> eltExpeditions = new List<EltExpedition>();
 
-    public void Show()
+    public override void Show()
     {
-        gameObject.SetActive(true);
+        base.Show();
         var dataList = DataExpedition.GetAll();
         foreach(var data in dataList)
         {
@@ -18,5 +18,7 @@ public class ExpeditionWindow : MonoBehaviour
             tempElt.Set(data);
             eltExpeditions.Add(tempElt);
         }
+
+        transform.SetAsLastSibling();
     }
 }
