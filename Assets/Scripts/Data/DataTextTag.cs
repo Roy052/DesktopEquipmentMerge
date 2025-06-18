@@ -7,8 +7,8 @@ public class DataTextTag : IRegistrable
     public static Dictionary<string, DataTextTag> dictDataTexts = new Dictionary<string, DataTextTag>();
 
     public string textTag;
-    public string tagKor;
-    public string tagEng;
+    public string textKor;
+    public string textEng;
 
     public void Register()
     {
@@ -18,6 +18,6 @@ public class DataTextTag : IRegistrable
     public static string FindText(string tag)
     {
         dictDataTexts.TryGetValue(tag, out var value);
-        return value.tagKor;
+        return value.textKor;
     }
 }

@@ -6,6 +6,8 @@ public class GameData
     Dictionary<int, long> dicItems = new Dictionary<int, long>();
     public List<int> storedEquipmentList = new List<int>();
 
+    public List<InfoUnit> infoUnits = new List<InfoUnit>();
+
     public void AddItems(List<int> items)
     {
         foreach(var itemId in items)
@@ -18,5 +20,10 @@ public class GameData
             else
                 dicItems[itemId] = 1;
         }
+    }
+
+    public void AddInfoUnit(InfoUnit infoUnit)
+    {
+        infoUnits.Add(infoUnit);
     }
 }

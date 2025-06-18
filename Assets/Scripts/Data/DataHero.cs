@@ -20,5 +20,11 @@ public class DataHero : IRegistrable
     {
         dictDataHeroes.Add(id, this);
     }
+
+    public static DataHero Get(short id)
+    {
+        dictDataHeroes.TryGetValue(id, out var value);
+        return value;
+    }
 }
 

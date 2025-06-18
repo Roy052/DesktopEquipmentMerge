@@ -13,6 +13,7 @@ public class EltExpedition : MonoBehaviour
 
     public void Set(DataExpedition data)
     {
+        dataExpedition = data;
         if (textName)
             textName.text = DataTextTag.FindText(data.tagName);
     }
@@ -22,7 +23,7 @@ public class EltExpedition : MonoBehaviour
         List<int> temp = new List<int>();
         for (int i = 0; i < dataExpedition.equipmentCount; i++)
             temp.Add(1);
-
+        
         Singleton.gm.gameData.AddItems(temp);
     }
 }

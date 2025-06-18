@@ -1,24 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeroExpeditionWindow : GameWindow
+public class ExpeditionUI : WindowUI
 {
-    public GameObject objPrefab;
+    public GameObject objEltExpedition;
     List<EltExpedition> eltExpeditions = new List<EltExpedition>();
 
     public override void Show()
     {
         base.Show();
         var dataList = DataExpedition.GetAll();
-        foreach(var data in dataList)
+        foreach (var data in dataList)
         {
-            GameObject temp = Instantiate(objPrefab, objPrefab.transform.parent);
+            GameObject temp = Instantiate(objEltExpedition, objEltExpedition.transform.parent);
             temp.SetActive(true);
             EltExpedition tempElt = temp.GetComponent<EltExpedition>();
             tempElt.Set(data);
             eltExpeditions.Add(tempElt);
         }
 
-        transform.SetAsLastSibling();
     }
 }
