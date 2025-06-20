@@ -7,6 +7,9 @@ public class GameData
     public List<int> storedEquipmentList = new List<int>();
 
     public List<InfoUnit> infoUnits = new List<InfoUnit>();
+    public List<InfoQuest> infoQuests = new List<InfoQuest>();
+    public Dictionary<short, long> itemCounts = new Dictionary<short, long>();
+    public Dictionary<TraderType, short> traderLvs = new Dictionary<TraderType, short>();
 
     public void AddItems(List<int> items)
     {

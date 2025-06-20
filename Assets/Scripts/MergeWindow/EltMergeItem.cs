@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-public class EltMergeEquipment : EltItem, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class EltMergeItem : EltItem, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     Canvas canvas;
     GraphicRaycaster gr;
@@ -46,7 +46,7 @@ public class EltMergeEquipment : EltItem, IBeginDragHandler, IDragHandler, IEndD
 
         foreach (var res in raycastResults)
         {
-            var target = res.gameObject.GetComponent<EltMergeEquipment>();
+            var target = res.gameObject.GetComponent<EltMergeItem>();
             if (target != null && target != this && target.GetScrapType() != 0)
             {
                 OnClick();

@@ -18,6 +18,12 @@ public class DataQuest : IRegistrable
     {
         dictDataQuests.Add(id, this);
     }
+
+    public static DataQuest Get(short id)
+    {
+        dictDataQuests.TryGetValue(id, out var dataQuest);
+        return dataQuest;
+    }
 }
 
 [Serializable]

@@ -6,6 +6,8 @@ public enum BuildingType
     MergeTable,
     Storage,
     ExpeditionCenter,
+    HeroCenter,
+    QuestCenter
 }
 
 [Serializable]

@@ -24,6 +24,14 @@ public class DataTrader : IRegistrable
         else
             list.Add(this);
     }
+
+    public static DataTrader Get(TraderType type, short lv)
+    {
+        if (dictDataTraders.TryGetValue(type, out var list) == false)
+            return null;
+
+        return list.Find(x => x.lv == lv);
+    }
 }
 
 [Serializable]

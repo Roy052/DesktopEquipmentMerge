@@ -5,20 +5,20 @@ public class MergeWindow : GameWindow
 {
     public GameObject objPrefab;
     public GameObject[,] panel;
-    public EltMergeEquipment[,] eltMergeEqupments;
+    public EltMergeItem[,] eltMergeEqupments;
 
     public void Set(int[,] scraps)
     {
         int xLength = scraps.GetLength(0);
         int yLength = scraps.GetLength(1);
         panel = new GameObject[xLength, yLength];
-        eltMergeEqupments = new EltMergeEquipment[xLength, yLength];
+        eltMergeEqupments = new EltMergeItem[xLength, yLength];
         for (int i = 0; i < scraps.GetLength(0); i++)
             for (int j = 0; j < scraps.GetLength(1); j++)
             {
                 panel[i, j] = Instantiate(objPrefab, objPrefab.transform.parent);
                 panel[i, j].SetActive(true);
-                var temp = panel[i, j].GetComponent<EltMergeEquipment>();
+                var temp = panel[i, j].GetComponent<EltMergeItem>();
                 temp.Set(scraps[i, j], i * 100 + j);
                 temp.funcClick = OnClick;
                 if (temp != null)

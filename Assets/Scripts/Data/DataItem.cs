@@ -23,4 +23,10 @@ public class DataItem : IRegistrable
     {
         dictDataItems.Add(id, this);
     }
+
+    public static DataItem Get(short id)
+    {
+        dictDataItems.TryGetValue(id, out var dataItem);
+        return dataItem;
+    }
 }
