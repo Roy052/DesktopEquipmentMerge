@@ -3,7 +3,11 @@ using System.Collections.Generic;
 
 public enum RoleType
 {
-    Shield,
+    Warrior,
+    Archer,
+    Rogue,
+    Wizard,
+    Max
 }
 
 [Serializable]

@@ -8,9 +8,9 @@ public class EltHero : MonoBehaviour
     public Text textName;
     public Image imgHero;
 
-    protected InfoUnit infoUnit;
+    protected InfoHero infoUnit;
 
-    public void Set(InfoUnit info)
+    public virtual void Set(InfoHero info)
     {
         infoUnit = info;
         if (textLv)

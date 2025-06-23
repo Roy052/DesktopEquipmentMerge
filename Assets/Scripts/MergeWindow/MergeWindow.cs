@@ -29,7 +29,7 @@ public class MergeWindow : GameWindow
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.M))
-            Singleton.gm.gameData.AddItems(new List<int>() { 1, 1, 1 });
+            Singleton.gm.gameData.AddItems(new List<(short, long)>() { (0, 100) });
     }
 
     int idxFirst = -1;

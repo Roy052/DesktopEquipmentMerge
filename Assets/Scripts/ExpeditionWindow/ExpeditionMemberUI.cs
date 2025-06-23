@@ -11,7 +11,7 @@ public class ExpeditionMemberUI : WindowUI
     public override void Show()
     {
         base.Show();
-        var list = Singleton.gm.gameData.infoUnits;
+        var list = Singleton.gm.gameData.infoHeroes;
         if (list == null)
         {
             Debug.LogError("No Member Exist");
