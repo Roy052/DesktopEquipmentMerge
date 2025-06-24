@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameData
@@ -7,11 +8,35 @@ public class GameData
     public List<int> storedEquipmentList = new List<int>();
 
     public List<InfoHero> infoHeroes = new List<InfoHero>();
+    public Dictionary<short, InfoExpedition> dictInfoExpeditions = new Dictionary<short, InfoExpedition>();
     public List<InfoQuest> infoQuests = new List<InfoQuest>();
     public Dictionary<short, long> itemCounts = new Dictionary<short, long>();
     public Dictionary<TraderType, short> traderLvs = new Dictionary<TraderType, short>();
     public List<InfoHero> infoHeroRecruits = new List<InfoHero>();
-    public TimeSpan remainTime = TimeSpan.Zero;
+    public bool[] isHeroRecruited;
+    public TimeSpan recruitRefreshRemainTime = TimeSpan.Zero;
+    public HashSet<int> alreadyExpeditionHeroIds = new HashSet<int>();
+
+    public void RefreshExpedition()
+    {
+        dictInfoExpeditions = dictInfoExpeditions
+            .Where(kv => kv.Value.state != ExpeditionState.End)
+            .ToDictionary(kv => kv.Key, kv => kv.Value);
+    }
+
+    public void RefreshAlreadyExpeditionHero()
+    {
+        alreadyExpeditionHeroIds.Clear();
+
+        foreach(var (infoId, info) in dictInfoExpeditions)
+        {
+            foreach(var id in info.heroIdxes)
+            {
+                if (alreadyExpeditionHeroIds.Add(id) == false)
+                    Debug.Log($"Already Exist Hero Id");
+            }
+        }
+    }
 
     public void AddItems(List<(short, long)> items)
     {
@@ -27,6 +52,17 @@ public class GameData
         }
     }
 
+    public void AddInfoUnit(InfoHero infoHero)
+    {
+        infoHeroes.Add(infoHero);
+    }
+
+    public void AddInfoExpedition(InfoExpedition infoExpedition)
+    {
+        dictInfoExpeditions.Add(infoExpedition.expeditionId, infoExpedition);
+        RefreshAlreadyExpeditionHero();
+    }
+
     public void RecruitUnit(int idx)
     {
         InfoHero info = infoHeroRecruits[idx];
@@ -34,30 +70,32 @@ public class GameData
         if (currentItemCount < info.price)
             return;
 
+        itemCounts[0] -= info.price;
         infoHeroes.Add(info);
-    }
-
-    public void AddInfoUnit(InfoHero infoHero)
-    {
-        infoHeroes.Add(infoHero);
+        isHeroRecruited[idx] = true;
+        Observer.onRefreshRecruit?.Invoke();
     }
 
     public void RefreshRecruitList()
     {
         infoHeroRecruits.Clear();
-        remainTime = TimeSpan.FromMinutes(5f);
+        if (isHeroRecruited == null || isHeroRecruited.Length < 3)
+            isHeroRecruited = new bool[3];
+
+        recruitRefreshRemainTime = TimeSpan.FromMinutes(5f);
         for(int i = 0; i < 3; i++)
         {
             InfoHero info = new InfoHero()
             {
                 heroId = (short)UnityEngine.Random.Range(0, (int)RoleType.Max),
                 exp = 0,
-                strName = "Do Re",
+                strName = $"Do Re {UnityEngine.Random.Range(0, 100)}",
                 weaponId = -1,
                 armorId = -1,
                 price = UnityEngine.Random.Range(10, 15)
             };
             infoHeroRecruits.Add(info);
+            isHeroRecruited[i] = false;
         }
     }
 }

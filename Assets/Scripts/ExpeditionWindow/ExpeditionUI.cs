@@ -3,21 +3,24 @@ using UnityEngine;
 
 public class ExpeditionUI : WindowUI
 {
-    public GameObject objEltExpedition;
-    List<EltExpedition> eltExpeditions = new List<EltExpedition>();
+    public EltExpedition eltExpedition;
+    List<EltExpedition> eltExpeditionList = new List<EltExpedition>();
+
+    public void Start()
+    {
+        Show();
+    }
 
     public override void Show()
     {
         base.Show();
         var dataList = DataExpedition.GetAll();
-        foreach (var data in dataList)
+        for(int i = 0; i < dataList.Count; i++)
         {
-            GameObject temp = Instantiate(objEltExpedition, objEltExpedition.transform.parent);
-            temp.SetActive(true);
-            EltExpedition tempElt = temp.GetComponent<EltExpedition>();
-            tempElt.Set(data);
-            eltExpeditions.Add(tempElt);
+            var elt = Utilities.GetOrCreate(eltExpeditionList, i, eltExpedition.gameObject);
+            elt.Set(dataList[i]);
+            elt.SetActive(true);
         }
-
+        Utilities.DeactivateSurplus(eltExpeditionList, dataList.Count);
     }
 }

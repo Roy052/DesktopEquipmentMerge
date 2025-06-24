@@ -20,6 +20,7 @@ public class EltExpedition : MonoBehaviour
 
     public void OnClickGoExpedition()
     {
+        Singleton.expeditionWindow.ShowExpeditionMember(dataExpedition);
         List<(short, long)> temp = new List<(short, long)>();
         for (int i = 0; i < dataExpedition.equipmentCount; i++)
             temp.Add((1, 1));

@@ -11,4 +11,15 @@ public class ExpeditionWindow : GameWindow
         expeditionUI.Show();
         expeditionMemberUI.Hide();
     }
+
+    public void ShowExpeditionMember(DataExpedition data)
+    {
+        expeditionMemberUI.Show();
+        expeditionMemberUI.Set(data);
+    }
+
+    public void HideExpeditionMember()
+    {
+        expeditionMemberUI.Hide();
+    }
 }

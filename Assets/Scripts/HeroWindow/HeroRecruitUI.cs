@@ -17,30 +17,40 @@ public class HeroRecruitUI : WindowUI
     public void Start()
     {
         Show();
+        Observer.onRefreshRecruit += SetMember;
+    }
+
+    public void OnDestroy()
+    {
+        Observer.onRefreshRecruit -= SetMember;
     }
 
     public override void Show()
     {
         base.Show();
-        if (co_RefreshTime != null)
-            StopCoroutine(co_RefreshTime);
-
         Set();
     }
 
     public void Set()
     {
+        SetMember();
+        remainTime = Singleton.gm.gameData.recruitRefreshRemainTime;
+        if (co_RefreshTime != null)
+            StopCoroutine(co_RefreshTime);
+        co_RefreshTime = StartCoroutine(RefreshTime());
+    }
+
+    void SetMember()
+    {
         var list = Singleton.gm.gameData.infoHeroRecruits;
-        for(int i = 0; i < list.Count; i++)
+        var isRecruited = Singleton.gm.gameData.isHeroRecruited;
+        for (int i = 0; i < list.Count; i++)
         {
             var elt = Utilities.GetOrCreate(eltHeroRecruitList, i, eltHeroRecruit.gameObject);
-            elt.Set(list[i], i);
+            elt.Set(list[i], i, isRecruited[i]);
             elt.SetActive(true);
         }
         Utilities.DeactivateSurplus(eltHeroRecruitList, eltHeroRecruitList.Count);
-
-        remainTime = Singleton.gm.gameData.remainTime;
-        co_RefreshTime = StartCoroutine(RefreshTime());
     }
 
     public void OnClickRefresh()
@@ -51,12 +61,13 @@ public class HeroRecruitUI : WindowUI
 
     IEnumerator RefreshTime()
     {
+        //btnRefresh.enabled = false;
         while (remainTime.TotalSeconds > 0)
         {
             textBtnRefresh.text = $"{remainTime.Minutes}:{remainTime.Seconds}";
             yield return new WaitForSeconds(1f);
             remainTime -= TimeSpan.FromSeconds(1);
-            Singleton.gm.gameData.remainTime = remainTime;
+            Singleton.gm.gameData.recruitRefreshRemainTime = remainTime;
         }
 
         btnRefresh.enabled = true;

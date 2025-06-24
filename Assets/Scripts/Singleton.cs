@@ -8,6 +8,7 @@ public class Singleton : MonoBehaviour
 
     //Window
     public static MergeWindow mergeWindow;
-    public static HeroWindow heroExpeditionWindow;
+    public static HeroWindow heroWindow;
+    public static ExpeditionWindow expeditionWindow;
     public static QuestWindow questWindow;
 }
