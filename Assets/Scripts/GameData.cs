@@ -16,12 +16,29 @@ public class GameData
     public bool[] isHeroRecruited;
     public TimeSpan recruitRefreshRemainTime = TimeSpan.Zero;
     public HashSet<int> alreadyExpeditionHeroIds = new HashSet<int>();
+    public List<short> buildingLvs = new List<short>();
+
+    public GameData()
+    {
+        isHeroRecruited = new bool[3];
+
+        for (int i = 0; i < (int)BuildingType.Max; i++)
+            buildingLvs.Add(0);
+    }
 
     public void RefreshExpedition()
     {
-        dictInfoExpeditions = dictInfoExpeditions
-            .Where(kv => kv.Value.state != ExpeditionState.End)
-            .ToDictionary(kv => kv.Key, kv => kv.Value);
+        foreach(var (infoId, info) in dictInfoExpeditions)
+        {
+            DataExpedition data = DataExpedition.Get(infoId);
+            if (info.state == ExpeditionState.Reward && DateTime.Now >= info.startTime.AddMinutes(data.expeditionTime))
+                info.state = ExpeditionState.Reward;
+        }
+        Observer.onRefreshExpedition?.Invoke();
+
+        //dictInfoExpeditions = dictInfoExpeditions
+        //    .Where(kv => kv.Value.state != ExpeditionState.End)
+        //    .ToDictionary(kv => kv.Key, kv => kv.Value);
     }
 
     public void RefreshAlreadyExpeditionHero()
@@ -97,5 +114,11 @@ public class GameData
             infoHeroRecruits.Add(info);
             isHeroRecruited[i] = false;
         }
+    }
+
+    public InfoExpedition GetCurrentExpedition(short expeditionId)
+    {
+        dictInfoExpeditions.TryGetValue(expeditionId, out var info);
+        return info;
     }
 }

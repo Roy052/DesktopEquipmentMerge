@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public abstract class GameWindow : MonoBehaviour, IBeginDragHandler, IDragHandler
+public abstract class GameWindow : Singleton, IBeginDragHandler, IDragHandler
 {
     RectTransform rt;
     Canvas canvas;

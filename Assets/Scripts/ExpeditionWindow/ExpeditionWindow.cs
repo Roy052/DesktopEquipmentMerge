@@ -5,6 +5,11 @@ public class ExpeditionWindow : GameWindow
     public ExpeditionUI expeditionUI;
     public ExpeditionMemberUI expeditionMemberUI;
 
+    public void Awake()
+    {
+        expeditionWindow = this;
+    }
+
     public override void Show()
     {
         base.Show();

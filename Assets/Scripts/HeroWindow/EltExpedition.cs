@@ -9,6 +9,10 @@ public class EltExpedition : MonoBehaviour
     public Text textEquipmentCount;
     public Text textRewardProb;
 
+    public Button btnSelectExpeditionMember;
+    public Button btnGetReward;
+    public Text textExpeditionState;
+
     DataExpedition dataExpedition;
 
     public void Set(DataExpedition data)
@@ -16,15 +20,25 @@ public class EltExpedition : MonoBehaviour
         dataExpedition = data;
         if (textName)
             textName.text = DataTextTag.FindText(data.tagName);
+
+        var info = Singleton.gm.gameData.GetCurrentExpedition(data.id);
+        btnSelectExpeditionMember.SetActive(info == null);
+        btnGetReward.SetActive(info != null);
+        textExpeditionState.SetActive(info != null);
+        if(info != null)
+        {
+            btnGetReward.enabled = info.state == ExpeditionState.Reward;
+            textExpeditionState.text = DataTextTag.FindText($"Expedition_State_{info.state}");
+        }
     }
 
-    public void OnClickGoExpedition()
+    public void OnClickSelectExpeditionMember()
     {
         Singleton.expeditionWindow.ShowExpeditionMember(dataExpedition);
-        List<(short, long)> temp = new List<(short, long)>();
-        for (int i = 0; i < dataExpedition.equipmentCount; i++)
-            temp.Add((1, 1));
-        
-        Singleton.gm.gameData.AddItems(temp);
+    }
+
+    public void OnclickGetRewardExpedition()
+    {
+
     }
 }

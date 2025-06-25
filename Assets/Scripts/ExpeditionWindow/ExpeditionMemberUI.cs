@@ -55,5 +55,6 @@ public class ExpeditionMemberUI : WindowUI
             heroIdxes = selectedMembers.ToList(),
         };
         Singleton.gm.gameData.AddInfoExpedition(info);
+        Hide();
     }
 }

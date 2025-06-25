@@ -7,7 +7,8 @@ public enum BuildingType
     Storage,
     ExpeditionCenter,
     HeroCenter,
-    QuestCenter
+    QuestCenter,
+    Max
 }
 
 [Serializable]

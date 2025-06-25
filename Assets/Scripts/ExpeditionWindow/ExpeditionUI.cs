@@ -9,13 +9,24 @@ public class ExpeditionUI : WindowUI
     public void Start()
     {
         Show();
+        Observer.onRefreshExpedition += RefreshExpedition;
+    }
+
+    public void OnDestroy()
+    {
+        Observer.onRefreshExpedition -= RefreshExpedition;
     }
 
     public override void Show()
     {
         base.Show();
+        RefreshExpedition();
+    }
+
+    void RefreshExpedition()
+    {
         var dataList = DataExpedition.GetAll();
-        for(int i = 0; i < dataList.Count; i++)
+        for (int i = 0; i < dataList.Count; i++)
         {
             var elt = Utilities.GetOrCreate(eltExpeditionList, i, eltExpedition.gameObject);
             elt.Set(dataList[i]);

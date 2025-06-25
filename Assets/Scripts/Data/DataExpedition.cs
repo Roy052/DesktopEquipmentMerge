@@ -10,6 +10,7 @@ public class DataExpedition : IRegistrable
     public short id;
     public string tagName;
     public string resImage;
+    public int expeditionTime;
     public int equipmentCount;
     public int rewardProbId;
     public List<ConditionTypeValue> conditions;
@@ -17,6 +18,12 @@ public class DataExpedition : IRegistrable
     public void Register()
     {
         dictDataExpeditions.Add(id, this);
+    }
+
+    public static DataExpedition Get(short id)
+    {
+        dictDataExpeditions.TryGetValue(id, out var data);
+        return data;
     }
 
     public static List<DataExpedition> GetAll()
@@ -31,6 +38,7 @@ public class TempDataExpedition : IConvertable<DataExpedition>
     public short id;
     public string tagName;
     public string resImage;
+    public int expeditionTime;
     public int equipmentCount;
     public int rewardProbId;
     public ConditionType conditionType1;
@@ -50,6 +58,7 @@ public class TempDataExpedition : IConvertable<DataExpedition>
             id = id,
             tagName = tagName,
             resImage = resImage,
+            expeditionTime = expeditionTime,
             equipmentCount = equipmentCount,
             rewardProbId = rewardProbId,
         };
