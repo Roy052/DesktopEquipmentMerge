@@ -31,7 +31,7 @@ public class GameData
         foreach(var (infoId, info) in dictInfoExpeditions)
         {
             DataExpedition data = DataExpedition.Get(infoId);
-            if (info.state == ExpeditionState.Reward && DateTime.Now >= info.startTime.AddMinutes(data.expeditionTime))
+            if (info.state == ExpeditionState.Progress && DateTime.Now >= info.startTime.AddMinutes(data.expeditionTime))
                 info.state = ExpeditionState.Reward;
         }
         Observer.onRefreshExpedition?.Invoke();
