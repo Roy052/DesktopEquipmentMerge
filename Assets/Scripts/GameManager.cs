@@ -17,7 +17,10 @@ public class GameManager : Singleton
 
         gm = this;
         DontDestroyOnLoad(gameObject);
+    }
 
+    public void Start()
+    {
         Set();
     }
 
