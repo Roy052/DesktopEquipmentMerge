@@ -29,6 +29,7 @@ public class GameManager : Singleton
         gameData = new GameData();
         gameData.AddItems(new List<(short, long)>() { (0, 100) });
         StartCoroutine(RefreshExpedition());
+        mainSM.Set();
     }
 
     IEnumerator RefreshExpedition()

@@ -13,6 +13,7 @@ public class ResourceManager : Singleton
 {
     public EquipmentIdSprite[] equipmentSprites;
     public Dictionary<int, Sprite> dicEquipmentSprites = new Dictionary<int, Sprite>();
+    public Material mat_GrayScale;
 
     public void Awake()
     {

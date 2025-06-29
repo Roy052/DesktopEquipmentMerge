@@ -5,6 +5,9 @@ public class Singleton : MonoBehaviour
     public static GameManager gm;
     public static ResourceManager resourceManager;
     public static DataManager dataManager;
+    public static MainBackground mainBackground;
+
+    public static MainSM mainSM;
 
     //Window
     public static MergeWindow mergeWindow;

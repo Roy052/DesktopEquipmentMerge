@@ -18,6 +18,10 @@ public class HeroWindow : GameWindow
         base.Show();
         
         transform.SetAsLastSibling();
+        if (tabs[0].isOn)
+            OnToggleHeroRecruit(true);
+        else
+            tabs[0].isOn = true;
     }
 
     public void OnToggleHeroRecruit(bool isOn)

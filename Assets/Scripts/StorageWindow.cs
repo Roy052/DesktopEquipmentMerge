@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StorageWindow : WindowUI
+public class StorageWindow : GameWindow
 {
     public EltItem eltItem;
 

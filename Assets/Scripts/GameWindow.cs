@@ -3,6 +3,8 @@ using UnityEngine.EventSystems;
 
 public abstract class GameWindow : Singleton, IBeginDragHandler, IDragHandler
 {
+    public bool IsShow => gameObject.activeSelf;
+
     RectTransform rt;
     Canvas canvas;
     Vector2 offset;

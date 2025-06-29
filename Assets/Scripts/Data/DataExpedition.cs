@@ -2,6 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+public enum HeroConditionType
+{
+    None = -1,
+    Role = 0,
+    Lv,
+}
+
+public class HeroConditionTypeValue
+{
+    public HeroConditionType type;
+    public int value1;
+    public int value2;
+}
+
 [Serializable]
 public class DataExpedition : IRegistrable
 {
@@ -13,7 +27,7 @@ public class DataExpedition : IRegistrable
     public int expeditionTime;
     public int equipmentCount;
     public int rewardProbId;
-    public List<ConditionTypeValue> conditions;
+    public List<HeroConditionTypeValue> conditions;
 
     public void Register()
     {
@@ -41,13 +55,13 @@ public class TempDataExpedition : IConvertable<DataExpedition>
     public int expeditionTime;
     public int equipmentCount;
     public int rewardProbId;
-    public ConditionType conditionType1;
+    public HeroConditionType conditionType1;
     public int condition1Value1;
     public int condition1Value2;
-    public ConditionType conditionType2;
+    public HeroConditionType conditionType2;
     public int condition2Value1;
     public int condition2Value2;
-    public ConditionType conditionType3;
+    public HeroConditionType conditionType3;
     public int condition3Value1;
     public int condition3Value2;
 
@@ -63,21 +77,21 @@ public class TempDataExpedition : IConvertable<DataExpedition>
             rewardProbId = rewardProbId,
         };
 
-        temp.conditions = new List<ConditionTypeValue>
+        temp.conditions = new List<HeroConditionTypeValue>
         {
-            new ConditionTypeValue()
+            new HeroConditionTypeValue()
             {
                 type = conditionType1,
                 value1 = condition1Value1,
                 value2 = condition1Value2,
             },
-            new ConditionTypeValue()
+            new HeroConditionTypeValue()
             {
                 type = conditionType2,
                 value1 = condition2Value1,
                 value2 = condition2Value2,
             },
-            new ConditionTypeValue()
+            new HeroConditionTypeValue()
             {
                 type = conditionType3,
                 value1 = condition3Value1,

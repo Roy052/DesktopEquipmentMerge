@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ExpeditionMemberUI : WindowUI
 {
     public EltHeroExpeditionMember eltHero;
+    public Image imgGoExpedition;
+    public Button btnGoExpedition;
 
     List<EltHeroExpeditionMember> eltHeroes = new List<EltHeroExpeditionMember>();
     HashSet<int> selectedMembers = new HashSet<int>();
@@ -14,27 +17,36 @@ public class ExpeditionMemberUI : WindowUI
     public override void Show()
     {
         base.Show();
-        var list = Singleton.gm.gameData.infoHeroes;
-        if (list == null)
-        {
-            Debug.LogError("No Member Exist");
-            return;
-        }
-
-        for(int i = 0; i < list.Count; i++)
-        {
-            var elt = Utilities.GetOrCreate(eltHeroes, i, eltHero.gameObject);
-            elt.Set(list[i], i, OnClickHero);
-            elt.SetActive(true);
-        }
-
-        Utilities.DeactivateSurplus(eltHeroes, list.Count);
+        
     }
 
     public void Set(DataExpedition data)
     {
         dataExpedition = data;
 
+    }
+
+    public void SetMember()
+    {
+        var list = Singleton.gm.gameData.infoHeroes;
+        var alreadyList = Singleton.gm.gameData.alreadyExpeditionHeroIdxs;
+        if (list == null)
+        {
+            Debug.LogError("No Member Exist");
+            return;
+        }
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (alreadyList.Contains(i))
+                continue;
+
+            var elt = Utilities.GetOrCreate(eltHeroes, i, eltHero.gameObject);
+            elt.Set(list[i], i, OnClickHero);
+            elt.SetActive(true);
+        }
+
+        Utilities.DeactivateSurplus(eltHeroes, list.Count);
     }
 
     public void OnClickHero(int idx, bool isSelect)
@@ -56,5 +68,13 @@ public class ExpeditionMemberUI : WindowUI
         };
         Singleton.gm.gameData.AddInfoExpedition(info);
         Hide();
+    }
+
+    void RefreshBtn()
+    {
+        foreach(var ctv in dataExpedition.conditions)
+        {
+
+        }
     }
 }

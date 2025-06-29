@@ -33,6 +33,13 @@ public class HeroRecruitUI : WindowUI
 
     public void Set()
     {
+        var list = Singleton.gm.gameData.infoHeroRecruits;
+        if (list == null || list.Count == 0)
+        {
+            Singleton.gm.gameData.RefreshRecruitList();
+            Set();
+            return;
+        }
         SetMember();
         remainTime = Singleton.gm.gameData.recruitRefreshRemainTime;
         if (co_RefreshTime != null)

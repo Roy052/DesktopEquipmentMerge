@@ -14,12 +14,25 @@ public class MergeWindow : GameWindow
 
     public void Awake()
     {
+        mergeWindow = this;
         Observer.onRefreshMergeItem += RefreshChest;
     }
 
     public void OnDestroy()
     {
+        mergeWindow = null;
         Observer.onRefreshMergeItem -= RefreshChest;
+    }
+
+    public override void Show()
+    {
+        base.Show();
+
+        int[,] scraps = new int[3, 3];
+        for (int i = 0; i < scraps.GetLength(0); i++)
+            for (int j = 0; j < scraps.GetLength(1); j++)
+                scraps[i, j] = Random.Range(0, 2);
+        mergeWindow.Set(scraps);
     }
 
     public void Set(int[,] scraps)

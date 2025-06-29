@@ -15,15 +15,13 @@ public class GameData
     public List<InfoHero> infoHeroRecruits = new();
     public bool[] isHeroRecruited;
     public TimeSpan recruitRefreshRemainTime = TimeSpan.Zero;
-    public HashSet<int> alreadyExpeditionHeroIds = new HashSet<int>();
-    public List<short> buildingLvs = new List<short>();
+    public HashSet<int> alreadyExpeditionHeroIdxs = new HashSet<int>();
+    public short[] buildingLvs;
 
     public GameData()
     {
         isHeroRecruited = new bool[3];
-
-        for (int i = 0; i < (int)BuildingType.Max; i++)
-            buildingLvs.Add(0);
+        buildingLvs = new short[(int)BuildingType.Max];
     }
 
     public void RefreshExpedition()
@@ -43,14 +41,19 @@ public class GameData
 
     public void RefreshAlreadyExpeditionHero()
     {
-        alreadyExpeditionHeroIds.Clear();
+        alreadyExpeditionHeroIdxs.Clear();
 
         foreach(var (infoId, info) in dictInfoExpeditions)
         {
+            if (info.state == ExpeditionState.End)
+                continue;
+
             foreach(var id in info.heroIdxes)
             {
-                if (alreadyExpeditionHeroIds.Add(id) == false)
+                if (alreadyExpeditionHeroIdxs.Add(id) == false)
                     Debug.Log($"Already Exist Hero Id");
+
+                alreadyExpeditionHeroIdxs.Add(id);
             }
         }
     }
@@ -225,5 +228,11 @@ public class GameData
     {
         dictInfoExpeditions.TryGetValue(expeditionId, out var info);
         return info;
+    }
+
+    public void BuildBuilding(BuildingType buildingType)
+    {
+        buildingLvs[(int)buildingType] = 1;
+        Observer.onRefreshBuilding?.Invoke();
     }
 }
