@@ -14,6 +14,8 @@ public class EltExpedition : MonoBehaviour
     public Text textExpeditionState;
     public Text textExpeditionRemainTime;
 
+    public GameObject objLock;
+
     DataExpedition dataExpedition;
 
     public void Set(DataExpedition data)
@@ -32,6 +34,11 @@ public class EltExpedition : MonoBehaviour
             textExpeditionState.text = DataTextTag.FindText($"Expedition_State_{info.state}");
             textExpeditionRemainTime.text = $"{(int)(info.startTime.AddMinutes(data.expeditionTime) - DateTime.Now).TotalSeconds} √ ";
         }
+
+        bool isLock = true;
+        if (dataExpedition.missionConditionId == -1 || Singleton.gm.gameData.IsMissionClear(dataExpedition.missionConditionId))
+            isLock = false;
+        objLock.SetActive(isLock);
     }
 
     public void OnClickSelectExpeditionMember()

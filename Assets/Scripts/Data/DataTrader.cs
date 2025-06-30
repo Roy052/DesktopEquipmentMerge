@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public enum TraderType
 {
+    None = -1,
     DrakoKingdom
 }
 

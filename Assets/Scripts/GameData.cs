@@ -235,4 +235,88 @@ public class GameData
         buildingLvs[(int)buildingType] = 1;
         Observer.onRefreshBuilding?.Invoke();
     }
+
+    public bool IsMissionClear(int questId)
+    {
+        var questInfo = infoQuests.Find(x => x.questId == questId);
+        if (questInfo != null && questInfo.state == QuestState.End)
+            return true;
+
+        return false;
+    }
+
+    public bool IsConditionClear(int questId)
+    {
+        DataQuest data = DataQuest.Get(questId);
+        if (data == null) return false;
+
+        foreach(var condition in data.conditions)
+        {
+            switch (condition.type)
+            {
+                case ConditionType.None:
+                    break;
+                case ConditionType.ItemCount:
+                    itemCounts.TryGetValue((short)condition.value1, out long itemCount);
+                    if (itemCount < condition.value2)
+                        return false;
+                    break;
+                case ConditionType.TraderLv:
+                    traderLvs.TryGetValue((TraderType)condition.value1, out short lv);
+                    if (lv < condition.value2)
+                        return false;
+                    break;
+                case ConditionType.MissionClear:
+                    if (IsMissionClear(condition.value1) == false)
+                        return false;
+                    break;
+            }
+        }
+
+        return true;
+    }
+
+    public bool IsHeroConditionClear(short expeditionId, List<int> heroIdxs)
+    {
+        DataExpedition dataExpedition = DataExpedition.Get(expeditionId);
+        if (dataExpedition == null) return false;
+
+        foreach (var condition in dataExpedition.heroConditions)
+        {
+            switch (condition.type)
+            {
+                case HeroConditionType.None:
+                    break;
+                case HeroConditionType.Role:
+                    int roleCount = 0;
+                    for (int i = 0; i < heroIdxs.Count; i++)
+                    {
+                        if (infoHeroes.Count <= i)
+                            break;
+
+                        var dataHero = DataHero.Get(infoHeroes[heroIdxs[i]].heroId);
+                        if (dataHero.role == (RoleType)condition.value1)
+                            roleCount++;
+                    }
+                    if (roleCount < condition.value2)
+                        return false;
+                    break;
+                case HeroConditionType.Lv:
+                    int lvCount = 0;
+                    for (int i = 0; i < heroIdxs.Count; i++)
+                    {
+                        if (infoHeroes.Count <= i)
+                            break;
+
+                        if (DataLv.GetLv(infoHeroes[i].exp) >= condition.value1)
+                            lvCount++;
+                    }
+                    if (lvCount < condition.value2)
+                        return false;
+                    break;
+            }
+        }
+
+        return true;
+    }
 }

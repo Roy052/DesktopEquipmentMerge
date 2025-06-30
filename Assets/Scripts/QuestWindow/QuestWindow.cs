@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System.Linq;
 
 public class QuestWindow : GameWindow
 {
@@ -32,19 +33,30 @@ public class QuestWindow : GameWindow
         }
         Utilities.DeactivateSurplus(traders, tIdx);
 
+    }
+
+    public void OnClickTrader(TraderType traderType)
+    {
         if (eltQuest == null)
         {
             Debug.Log($"EltQuest Not Exist");
             return;
         }
-        var infoQuests = Singleton.gm.gameData.infoQuests;
-        for (int i = 0; i < infoQuests.Count; i++)
+        var infoQuests = gm.gameData.infoQuests.Where(x => (DataQuest.Get(x.questId)?.traderType ?? TraderType.None) == traderType).ToList();
+        var dataQuestByTrader = DataQuest.GetAllByTrader(traderType);
+        HashSet<int> progressQuest = new HashSet<int>();
+
+        int count = 0;
+        for (int i = 0; i < dataQuestByTrader.Count; i++)
         {
-            var elt = Utilities.GetOrCreate(quests, i, eltQuest.gameObject);
+            if (gm.gameData.IsConditionClear(dataQuestByTrader[i].id) == false)
+                continue;
+
+            var elt = Utilities.GetOrCreate(quests, count, eltQuest.gameObject);
             elt.Set(infoQuests[i]);
             elt.SetActive(true);
         }
-        Utilities.DeactivateSurplus(quests, quests.Count);
+        Utilities.DeactivateSurplus(quests, count);
     }
 
     public void OnClickQuest(InfoQuest info)

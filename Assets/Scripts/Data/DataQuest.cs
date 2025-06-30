@@ -4,9 +4,10 @@ using System.Collections.Generic;
 [Serializable]
 public class DataQuest : IRegistrable
 {
-    public static Dictionary<short, DataQuest> dictDataQuests = new Dictionary<short, DataQuest>();
+    public static Dictionary<int, DataQuest> dictDataQuests = new();
+    static Dictionary<TraderType, List<DataQuest>> dictDataQuestsByTrader = new();
 
-    public short id;
+    public int id;
     public TraderType traderType;
     public string tagName;
     public string tagDesc;
@@ -17,19 +18,30 @@ public class DataQuest : IRegistrable
     public void Register()
     {
         dictDataQuests.Add(id, this);
+
+        if (dictDataQuestsByTrader.TryGetValue(traderType, out var list) == false)
+            dictDataQuestsByTrader.Add(traderType, new List<DataQuest>() { this });
+        else
+            list.Add(this);
     }
 
-    public static DataQuest Get(short id)
+    public static DataQuest Get(int id)
     {
         dictDataQuests.TryGetValue(id, out var dataQuest);
         return dataQuest;
+    }
+
+    public static List<DataQuest> GetAllByTrader(TraderType traderType)
+    {
+        dictDataQuestsByTrader.TryGetValue(traderType, out var list);
+        return list;
     }
 }
 
 [Serializable]
 public class TempDataQuest : IConvertable<DataQuest>
 {
-    public short id;
+    public int id;
     public TraderType traderType;
     public string tagName;
     public string tagDesc;

@@ -13,6 +13,7 @@ public class ExpeditionMemberUI : WindowUI
     List<EltHeroExpeditionMember> eltHeroes = new List<EltHeroExpeditionMember>();
     HashSet<int> selectedMembers = new HashSet<int>();
     DataExpedition dataExpedition;
+    bool isConditionClear = false;
 
     public override void Show()
     {
@@ -55,10 +56,15 @@ public class ExpeditionMemberUI : WindowUI
             selectedMembers.Add(idx);
         else
             selectedMembers.Remove(idx);
+
+        RefreshBtn();
     }
 
     public void OnClickGoExpedition()
     {
+        if (isConditionClear == false)
+            return;
+
         InfoExpedition info = new InfoExpedition()
         {
             expeditionId = dataExpedition.id,
@@ -72,9 +78,6 @@ public class ExpeditionMemberUI : WindowUI
 
     void RefreshBtn()
     {
-        foreach(var ctv in dataExpedition.conditions)
-        {
-
-        }
+        isConditionClear = Singleton.gm.gameData.IsHeroConditionClear(dataExpedition.id, selectedMembers.ToList());
     }
 }

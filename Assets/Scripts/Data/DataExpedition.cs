@@ -27,7 +27,8 @@ public class DataExpedition : IRegistrable
     public int expeditionTime;
     public int equipmentCount;
     public int rewardProbId;
-    public List<HeroConditionTypeValue> conditions;
+    public int missionConditionId;
+    public List<HeroConditionTypeValue> heroConditions;
 
     public void Register()
     {
@@ -55,15 +56,16 @@ public class TempDataExpedition : IConvertable<DataExpedition>
     public int expeditionTime;
     public int equipmentCount;
     public int rewardProbId;
-    public HeroConditionType conditionType1;
-    public int condition1Value1;
-    public int condition1Value2;
-    public HeroConditionType conditionType2;
-    public int condition2Value1;
-    public int condition2Value2;
-    public HeroConditionType conditionType3;
-    public int condition3Value1;
-    public int condition3Value2;
+    public int missionConditionId;
+    public HeroConditionType heroConditionType1;
+    public int heroCondition1Value1;
+    public int heroCondition1Value2;
+    public HeroConditionType heroConditionType2;
+    public int heroCondition2Value1;
+    public int heroCondition2Value2;
+    public HeroConditionType heroConditionType3;
+    public int heroCondition3Value1;
+    public int heroCondition3Value2;
 
     public DataExpedition ConvertTo()
     {
@@ -75,27 +77,28 @@ public class TempDataExpedition : IConvertable<DataExpedition>
             expeditionTime = expeditionTime,
             equipmentCount = equipmentCount,
             rewardProbId = rewardProbId,
+            missionConditionId = missionConditionId
         };
 
-        temp.conditions = new List<HeroConditionTypeValue>
+        temp.heroConditions = new List<HeroConditionTypeValue>
         {
             new HeroConditionTypeValue()
             {
-                type = conditionType1,
-                value1 = condition1Value1,
-                value2 = condition1Value2,
+                type = heroConditionType1,
+                value1 = heroCondition1Value1,
+                value2 = heroCondition1Value2,
             },
             new HeroConditionTypeValue()
             {
-                type = conditionType2,
-                value1 = condition2Value1,
-                value2 = condition2Value2,
+                type = heroConditionType2,
+                value1 = heroCondition2Value1,
+                value2 = heroCondition2Value2,
             },
             new HeroConditionTypeValue()
             {
-                type = conditionType3,
-                value1 = condition3Value1,
-                value2 = condition3Value2,
+                type = heroConditionType3,
+                value1 = heroCondition3Value1,
+                value2 = heroCondition3Value2,
             }
         };
 
