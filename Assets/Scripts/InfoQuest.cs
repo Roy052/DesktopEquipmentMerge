@@ -4,9 +4,10 @@ using UnityEngine;
 public enum QuestState
 {
     NotOpened,
+    NotAccept,
     Progress,
     Reward,
-    End
+    Clear
 }
 
 public class InfoQuest : MonoBehaviour

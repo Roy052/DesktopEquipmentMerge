@@ -9,6 +9,8 @@ public class QuestWindow : GameWindow
     public EltQuest eltQuest;
 
     [Header("QuestDesc")]
+    public Text textQuestName;
+    public Text textQuestDesc;
     public EltQuestProgress eltQuestProgress;
     List<EltQuestProgress> questProgresses = new List<EltQuestProgress>();
 
@@ -24,10 +26,15 @@ public class QuestWindow : GameWindow
             return;
         }
         int tIdx = 0;
-        foreach (var kvp in Singleton.gm.gameData.traderLvs)
+        gm.gameData.traderLvs.Add(TraderType.DrakoKingdom, 1);
+        foreach (var (type, lv) in Singleton.gm.gameData.traderLvs)
         {
+            if (lv == 0)
+                continue;
+
             var elt = Utilities.GetOrCreate(traders, tIdx, eltTrader.gameObject);
-            elt.Set(DataTrader.Get(kvp.Key, kvp.Value), kvp.Value);
+            elt.Set(DataTrader.Get(type, lv), lv);
+            elt.funcClick = OnClickTrader;
             elt.SetActive(true);
             tIdx++;
         }
@@ -65,10 +72,13 @@ public class QuestWindow : GameWindow
             return;
 
         DataQuest data = DataQuest.Get(info.questId);
+        textQuestName.text = DataTextTag.FindText(data.tagName);
+        textQuestDesc.text = DataTextTag.FindText(data.tagDesc);
 
         if (eltQuestProgress == null)
         {
-
+            Debug.LogError("EltQuestProgress Not Exist");
+            return;
         }
 
         for (int i = 0; i < data.requireItems.Count; i++)

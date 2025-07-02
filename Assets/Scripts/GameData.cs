@@ -239,7 +239,7 @@ public class GameData
     public bool IsMissionClear(int questId)
     {
         var questInfo = infoQuests.Find(x => x.questId == questId);
-        if (questInfo != null && questInfo.state == QuestState.End)
+        if (questInfo != null && questInfo.state == QuestState.Clear)
             return true;
 
         return false;
