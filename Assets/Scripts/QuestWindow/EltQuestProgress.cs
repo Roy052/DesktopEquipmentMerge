@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class EltQuestProgress : MonoBehaviour
@@ -9,10 +10,16 @@ public class EltQuestProgress : MonoBehaviour
     public Text textProgress;
 
     public RectTransform rectProgressBar;
-    public GameObject objDisable;
+    public GameObject objDisable; 
+    public GameObject objBtnSubmit;
 
-    public void Set(int itemId, int currentCount, int requireCount)
+    public UnityAction<int> funcSubmit;
+    int idx = -1;
+
+    public void Set(int idx, int itemId, int currentCount, int requireCount)
     {
+        this.idx = idx;
+
         DataItem dataItem = DataItem.Get((short)itemId);
         if (dataItem == null)
             return;
@@ -21,5 +28,11 @@ public class EltQuestProgress : MonoBehaviour
         textProgress.text = $"{currentCount} / {requireCount}";
         rectProgressBar.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, MaxWidth * ((float)currentCount / requireCount));
         objDisable.SetActive(currentCount >= requireCount);
+        objBtnSubmit.SetActive(currentCount < requireCount);
+    }
+
+    public void OnClickSubmit()
+    {
+        funcSubmit?.Invoke(idx);
     }
 }

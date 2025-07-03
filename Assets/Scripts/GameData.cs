@@ -7,9 +7,10 @@ public class GameData
 {
     public Dictionary<MergeItemCategory, List<short>> storedEquipmentList = new();
 
+    public int[,] mergeItems;
     public List<InfoHero> infoHeroes = new();
     public Dictionary<short, InfoExpedition> dictInfoExpeditions = new();
-    public List<InfoQuest> infoQuests = new();
+    public Dictionary<TraderType, List<InfoQuest>> traderQuests = new();
     public Dictionary<short, long> itemCounts = new();
     public Dictionary<TraderType, short> traderLvs = new();
     public List<InfoHero> infoHeroRecruits = new();
@@ -20,8 +21,46 @@ public class GameData
 
     public GameData()
     {
+        mergeItems = new int[3, 3];
         isHeroRecruited = new bool[3];
         buildingLvs = new short[(int)BuildingType.Max];
+        
+        for(TraderType type = TraderType.None + 1; type < TraderType.Max; type++)
+        {
+            HashSet<int> checkId = new HashSet<int>();
+            if (traderQuests.TryGetValue(type, out var list) == false)
+            {
+                list = new List<InfoQuest>();
+                traderQuests.Add(type, list);
+            }
+            else
+            {
+                foreach(var item in list)
+                    checkId.Add(item.questId);
+            }
+
+            var dataQuestList = DataQuest.GetAllByTrader(type);
+            foreach (var dataQuest in dataQuestList)
+            {
+                if (checkId.Contains(dataQuest.id))
+                    continue;
+
+                InfoQuest temp = new()
+                {
+                    state = IsConditionClear(dataQuest.conditions) ? QuestState.NotAccept : QuestState.NotOpened,
+                    questId = dataQuest.id,
+                    questProgress = new List<int>()
+                };
+                foreach (var require in dataQuest.requireItems)
+                {
+                    if (require.itemId != -1)
+                        temp.questProgress.Add(0);
+                }
+                list.Add(temp);
+
+                checkId.Add(dataQuest.id);
+            }
+        }
     }
 
     public void RefreshExpedition()
@@ -238,19 +277,22 @@ public class GameData
 
     public bool IsMissionClear(int questId)
     {
-        var questInfo = infoQuests.Find(x => x.questId == questId);
+        DataQuest dataQuest = DataQuest.Get(questId);
+        if (dataQuest == null)
+            return true;
+
+        var questInfo = traderQuests[dataQuest.traderType].Find(x => x.questId == questId);
         if (questInfo != null && questInfo.state == QuestState.Clear)
             return true;
 
         return false;
     }
 
-    public bool IsConditionClear(int questId)
+    public bool IsConditionClear(List<ConditionTypeValue> conditions)
     {
-        DataQuest data = DataQuest.Get(questId);
-        if (data == null) return false;
+        if (conditions == null) return false;
 
-        foreach(var condition in data.conditions)
+        foreach(var condition in conditions)
         {
             switch (condition.type)
             {
@@ -318,5 +360,28 @@ public class GameData
         }
 
         return true;
+    }
+
+    public void RemoveMergeItem(int itemId, int count)
+    {
+        if (count == 0)
+            return;
+
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (itemId == mergeItems[i,j])
+                {
+                    mergeItems[i, j] = 0;
+                    count -= 1;
+                }
+
+                if (count <= 0)
+                    break;
+            }
+        }
+
+        Singleton.mergeWindow.Set(mergeItems);
     }
 }

@@ -17,14 +17,16 @@ public class QuestWindow : GameWindow
     List<EltTrader> traders = new List<EltTrader>();
     List<EltQuest> quests = new List<EltQuest>();
 
+    InfoQuest currentInfoQuest;
+    DataQuest currentDataQuest;
+
     public override void Show()
     {
         base.Show();
-        if (eltTrader == null)
-        {
-            Debug.Log($"EltTrader Not Exist");
-            return;
-        }
+        eltTrader.SetActive(false);
+        eltQuest.SetActive(false);
+        eltQuestProgress.SetActive(false);
+
         int tIdx = 0;
         gm.gameData.traderLvs.Add(TraderType.DrakoKingdom, 1);
         foreach (var (type, lv) in Singleton.gm.gameData.traderLvs)
@@ -44,24 +46,21 @@ public class QuestWindow : GameWindow
 
     public void OnClickTrader(TraderType traderType)
     {
-        if (eltQuest == null)
-        {
-            Debug.Log($"EltQuest Not Exist");
-            return;
-        }
-        var infoQuests = gm.gameData.infoQuests.Where(x => (DataQuest.Get(x.questId)?.traderType ?? TraderType.None) == traderType).ToList();
+        var infoQuests = gm.gameData.traderQuests[traderType];
         var dataQuestByTrader = DataQuest.GetAllByTrader(traderType);
         HashSet<int> progressQuest = new HashSet<int>();
 
         int count = 0;
         for (int i = 0; i < dataQuestByTrader.Count; i++)
         {
-            if (gm.gameData.IsConditionClear(dataQuestByTrader[i].id) == false)
+            if (infoQuests[i].state == QuestState.NotOpened)
                 continue;
 
             var elt = Utilities.GetOrCreate(quests, count, eltQuest.gameObject);
             elt.Set(infoQuests[i]);
+            elt.funcClick = OnClickQuest;
             elt.SetActive(true);
+            count++;
         }
         Utilities.DeactivateSurplus(quests, count);
     }
@@ -71,23 +70,43 @@ public class QuestWindow : GameWindow
         if (info.state == QuestState.NotOpened)
             return;
 
+        currentInfoQuest = info;
+
         DataQuest data = DataQuest.Get(info.questId);
+        currentDataQuest = data;
         textQuestName.text = DataTextTag.FindText(data.tagName);
         textQuestDesc.text = DataTextTag.FindText(data.tagDesc);
 
-        if (eltQuestProgress == null)
-        {
-            Debug.LogError("EltQuestProgress Not Exist");
-            return;
-        }
-
+        int count = 0;
         for (int i = 0; i < data.requireItems.Count; i++)
         {
+            if (data.requireItems[i].itemId == -1)
+                continue;
+
             var elt = Utilities.GetOrCreate(questProgresses, i, eltQuestProgress.gameObject);
-            elt.Set(data.requireItems[i].itemId, info.questProgress[i], data.requireItems[i].itemCount);
+            elt.Set(count, data.requireItems[i].itemId, info.questProgress[i], data.requireItems[i].itemCount);
+            elt.funcSubmit = OnQuestSubmit;
             elt.SetActive(true);
+            count++;
         }
 
-        Utilities.DeactivateSurplus(questProgresses, data.requireItems.Count);
+        Utilities.DeactivateSurplus(questProgresses, count);
+    }
+
+    public void OnQuestSubmit(int idx)
+    {
+        if (currentInfoQuest == null)
+            return;
+
+        int itemId = currentDataQuest.requireItems[idx].itemId;
+        int currentCount = mergeWindow.GetCountByItemId(itemId);
+        if (currentCount == 0)
+            return;
+
+        int currentRequireItem = currentDataQuest.requireItems[idx].itemCount - currentInfoQuest.questProgress[idx];
+        int submitCount = System.Math.Min(currentCount, currentRequireItem);
+
+        currentInfoQuest.questProgress[idx] += submitCount;
+        gm.gameData.RemoveMergeItem(itemId, submitCount);
     }
 }

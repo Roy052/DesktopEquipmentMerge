@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(Button))]
 public class ButtonAddOn : MonoBehaviour, IPointerClickHandler
 {
+    public SFX soundClick = SFX.Click;
+
     private Button btn;
 
     void Awake()
@@ -22,6 +24,6 @@ public class ButtonAddOn : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Singleton.soundManager.PlaySFX(SFX.Click);
+        Singleton.soundManager.PlaySFX(soundClick);
     }
 }

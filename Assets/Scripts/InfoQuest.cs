@@ -10,9 +10,9 @@ public enum QuestState
     Clear
 }
 
-public class InfoQuest : MonoBehaviour
+public class InfoQuest
 {
     public QuestState state;
-    public short questId;
+    public int questId;
     public List<int> questProgress;
 }

@@ -9,7 +9,7 @@ public abstract class GameWindow : Singleton, IBeginDragHandler, IDragHandler
     Canvas canvas;
     Vector2 offset;
 
-    void Awake()
+    protected virtual void Awake()
     {
         rt = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();

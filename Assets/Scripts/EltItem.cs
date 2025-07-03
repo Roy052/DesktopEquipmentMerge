@@ -8,20 +8,20 @@ public class EltItem : MonoBehaviour
     public UnityAction<int> funcClick;
     public GameObject objSelect;
 
-    int type = -1;
+    int id = -1;
     int grade = -1;
     int idx = -1;
 
-    public void Set(int typeIdx, int idx)
+    public void Set(int id, int idx)
     {
         this.idx = idx;
 
-        type = typeIdx;
-        if (typeIdx == 0)
+        this.id = id;
+        if (id == 0)
             imgIcon.sprite = null;
         else
-            imgIcon.sprite = Singleton.resourceManager.dicEquipmentSprites[typeIdx];
-        imgIcon.color = type == 1 ? Color.red : Color.yellow;
+            imgIcon.sprite = Singleton.resourceManager.dicEquipmentSprites[id];
+        imgIcon.color = this.id == 1 ? Color.red : Color.yellow;
     }
 
     public virtual void OnClick()
@@ -29,8 +29,8 @@ public class EltItem : MonoBehaviour
         funcClick?.Invoke(idx);
     }
 
-    public int GetScrapType()
+    public int GetMergeItemId()
     {
-        return type;
+        return id;
     }
 }

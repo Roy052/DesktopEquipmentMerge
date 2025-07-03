@@ -18,7 +18,7 @@ public class ExpeditionMemberUI : WindowUI
     public override void Show()
     {
         base.Show();
-        
+        SetMember();
     }
 
     public void Set(DataExpedition data)

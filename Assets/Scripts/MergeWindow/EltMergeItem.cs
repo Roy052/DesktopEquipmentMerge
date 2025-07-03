@@ -21,7 +21,7 @@ public class EltMergeItem : EltItem, IBeginDragHandler, IDragHandler, IEndDragHa
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (GetScrapType() == 0)
+        if (GetMergeItemId() == 0)
             return;
 
         originalPosition = rectTransform.anchoredPosition;
@@ -29,7 +29,7 @@ public class EltMergeItem : EltItem, IBeginDragHandler, IDragHandler, IEndDragHa
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (GetScrapType() == 0)
+        if (GetMergeItemId() == 0)
             return;
 
         rectTransform.anchoredPosition += eventData.delta / GetCanvasScale();
@@ -37,7 +37,7 @@ public class EltMergeItem : EltItem, IBeginDragHandler, IDragHandler, IEndDragHa
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (GetScrapType() == 0)
+        if (GetMergeItemId() == 0)
             return;
 
         bool isFound = false;
@@ -47,7 +47,7 @@ public class EltMergeItem : EltItem, IBeginDragHandler, IDragHandler, IEndDragHa
         foreach (var res in raycastResults)
         {
             var target = res.gameObject.GetComponent<EltMergeItem>();
-            if (target != null && target != this && target.GetScrapType() != 0)
+            if (target != null && target != this && target.GetMergeItemId() != 0)
             {
                 OnClick();
                 target.OnClick();

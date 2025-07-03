@@ -17,8 +17,8 @@ public class DataHero : IRegistrable
 
     public short id;
     public RoleType role;
-    public ItemType weapon;
-    public ItemType armor;
+    public MergeItemType weapon;
+    public MergeItemType armor;
 
     public void Register()
     {

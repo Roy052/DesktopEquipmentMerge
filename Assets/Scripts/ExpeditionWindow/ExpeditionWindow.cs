@@ -5,8 +5,9 @@ public class ExpeditionWindow : GameWindow
     public ExpeditionUI expeditionUI;
     public ExpeditionMemberUI expeditionMemberUI;
 
-    public void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         expeditionWindow = this;
     }
 
