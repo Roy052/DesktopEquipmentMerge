@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using UnityEngine;
 
 public class GameData
 {
-    public Dictionary<MergeItemCategory, List<short>> storedEquipmentList = new();
+    public Dictionary<MergeItemCategory, List<int>> storedEquipmentList = new();
 
     public int[,] mergeItems;
     public List<InfoHero> infoHeroes = new();
     public Dictionary<short, InfoExpedition> dictInfoExpeditions = new();
     public Dictionary<TraderType, List<InfoQuest>> traderQuests = new();
-    public Dictionary<short, long> itemCounts = new();
+    public Dictionary<int, long> itemCounts = new();
     public Dictionary<TraderType, short> traderLvs = new();
     public List<InfoHero> infoHeroRecruits = new();
     public bool[] isHeroRecruited;
@@ -65,17 +66,23 @@ public class GameData
 
     public void RefreshExpedition()
     {
+        List<short> removeList = new List<short>();
         foreach(var (infoId, info) in dictInfoExpeditions)
         {
             DataExpedition data = DataExpedition.Get(infoId);
             if (info.state == ExpeditionState.Progress && DateTime.Now >= info.startTime.AddMinutes(data.expeditionTime))
                 info.state = ExpeditionState.Reward;
+
+            if (info.state == ExpeditionState.End)
+                removeList.Add(infoId);
+        }
+
+        while (removeList.Count > 0)
+        {
+            dictInfoExpeditions.Remove(removeList[removeList.Count - 1]);
+            removeList.RemoveAt(removeList.Count - 1);
         }
         Observer.onRefreshExpedition?.Invoke();
-
-        //dictInfoExpeditions = dictInfoExpeditions
-        //    .Where(kv => kv.Value.state != ExpeditionState.End)
-        //    .ToDictionary(kv => kv.Key, kv => kv.Value);
     }
 
     public void RefreshAlreadyExpeditionHero()
@@ -97,12 +104,12 @@ public class GameData
         }
     }
 
-    public void AddItems(List<(short, long)> items)
+    public void AddItems(List<(int, long)> items)
     {
         for (int i = 0; i < items.Count; i++)
         {
             var item = items[i];
-            short itemId = item.Item1;
+            int itemId = item.Item1;
             long itemCount = item.Item2;
 
             DataItem dataItem = DataItem.Get(itemId);
@@ -137,7 +144,7 @@ public class GameData
                         }
 
                         if (storedEquipmentList.TryGetValue(category, out var list) == false)
-                            storedEquipmentList[category] = new List<short> { itemId };
+                            storedEquipmentList[category] = new List<int> { itemId };
                         else
                             list.Add(itemId);
                     }
@@ -160,7 +167,7 @@ public class GameData
                         }
 
                         if (storedEquipmentList.TryGetValue(category, out var list) == false)
-                            storedEquipmentList[category] = new List<short> { itemId };
+                            storedEquipmentList[category] = new List<int> { itemId };
                         else
                             list.Add(itemId);
                     }
@@ -168,7 +175,7 @@ public class GameData
                 else
                 {
                     if (storedEquipmentList.TryGetValue(dataMergeItem.category, out var list) == false)
-                        storedEquipmentList[dataMergeItem.category] = new List<short> { itemId };
+                        storedEquipmentList[dataMergeItem.category] = new List<int> { itemId };
                     else
                         list.Add(itemId);
                 }
@@ -245,22 +252,60 @@ public class GameData
             return;
         }
 
-        Dictionary<short, long> dicItems = new Dictionary<short, long>();
+        DataRewardProb dataProb = DataRewardProb.Get(dataExpedition.rewardProbId);
+        if(dataProb == null)
+        {
+            Debug.LogError($"DataRewardProb {dataExpedition.rewardProbId} Not Exist");
+            return;
+        }
+
+        Dictionary<int, long> dicItems = new Dictionary<int, long>();
         for (int i = 0; i < dataExpedition.equipmentCount; i++)
         {
-            short key = (short)UnityEngine.Random.Range(1, 3);
+            MergeItemType randomType = dataProb.types[UnityEngine.Random.Range(0, dataProb.types.Count)];
+
+            //
+            int totalWeight = 0;
+            for (int j = 0; j < dataProb.probs.Count; j++)
+                totalWeight += dataProb.probs[j];
+
+            if(totalWeight == 0)
+            {
+                Debug.LogError($"Total Weight is 0");
+                return;
+            }
+
+            int pickValue = UnityEngine.Random.Range(0, totalWeight);
+            int acc = 0;
+            short randomGrade = 0;
+            for(int j = 0; j < dataProb.probs.Count; j++)
+            {
+                if (dataProb.probs[j] == 0)
+                    continue;
+
+                acc += dataProb.probs[j];
+                if(pickValue < acc)
+                {
+                    randomGrade = (short)(j + 1);
+                    break;
+                }
+            }
+
+            int key = DataMergeItem.GetMergeItemId(randomType, randomGrade);
             if (dicItems.ContainsKey(key))
                 dicItems[key] += 1;
             else
                 dicItems.Add(key, 1);
         }
 
-        List<(short, long)> items = new List<(short, long)>();
+        List<(int, long)> items = new List<(int, long)>();
         foreach (var kvp in dicItems)
             items.Add((kvp.Key, kvp.Value));
 
-        Singleton.gm.gameData.AddItems(items);
-        Observer.onRefreshMergeItem?.Invoke();
+        AddItems(items);
+        
+        Observer.onRefreshExpedition?.Invoke();
+        Observer.onRefreshChest?.Invoke();
     }
 
     public InfoExpedition GetCurrentExpedition(short expeditionId)
@@ -362,6 +407,23 @@ public class GameData
         return true;
     }
 
+    public int GetCountMergeItemId(int itemId)
+    {
+        int count = 0;
+        int row = mergeItems.GetLength(0);
+        int col = mergeItems.GetLength(1);
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < col; j++)
+            {
+                if (itemId == mergeItems[i, j])
+                    count++;
+            }
+        }
+
+        return count;
+    }
+
     public void RemoveMergeItem(int itemId, int count)
     {
         if (count == 0)
@@ -382,6 +444,53 @@ public class GameData
             }
         }
 
-        Singleton.mergeWindow.Set(mergeItems);
+        Observer.onRefreshMergeWindow?.Invoke();
+    }
+
+    public void OnMergeItems((int, int) coord1, (int, int) coord2)
+    {
+        int id1 = mergeItems[coord1.Item1, coord1.Item2];
+        int id2 = mergeItems[coord2.Item1, coord2.Item2];
+
+        if (id1 == 0 || id1 != id2)
+            return;
+
+        if (DataMergeItem.IsMaxGrade(id2))
+            return;
+
+        int nextId = DataMergeItem.GetNextGrade(id2)?.id ?? 0;
+        mergeItems[coord1.Item1, coord1.Item2] = 0;
+        mergeItems[coord2.Item1, coord2.Item2] = nextId;
+
+        Observer.onRefreshMergeWindow?.Invoke();
+    }
+
+    public void OnChestToAddMergeItem(MergeItemCategory category)
+    {
+        if (storedEquipmentList.ContainsKey(category) == false || storedEquipmentList[category].Count == 0)
+        {
+            Debug.Log("Not Exist Stored Equipment");
+            return;
+        }
+
+        List<(int, int)> emptyCoord = new List<(int, int)>();
+        int xLength = mergeItems.GetLength(0);
+        int yLength = mergeItems.GetLength(1);
+        for (int i = 0; i < xLength; i++)
+        {
+            for (int j = 0; j < yLength; j++)
+            {
+                if (mergeItems[i, j] == 0)
+                    emptyCoord.Add((i, j));
+            }
+        }
+
+        var randomCoord = emptyCoord[UnityEngine.Random.Range(0, emptyCoord.Count)];
+        int id = Singleton.gm.gameData.storedEquipmentList[category][0];
+        Singleton.gm.gameData.storedEquipmentList[category].RemoveAt(0);
+        mergeItems[randomCoord.Item1, randomCoord.Item2] = id;
+
+        Observer.onRefreshChest?.Invoke();
+        Observer.onRefreshMergeWindow?.Invoke();
     }
 }

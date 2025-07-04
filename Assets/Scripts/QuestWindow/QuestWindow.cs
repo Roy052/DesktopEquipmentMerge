@@ -99,7 +99,7 @@ public class QuestWindow : GameWindow
             return;
 
         int itemId = currentDataQuest.requireItems[idx].itemId;
-        int currentCount = mergeWindow.GetCountByItemId(itemId);
+        int currentCount = gm.gameData.GetCountMergeItemId(itemId);
         if (currentCount == 0)
             return;
 

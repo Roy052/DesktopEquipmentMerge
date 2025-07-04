@@ -4,14 +4,21 @@ using System.Collections.Generic;
 [Serializable]
 public class DataRewardProb : IRegistrable
 {
-    public static Dictionary<short, DataRewardProb> dictDataRewardProbs = new Dictionary<short, DataRewardProb>();
+    public static Dictionary<int, DataRewardProb> dictDataRewardProbs = new Dictionary<int, DataRewardProb>();
 
-    public short id;
+    public int id;
+    public List<MergeItemType> types;
     public List<int> probs;
 
     public void Register()
     {
         dictDataRewardProbs.Add(id, this);
+    }
+
+    public static DataRewardProb Get(int id)
+    {
+        dictDataRewardProbs.TryGetValue(id, out var value);
+        return value;
     }
 }
 
@@ -19,6 +26,15 @@ public class DataRewardProb : IRegistrable
 public class TempDataRewardProb : IConvertable<DataRewardProb>
 {
     public short id;
+    public MergeItemType type1;
+    public MergeItemType type2;
+    public MergeItemType type3;
+    public MergeItemType type4;
+    public MergeItemType type5;
+    public MergeItemType type6;
+    public MergeItemType type7;
+    public MergeItemType type8;
+    public MergeItemType type9;
     public int prob1;
     public int prob2;
     public int prob3;
@@ -37,6 +53,18 @@ public class TempDataRewardProb : IConvertable<DataRewardProb>
         DataRewardProb temp = new DataRewardProb()
         {
             id = id,
+            types = new List<MergeItemType>() 
+            {
+                type1,
+                type2,
+                type3,
+                type4,
+                type5,
+                type6,
+                type7,
+                type8,
+                type9,
+            },
             probs = new List<int>()
             {
                 prob1,

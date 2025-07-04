@@ -11,9 +11,9 @@ public enum ItemType
 [Serializable]
 public class DataItem : IRegistrable
 {
-    public static Dictionary<short, DataItem> dictDataItems = new Dictionary<short, DataItem>();
+    public static Dictionary<int, DataItem> dictDataItems = new Dictionary<int, DataItem>();
 
-    public short id;
+    public int id;
     public short grade;
     public ItemType type;
     public string tagName;
@@ -25,7 +25,7 @@ public class DataItem : IRegistrable
         dictDataItems.Add(id, this);
     }
 
-    public static DataItem Get(short id)
+    public static DataItem Get(int id)
     {
         dictDataItems.TryGetValue(id, out var dataItem);
         return dataItem;

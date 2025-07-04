@@ -27,7 +27,7 @@ public class GameManager : Singleton
     public void Set()
     {
         gameData = new GameData();
-        gameData.AddItems(new List<(short, long)>() { (0, 100) });
+        gameData.AddItems(new List<(int, long)>() { (0, 100) });
         StartCoroutine(RefreshExpedition());
         mainSM.Set();
     }

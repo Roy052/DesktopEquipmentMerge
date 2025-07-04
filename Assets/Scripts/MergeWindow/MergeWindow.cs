@@ -16,22 +16,29 @@ public class MergeWindow : GameWindow
     {
         base.Awake();
         mergeWindow = this;
-        Observer.onRefreshMergeItem += RefreshChest;
+        Observer.onRefreshMergeWindow += RefreshMergeWindow;
+        Observer.onRefreshChest += RefreshChest;
     }
 
     public void OnDestroy()
     {
         mergeWindow = null;
-        Observer.onRefreshMergeItem -= RefreshChest;
+        Observer.onRefreshMergeWindow -= RefreshMergeWindow;
+        Observer.onRefreshChest -= RefreshChest;
     }
 
     public override void Show()
     {
         base.Show();
+        RefreshMergeWindow();
+    }
+
+    public void RefreshMergeWindow()
+    {
         mergeWindow.Set(gm.gameData.mergeItems);
     }
 
-    public void Set(int[,] scraps)
+    public void Set(int[,] mergeItems)
     {
         for(int i = 0; i < (int)MergeItemCategory.Max; i++)
         {
@@ -43,31 +50,54 @@ public class MergeWindow : GameWindow
 
         Utilities.DeactivateSurplus(eltChestList, (int)MergeItemCategory.Max);
 
-        int xLength = scraps.GetLength(0);
-        int yLength = scraps.GetLength(1);
-        panel = new GameObject[xLength, yLength];
-        eltMergeItems = new EltMergeItem[xLength, yLength];
-        for (int i = 0; i < scraps.GetLength(0); i++)
-            for (int j = 0; j < scraps.GetLength(1); j++)
+        int row = mergeItems.GetLength(0);
+        int col = mergeItems.GetLength(1);
+        
+        if(panel == null)
+        {
+            panel = new GameObject[row, col];
+            eltMergeItems = new EltMergeItem[row, col];
+        }
+        else if(panel.GetLength(0) != row)
+        {
+            GameObject[,] tempPanel = new GameObject[row, col];
+            EltMergeItem[,] tempElt = new EltMergeItem[row, col];
+
+            int tempRow = panel.GetLength(0);
+            int tempCol = panel.GetLength(1);
+            for(int i = 0; i < tempRow; i++)
+                for(int j = 0; j < tempCol; j++)
+                {
+                    tempPanel[i, j] = panel[i, j];
+                    tempElt[i, j] = eltMergeItems[i, j];
+                }
+
+            panel = tempPanel;
+            eltMergeItems = tempElt;
+        }
+            
+        for (int i = 0; i < row; i++)
+            for (int j = 0; j < col; j++)
             {
-                panel[i, j] = Instantiate(objPrefab, objPrefab.transform.parent);
-                panel[i, j].SetActive(true);
-                var temp = panel[i, j].GetComponent<EltMergeItem>();
-                temp.Set(scraps[i, j], i * 100 + j);
-                temp.funcClick = OnClick;
+                EltMergeItem temp = null;
+                if (panel[i, j] == null)
+                {
+                    panel[i, j] = Instantiate(objPrefab, objPrefab.transform.parent);
+                    panel[i, j].SetActive(true);
+                    temp = panel[i, j].GetComponent<EltMergeItem>();
+                    temp.funcClick = OnSelect;
+                }
+                else
+                    temp = eltMergeItems[i, j];
+
+                temp.Set(mergeItems[i, j], i * 100 + j);
                 if (temp != null)
                     eltMergeItems[i, j] = temp;
             }
     }
 
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.M))
-            Singleton.gm.gameData.AddItems(new List<(short, long)>() { (0, 100) });
-    }
-
     int idxFirst = -1;
-    public void OnClick(int idx)
+    public void OnSelect(int idx)
     {
         var coord = GetCoordByIdx(idx);
         var elt = eltMergeItems[coord.Item1, coord.Item2];
@@ -79,49 +109,14 @@ public class MergeWindow : GameWindow
         else
         {
             var coord1 = GetCoordByIdx(idxFirst);
-            var elt1 = eltMergeItems[coord1.Item1, coord1.Item2];
-            int type1st = elt1.GetMergeItemId();
-            int type2nd = elt.GetMergeItemId();
-            
-            if (type1st == type2nd)
-            {
-                gm.gameData.mergeItems[coord1.Item1, coord1.Item2] = 0;
-                gm.gameData.mergeItems[coord.Item1, coord.Item2] = type1st + 1;
-
-                eltMergeItems[coord1.Item1, coord1.Item2].Set(0, idxFirst);
-                eltMergeItems[coord.Item1, coord.Item2].Set(type1st + 1, idx);
-            }
-
+            gm.gameData.OnMergeItems(coord1, coord);
             idxFirst = -1;
         }
     }
 
     public void OnClickChest(MergeItemCategory category)
     {
-        if (gm.gameData.storedEquipmentList.ContainsKey(category) == false || gm.gameData.storedEquipmentList[category].Count == 0)
-        {
-            Debug.Log("Not Exist Stored Equipment");
-            return;
-        }
-
-        List<(int, int)> emptyCoord = new List<(int, int)>();
-        int xLength = eltMergeItems.GetLength(0);
-        int yLength = eltMergeItems.GetLength(1);
-        for (int i = 0; i < xLength; i++)
-        {
-            for (int j = 0; j < yLength; j++)
-            {
-                if (eltMergeItems[i, j].GetMergeItemId() == 0)
-                    emptyCoord.Add((i, j));
-            }
-        }
-        
-        var randomCoord = emptyCoord[Random.Range(0, emptyCoord.Count)];
-        int id = Singleton.gm.gameData.storedEquipmentList[category][0];
-        Singleton.gm.gameData.storedEquipmentList[category].RemoveAt(0);
-        eltMergeItems[randomCoord.Item1, randomCoord.Item2].Set(id, GetIdxByCoord(randomCoord));
-
-        eltChestList[(int)category].Refresh();
+        gm.gameData.OnChestToAddMergeItem(category);
     }
 
     public (int, int) GetCoordByIdx(int idx)
@@ -138,41 +133,5 @@ public class MergeWindow : GameWindow
     {
         for (int i = 0; i < (int)MergeItemCategory.Max; i++)
             eltChestList[i].Refresh();
-    }
-
-    public int GetCountByItemId(int itemId)
-    {
-        int count = 0;
-        for(int i = 0; i < 3; i++)
-        {
-            for(int j = 0; j < 3; j++)
-            {
-                if (itemId == eltMergeItems[i, j].GetMergeItemId())
-                    count++;
-            }
-        }
-
-        return count;
-    }
-
-    public void RemoveByItemId(int itemId, int count)
-    {
-        if (count == 0)
-            return;
-
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                if (itemId == eltMergeItems[i, j].GetMergeItemId())
-                {
-                    eltMergeItems[i, j].Set(0, GetIdxByCoord((i, j)));
-                    count -= 1;
-                }
-
-                if (count <= 0)
-                    break;
-            }
-        }
     }
 }
