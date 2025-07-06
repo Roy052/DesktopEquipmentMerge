@@ -8,6 +8,7 @@ public class EltQuest : MonoBehaviour
     public Text textName;
     public GameObject objClear;
     public GameObject objProgress;
+    public GameObject objSelected;
 
     public UnityAction<InfoQuest> funcClick;
 
@@ -30,4 +31,6 @@ public class EltQuest : MonoBehaviour
     {
         funcClick?.Invoke(info);
     }
+
+    public int QuestId => info.questId;
 }

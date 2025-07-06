@@ -35,7 +35,7 @@ public class MainSM : Singleton
         var buildingLvs = gm.gameData.buildingLvs;
         for (int i = 0; i < buildingLvs.Length; i++)
         {
-            buildings[i].Set((BuildingType)i, buildingLvs[i] == 0);
+            buildings[i].Set((BuildingType)i, buildingLvs[i]);
             buildings[i].funcBuild = OnClickBuild;
         }
     }

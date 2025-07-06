@@ -13,6 +13,7 @@ public class ResourceManager : Singleton
 {
     public EquipmentIdSprite[] equipmentSprites;
     public Dictionary<int, Sprite> dicEquipmentSprites = new Dictionary<int, Sprite>();
+    public Dictionary<string, Sprite> dicResourceSprites = new();
     public Material mat_GrayScale;
 
     public void Awake()
@@ -20,6 +21,12 @@ public class ResourceManager : Singleton
         resourceManager = this;
         foreach (var equipmentSprite in equipmentSprites)
             dicEquipmentSprites[equipmentSprite.id] = equipmentSprite.sprite;
+
+        var sprites = Resources.FindObjectsOfTypeAll<Sprite>();
+        foreach(var sprite in sprites)
+        {
+            dicResourceSprites.Add(sprite.name, sprite);
+        }
     }
 
 

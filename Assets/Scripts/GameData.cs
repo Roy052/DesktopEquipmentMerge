@@ -26,6 +26,7 @@ public class GameData
         isHeroRecruited = new bool[3];
         buildingLvs = new short[(int)BuildingType.Max];
         
+        //Set Quests
         for(TraderType type = TraderType.None + 1; type < TraderType.Max; type++)
         {
             HashSet<int> checkId = new HashSet<int>();
@@ -62,6 +63,9 @@ public class GameData
                 checkId.Add(dataQuest.id);
             }
         }
+
+
+        traderLvs.Add(TraderType.DrakoKingdom, 1);
     }
 
     public void RefreshExpedition()
@@ -424,7 +428,7 @@ public class GameData
         return count;
     }
 
-    public void RemoveMergeItem(int itemId, int count)
+    public void OnRemoveMergeItem(int itemId, int count)
     {
         if (count == 0)
             return;
@@ -492,5 +496,19 @@ public class GameData
 
         Observer.onRefreshChest?.Invoke();
         Observer.onRefreshMergeWindow?.Invoke();
+    }
+
+    public void OnRewardQuest(InfoQuest info)
+    {
+        if (info.state != QuestState.Reward)
+            return;
+
+        DataQuest dataQuest = DataQuest.Get(info.questId);
+        List<(int, long)> rewards = new();
+        foreach(var reward in dataQuest.rewardItems)
+            rewards.Add((reward.itemId, reward.itemCount));
+        AddItems(rewards);
+
+        info.state = QuestState.Clear;
     }
 }

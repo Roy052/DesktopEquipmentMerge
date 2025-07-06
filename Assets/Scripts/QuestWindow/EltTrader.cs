@@ -7,6 +7,7 @@ public class EltTrader : MonoBehaviour
     public Image imgIcon;
     public Text textName;
     public Text textLv;
+    public GameObject objSelected;
 
     public UnityAction<TraderType> funcClick;
 
@@ -23,4 +24,6 @@ public class EltTrader : MonoBehaviour
     {
         funcClick?.Invoke(dataTrader.type);
     }
+
+    public TraderType TraderType => dataTrader.type;
 }

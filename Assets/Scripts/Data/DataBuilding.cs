@@ -29,6 +29,11 @@ public class DataBuilding : IRegistrable
         else
             list.Add(this);
     }
+
+    public static DataBuilding Get(BuildingType type, int lv)
+    {
+        return dictDataBuildings[type]?.Find(x => x.lv == lv) ?? null;
+    }
 }
 
 public enum ConditionType
