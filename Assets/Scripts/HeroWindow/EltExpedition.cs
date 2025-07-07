@@ -28,11 +28,19 @@ public class EltExpedition : MonoBehaviour
         btnSelectExpeditionMember.SetActive(info == null);
         btnGetReward.SetActive(info != null);
         textExpeditionState.SetActive(info != null);
-        if(info != null)
+        textExpeditionRemainTime.SetActive(info != null);
+        if (info != null)
         {
             btnGetReward.enabled = info.state == ExpeditionState.Reward;
             textExpeditionState.text = DataTextTag.FindText($"Expedition_State_{info.state}");
-            textExpeditionRemainTime.text = $"{(int)(info.startTime.AddMinutes(data.expeditionTime) - DateTime.Now).TotalSeconds} √ ";
+
+            if(info.state == ExpeditionState.Progress || info.state == ExpeditionState.Reward)
+            {
+                int remainSec = (int)(info.startTime.AddMinutes(data.expeditionTime) - DateTime.Now).TotalSeconds;
+                if (remainSec <= 0)
+                    remainSec = 0;
+                textExpeditionRemainTime.text = $"{remainSec} √ ";
+            }
         }
 
         bool isLock = true;
@@ -46,7 +54,7 @@ public class EltExpedition : MonoBehaviour
         Singleton.expeditionWindow.ShowExpeditionMember(dataExpedition);
     }
 
-    public void OnclickGetRewardExpedition()
+    public void OnClickGetRewardExpedition()
     {
         Singleton.gm.gameData.GetRewardExpedition(dataExpedition.id);
     }

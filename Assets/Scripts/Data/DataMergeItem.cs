@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using static UnityEditor.Progress;
 
 public enum MergeItemCategory
 {
@@ -87,6 +86,6 @@ public class DataMergeItem : IRegistrable
 
     public static short GetMergeItemId(MergeItemType type, short grade)
     {
-        return (short)(1000 + (int)type * 100 + grade);
+        return (short)(10000 + ((int)type * 100) + grade);
     }
 }

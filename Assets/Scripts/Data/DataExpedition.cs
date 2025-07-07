@@ -28,6 +28,7 @@ public class DataExpedition : IRegistrable
     public int equipmentCount;
     public int rewardProbId;
     public int missionConditionId;
+    public int exp;
     public List<HeroConditionTypeValue> heroConditions;
 
     public void Register()

@@ -42,6 +42,9 @@ public class GameData
             }
 
             var dataQuestList = DataQuest.GetAllByTrader(type);
+            if (dataQuestList == null)
+                continue;
+            
             foreach (var dataQuest in dataQuestList)
             {
                 if (checkId.Contains(dataQuest.id))
@@ -54,18 +57,14 @@ public class GameData
                     questProgress = new List<int>()
                 };
                 foreach (var require in dataQuest.requireItems)
-                {
-                    if (require.itemId != -1)
-                        temp.questProgress.Add(0);
-                }
+                    temp.questProgress.Add(0);
                 list.Add(temp);
 
                 checkId.Add(dataQuest.id);
             }
         }
 
-
-        traderLvs.Add(TraderType.DrakoKingdom, 1);
+        traderLvs.Add(TraderType.Keeper, 1);
     }
 
     public void RefreshExpedition()
@@ -148,9 +147,17 @@ public class GameData
                         }
 
                         if (storedEquipmentList.TryGetValue(category, out var list) == false)
-                            storedEquipmentList[category] = new List<int> { itemId };
+                        {
+                            List<int> tempList = new((int)itemCount);
+                            for (int j = 0; j < itemCount; j++)
+                                tempList.Add(itemId);
+                            storedEquipmentList[category] = tempList;
+                        }
                         else
-                            list.Add(itemId);
+                        {
+                            for (int j = 0; j < itemCount; j++)
+                                list.Add(itemId);
+                        }
                     }
                     //2. If Not First, Check Before
                     else
@@ -171,17 +178,33 @@ public class GameData
                         }
 
                         if (storedEquipmentList.TryGetValue(category, out var list) == false)
-                            storedEquipmentList[category] = new List<int> { itemId };
+                        {
+                            List<int> tempList = new((int)itemCount);
+                            for (int j = 0; j < itemCount; j++)
+                                tempList.Add(itemId);
+                            storedEquipmentList[category] = tempList;
+                        }
                         else
-                            list.Add(itemId);
+                        {
+                            for (int j = 0; j < itemCount; j++)
+                                list.Add(itemId);
+                        }
                     }
                 }
                 else
                 {
                     if (storedEquipmentList.TryGetValue(dataMergeItem.category, out var list) == false)
-                        storedEquipmentList[dataMergeItem.category] = new List<int> { itemId };
+                    {
+                        List<int> tempList = new((int)itemCount);
+                        for (int j = 0; j < itemCount; j++)
+                            tempList.Add(itemId);
+                        storedEquipmentList[dataMergeItem.category] = tempList;
+                    }
                     else
-                        list.Add(itemId);
+                    {
+                        for (int j = 0; j < itemCount; j++)
+                            list.Add(itemId);
+                    }
                 }
             }
             else
@@ -256,6 +279,7 @@ public class GameData
             return;
         }
 
+        //Items
         DataRewardProb dataProb = DataRewardProb.Get(dataExpedition.rewardProbId);
         if(dataProb == null)
         {
@@ -263,22 +287,21 @@ public class GameData
             return;
         }
 
+        int totalWeight = 0;
+        for (int j = 0; j < dataProb.probs.Count; j++)
+            totalWeight += dataProb.probs[j];
+
+        if (totalWeight == 0)
+        {
+            Debug.LogError($"Total Weight is 0");
+            return;
+        }
+
         Dictionary<int, long> dicItems = new Dictionary<int, long>();
         for (int i = 0; i < dataExpedition.equipmentCount; i++)
         {
-            MergeItemType randomType = dataProb.types[UnityEngine.Random.Range(0, dataProb.types.Count)];
-
-            //
-            int totalWeight = 0;
-            for (int j = 0; j < dataProb.probs.Count; j++)
-                totalWeight += dataProb.probs[j];
-
-            if(totalWeight == 0)
-            {
-                Debug.LogError($"Total Weight is 0");
-                return;
-            }
-
+            int typeCount = dataProb.types.FindAll(x => x != MergeItemType.None).Count;
+            MergeItemType randomType = dataProb.types[UnityEngine.Random.Range(0, typeCount)];
             int pickValue = UnityEngine.Random.Range(0, totalWeight);
             int acc = 0;
             short randomGrade = 0;
@@ -308,8 +331,13 @@ public class GameData
 
         AddItems(items);
         
+        //Heroes
+        foreach(int idx in info.heroIdxes)
+            infoHeroes[idx].exp += dataExpedition.exp;
+
         Observer.onRefreshExpedition?.Invoke();
         Observer.onRefreshChest?.Invoke();
+        Observer.onRefreshHeroes?.Invoke();
     }
 
     public InfoExpedition GetCurrentExpedition(short expeditionId)

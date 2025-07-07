@@ -10,7 +10,7 @@ public class EltBuilding : MonoBehaviour
     public Button btnLvUp;
     public GameWindow gameWindow;
     public SlotItem slotRequireItem;
-    List<SlotItem> slotItems;
+    List<SlotItem> slotRequireItems = new();
 
     public UnityAction<BuildingType> funcBuild;
     public UnityAction<BuildingType> funcLvUp;
@@ -21,20 +21,32 @@ public class EltBuilding : MonoBehaviour
     public void Set(BuildingType type, int lv)
     {
         this.type = type;
+        this.lv = lv;
 
         imgBuilding.material = lv == 0 ? Singleton.resourceManager.mat_GrayScale : null;
         btnBuild.SetActive(lv == 0);
         btnLvUp.SetActive(lv != 0);
 
+        slotRequireItem.SetActive(false);
         DataBuilding dataBuilding = DataBuilding.Get(type, lv);
+        if(dataBuilding == null)
+        {
+            Debug.LogError($"Data Building Not Exist {type} {lv}");
+            return;
+        }
+
         for(int i = 0; i < dataBuilding.requireItems.Count; i++)
         {
-            var elt = Utilities.GetOrCreate(slotItems, i, slotRequireItem.gameObject);
-            elt.Set(DataItem.Get(dataBuilding.requireItems[i].itemId).resImage);
+            var requireItem = dataBuilding.requireItems[i];
+            if (requireItem.itemId == -1)
+                continue;
+
+            var elt = Utilities.GetOrCreate(slotRequireItems, i, slotRequireItem.gameObject);
+            elt.Set(DataItem.Get(requireItem.itemId).resImage, requireItem.itemCount);
             elt.SetActive(true);
         }
 
-        Utilities.DeactivateSurplus(slotItems, dataBuilding.requireItems.Count);
+        Utilities.DeactivateSurplus(slotRequireItems, dataBuilding.requireItems.Count);
     }
 
     public void OnClick()

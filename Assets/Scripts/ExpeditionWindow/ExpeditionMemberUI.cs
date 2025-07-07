@@ -65,6 +65,9 @@ public class ExpeditionMemberUI : WindowUI
         if (isConditionClear == false)
             return;
 
+        if (selectedMembers.Count == 0)
+            return;
+
         InfoExpedition info = new InfoExpedition()
         {
             expeditionId = dataExpedition.id,

@@ -13,8 +13,9 @@ public class EltHero : MonoBehaviour
     public virtual void Set(InfoHero info)
     {
         infoUnit = info;
+        int lv = DataLv.GetLv(info.exp);
         if (textLv)
-            textLv.text = $"Lv.{info.exp}";
+            textLv.text = $"Lv.{lv}";
         if (textName)
             textName.text = info.strName;
 

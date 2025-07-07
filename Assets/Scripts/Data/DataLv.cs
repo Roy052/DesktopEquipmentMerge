@@ -11,7 +11,9 @@ public class DataLv : IRegistrable
     public short lv;
     public int expMin;
     public int expMax;
-    
+    public int traderExpMin;
+    public int traderExpMax;
+
     public void Register()
     {
         dictLvs.Add(lv, this);
@@ -24,6 +26,17 @@ public class DataLv : IRegistrable
         foreach(var kvp in dictLvs)
         {
             if (exp >= kvp.Value.expMin && exp <= kvp.Value.expMax)
+                return kvp.Key;
+        }
+
+        return 1;
+    }
+
+    public static int GetTraderLv(int exp)
+    {
+        foreach (var kvp in dictLvs)
+        {
+            if (exp >= kvp.Value.traderExpMin && exp <= kvp.Value.traderExpMax)
                 return kvp.Key;
         }
 

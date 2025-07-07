@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Linq;
+using UnityEditor.Rendering;
 
 public class QuestWindow : GameWindow
 {
@@ -40,6 +41,10 @@ public class QuestWindow : GameWindow
         foreach (var (type, lv) in Singleton.gm.gameData.traderLvs)
         {
             if (lv == 0)
+                continue;
+
+            var dataQuestByTrader = DataQuest.GetAllByTrader(type);
+            if (dataQuestByTrader == null || dataQuestByTrader.Count == 0)
                 continue;
 
             var elt = Utilities.GetOrCreate(eltTraders, tIdx, eltTrader.gameObject);
@@ -95,7 +100,7 @@ public class QuestWindow : GameWindow
         textQuestName.text = DataTextTag.FindText(data.tagName);
         textQuestDesc.text = DataTextTag.FindText(data.tagDesc);
 
-        if(info.state == QuestState.Progress)
+        if(info.state != QuestState.NotAccept)
         {
             int count = 0;
             for (int i = 0; i < data.requireItems.Count; i++)
@@ -138,7 +143,7 @@ public class QuestWindow : GameWindow
         gm.gameData.OnRemoveMergeItem(itemId, submitCount);
 
         bool isComplete = true;
-        for (int i = 0; i < currentDataQuest.requireItems.Count; i++)
+        for (int i = 0; i < currentInfoQuest.questProgress.Count; i++)
         {
             if (currentInfoQuest.questProgress[i] < currentDataQuest.requireItems[i].itemCount)
             {
