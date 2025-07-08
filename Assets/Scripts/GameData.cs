@@ -13,7 +13,7 @@ public class GameData
     public Dictionary<short, InfoExpedition> dictInfoExpeditions = new();
     public Dictionary<TraderType, List<InfoQuest>> traderQuests = new();
     public Dictionary<int, long> itemCounts = new();
-    public Dictionary<TraderType, short> traderLvs = new();
+    public Dictionary<TraderType, int> traderExps = new();
     public List<InfoHero> infoHeroRecruits = new();
     public bool[] isHeroRecruited;
     public TimeSpan recruitRefreshRemainTime = TimeSpan.Zero;
@@ -64,7 +64,7 @@ public class GameData
             }
         }
 
-        traderLvs.Add(TraderType.Keeper, 1);
+        traderExps.Add(TraderType.Keeper, 1);
     }
 
     public void RefreshExpedition()
@@ -381,7 +381,8 @@ public class GameData
                         return false;
                     break;
                 case ConditionType.TraderLv:
-                    traderLvs.TryGetValue((TraderType)condition.value1, out short lv);
+                    traderExps.TryGetValue((TraderType)condition.value1, out int exp);
+                    int lv = DataLv.GetTraderLv(exp);
                     if (lv < condition.value2)
                         return false;
                     break;
@@ -538,5 +539,7 @@ public class GameData
         AddItems(rewards);
 
         info.state = QuestState.Clear;
+        traderExps.TryGetValue(dataQuest.traderType, out int exp);
+        traderExps[dataQuest.traderType] = exp + dataQuest.rewardTraderExp;
     }
 }

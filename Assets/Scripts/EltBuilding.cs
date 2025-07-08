@@ -42,7 +42,7 @@ public class EltBuilding : MonoBehaviour
                 continue;
 
             var elt = Utilities.GetOrCreate(slotRequireItems, i, slotRequireItem.gameObject);
-            elt.Set(DataItem.Get(requireItem.itemId).resImage, requireItem.itemCount);
+            elt.Set(requireItem.itemId, requireItem.itemCount);
             elt.SetActive(true);
         }
 

@@ -38,11 +38,11 @@ public class QuestWindow : GameWindow
         eltQuestProgress.SetActive(false);
 
         int tIdx = 0;
-        foreach (var (type, lv) in Singleton.gm.gameData.traderLvs)
+        foreach (var (type, exp) in Singleton.gm.gameData.traderExps)
         {
-            if (lv == 0)
+            if (exp == 0)
                 continue;
-
+            short lv = DataLv.GetTraderLv(exp);
             var dataQuestByTrader = DataQuest.GetAllByTrader(type);
             if (dataQuestByTrader == null || dataQuestByTrader.Count == 0)
                 continue;

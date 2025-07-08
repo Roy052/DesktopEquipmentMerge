@@ -6,10 +6,18 @@ public class SlotItem : MonoBehaviour
     public Image imgItem;
     public Text textCount;
 
-    public void Set(string name, int count)
+    public void Set(int id, long count)
     {
-        if (Singleton.resourceManager.dicResourceSprites.TryGetValue(name, out var sprite))
+        DataItem dataItem = DataItem.Get(id);
+        if(dataItem == null)
+        {
+            Debug.LogError($"Data Item Not Exist {id}");
+            return;
+        }
+
+        if (Singleton.resourceManager.dicResourceSprites.TryGetValue(dataItem.resImage, out var sprite))
             imgItem.sprite = sprite;
-        textCount.text = count.ToString();
+        if (textCount)
+            textCount.text = Utilities.CountUnitConversion(count);
     }
 }

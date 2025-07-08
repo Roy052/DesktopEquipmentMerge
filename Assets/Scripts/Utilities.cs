@@ -30,4 +30,15 @@ public static class Utilities
         for (int i = from; i < pool.Count; i++)
             pool[i].gameObject.SetActive(false);
     }
+
+    static long[] ConvValue = new long[] { 1000000, 1000, };
+    public static string CountUnitConversion(long count)
+    {
+        if (count >= ConvValue[0] * 100)
+            return $"{count / ConvValue[0]}M";
+        else if (count >= ConvValue[1] * 100)
+            return $"{count / ConvValue[1]}K";
+        else
+            return $"{count}";
+    }
 }

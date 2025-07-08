@@ -11,6 +11,8 @@ public enum ItemType
 [Serializable]
 public class DataItem : IRegistrable
 {
+    public const int GoldId = 0;
+
     public static Dictionary<int, DataItem> dictDataItems = new Dictionary<int, DataItem>();
 
     public int id;

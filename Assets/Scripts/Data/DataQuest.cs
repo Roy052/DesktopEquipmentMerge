@@ -14,6 +14,7 @@ public class DataQuest : IRegistrable
     public List<ConditionTypeValue> conditions;
     public List<ItemIdCount> requireItems;
     public List<ItemIdCount> rewardItems;
+    public int rewardTraderExp;
 
     public void Register()
     {
@@ -66,6 +67,7 @@ public class TempDataQuest : IConvertable<DataQuest>
     public int rewardItemCount2;
     public int rewardItemId3;
     public int rewardItemCount3;
+    public int rewardTraderExp;
 
     public DataQuest ConvertTo()
     {
@@ -75,6 +77,7 @@ public class TempDataQuest : IConvertable<DataQuest>
             traderType = traderType,
             tagName = tagName,
             tagDesc = tagDesc,
+            rewardTraderExp = rewardTraderExp
         };
 
         temp.conditions = new List<ConditionTypeValue>

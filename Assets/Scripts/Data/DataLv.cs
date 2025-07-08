@@ -21,7 +21,7 @@ public class DataLv : IRegistrable
             MaxLv = lv;
     }
 
-    public static int GetLv(int exp)
+    public static short GetLv(int exp)
     {
         foreach(var kvp in dictLvs)
         {
@@ -32,7 +32,7 @@ public class DataLv : IRegistrable
         return 1;
     }
 
-    public static int GetTraderLv(int exp)
+    public static short GetTraderLv(int exp)
     {
         foreach (var kvp in dictLvs)
         {

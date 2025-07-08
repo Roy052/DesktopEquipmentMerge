@@ -1,24 +1,31 @@
 using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine.UI;
 
 public class StorageWindow : GameWindow
 {
-    public EltItem eltItem;
+    public SlotItem slotGold;
+    public Text textGoldCount;
 
-    List<EltItem> eltItemList = new List<EltItem>();
+    public SlotItem slotItem;
+    List<SlotItem> slotItemList = new List<SlotItem>();
 
     public override void Show()
     {
         base.Show();
 
         int tIdx = 0;
-        foreach (var kvp in Singleton.gm.gameData.itemCounts)
+        foreach (var (itemId, itemCount) in Singleton.gm.gameData.itemCounts)
         {
-            var elt = Utilities.GetOrCreate(eltItemList, tIdx, eltItem.gameObject);
-            elt.Set(kvp.Key, (int)kvp.Value);
+            if(itemId == DataItem.GoldId)
+            {
+                textGoldCount.text = itemCount.ToString("#,0");
+                continue;
+            }
+            var elt = Utilities.GetOrCreate(slotItemList, tIdx, slotItem.gameObject);
+            elt.Set(itemId, itemCount);
             elt.SetActive(true);
             tIdx++;
         }
-        Utilities.DeactivateSurplus(eltItemList, tIdx);
+        Utilities.DeactivateSurplus(slotItemList, tIdx);
     }
 }
