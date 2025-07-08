@@ -3,20 +3,29 @@ using UnityEngine;
 
 public class HeroMemberUI : WindowUI
 {
-    public EltHero eltHero;
+    public EltHeroMember eltHeroMember;
+    public HeroMemberInfoUI heroMemberInfoUI;
 
-    List<EltHero> eltHeroList = new List<EltHero>();
+    List<EltHeroMember> eltHeroMemberList = new List<EltHeroMember>();
+    List<InfoHero> infoHeroes = new();
 
     public override void Show()
     {
         base.Show();
-        var list = Singleton.gm.gameData.infoHeroes;
-        for(int i = 0; i < list.Count; i++)
+        infoHeroes = Singleton.gm.gameData.infoHeroes;
+        for(int i = 0; i < infoHeroes.Count; i++)
         {
-            var elt = Utilities.GetOrCreate(eltHeroList, i, eltHero.gameObject);
-            elt.Set(list[i]);
+            var elt = Utilities.GetOrCreate(eltHeroMemberList, i, eltHeroMember.gameObject);
+            elt.Set(infoHeroes[i], i);
+            elt.funcClick = OnClickMember;
             elt.SetActive(true);
         }
-        Utilities.DeactivateSurplus(eltHeroList, list.Count);
+        Utilities.DeactivateSurplus(eltHeroMemberList, infoHeroes.Count);
+    }
+
+    public void OnClickMember(int idx)
+    {
+        heroMemberInfoUI.Set(infoHeroes[idx]);
+        heroMemberInfoUI.Show();
     }
 }

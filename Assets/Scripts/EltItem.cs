@@ -15,13 +15,15 @@ public class EltItem : MonoBehaviour
     public void Set(int id, int idx)
     {
         this.idx = idx;
-
         this.id = id;
-        if (id == 0)
-            imgIcon.sprite = null;
-        else
-            imgIcon.sprite = Singleton.resourceManager.dicEquipmentSprites[id];
-        imgIcon.color = this.id == 1 ? Color.red : Color.yellow;
+        if (imgIcon != null)
+        {
+            if (id == 0)
+                imgIcon.sprite = null;
+            else
+                imgIcon.sprite = Singleton.resourceManager.dicEquipmentSprites[id];
+            imgIcon.color = this.id == 1 ? Color.red : Color.yellow;
+        }
     }
 
     public virtual void OnClick()
