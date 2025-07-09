@@ -10,6 +10,7 @@ public enum QuestState
     Clear
 }
 
+[System.Serializable]
 public class InfoQuest
 {
     public QuestState state;

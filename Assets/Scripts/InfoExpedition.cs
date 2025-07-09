@@ -10,6 +10,7 @@ public enum ExpeditionState
     End
 }
 
+[System.Serializable]
 public class InfoExpedition
 {
     public int expeditionUid;

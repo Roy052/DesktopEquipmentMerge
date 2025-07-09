@@ -1,14 +1,99 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.Progress;
+
+[System.Serializable]
+public class Pair<TKey, TValue> { public TKey key; public TValue value; }
+
+[System.Serializable]
+public class PairList<TKey, TValue>
+{
+    public List<Pair<TKey, TValue>> items;
+    public static PairList<TKey, TValue> FromDictionary(Dictionary<TKey, TValue> dict)
+    {
+        var list = new PairList<TKey, TValue> { items = new List<Pair<TKey, TValue>>(dict.Count) };
+        foreach (var kv in dict) list.items.Add(new Pair<TKey, TValue> { key = kv.Key, value = kv.Value });
+        return list;
+    }
+
+    public Dictionary<TKey, TValue> ToDictionary()
+        => items.ToDictionary(p => p.key, p => p.value);
+}
+
+[System.Serializable]
+public class SerializedGameData
+{
+    public PairList<MergeItemCategory, List<int>> storedEquipmentList;
+    public int row;
+    public int col;
+    public List<int> mergeItems;
+    public List<InfoHero> infoHeroes = new();
+    public PairList<short, InfoExpedition> dictInfoExpeditions = new();
+    public PairList<TraderType, List<InfoQuest>> traderQuests = new();
+    public PairList<int, long> itemCounts = new();
+    public PairList<TraderType, int> traderExps = new();
+    public List<InfoHero> infoHeroRecruits = new();
+    public bool[] isHeroRecruited;
+    public long recruitRefreshRemainTimeTick;
+    public List<int> alreadyExpeditionHeroIdxs = new List<int>();
+    public short[] buildingLvs;
+
+    public GameData ToGameData()
+    {
+        GameData data = new()
+        {
+            storedEquipmentList = storedEquipmentList.ToDictionary(),
+            row = row,
+            col = col,
+            mergeItems = new int[row, col]
+        };
+        for (int i = 0; i < row; i++)
+            for (int j = 0; j < col; j++)
+                data.mergeItems[i, j] = mergeItems[i * row + j];
+        data.infoHeroes = infoHeroes;
+        data.dictInfoExpeditions = dictInfoExpeditions.ToDictionary();
+        data.traderQuests = traderQuests.ToDictionary();
+        data.itemCounts = itemCounts.ToDictionary();
+        data.traderExps = traderExps.ToDictionary();
+        data.infoHeroRecruits = infoHeroRecruits;
+        data.isHeroRecruited = isHeroRecruited;
+        data.recruitRefreshRemainTime = TimeSpan.FromTicks(recruitRefreshRemainTimeTick);
+        data.alreadyExpeditionHeroIdxs = alreadyExpeditionHeroIdxs.ToHashSet();
+        data.buildingLvs = buildingLvs;
+
+        return data;
+    }
+
+    public SerializedGameData(GameData data)
+    {
+        storedEquipmentList = PairList<MergeItemCategory, List<int>>.FromDictionary(data.storedEquipmentList);
+        row = data.row;
+        col = data.col;
+        List<int> mergeItems = new List<int>();
+        for (int i = 0; i < row; i++)
+            for (int j = 0; j < col; j++)
+                mergeItems.Add(data.mergeItems[i, j]);
+        infoHeroes = data.infoHeroes;
+        dictInfoExpeditions = PairList<short, InfoExpedition>.FromDictionary(data.dictInfoExpeditions);
+        traderQuests = PairList<TraderType, List<InfoQuest>>.FromDictionary(data.traderQuests);
+        itemCounts = PairList<int, long>.FromDictionary(data.itemCounts);
+        traderExps = PairList<TraderType, int>.FromDictionary(data.traderExps);
+        infoHeroRecruits = data.infoHeroRecruits;
+        isHeroRecruited = data.isHeroRecruited;
+        recruitRefreshRemainTimeTick = data.recruitRefreshRemainTime.Ticks;
+        alreadyExpeditionHeroIdxs = data.alreadyExpeditionHeroIdxs.ToList();
+        buildingLvs = data.buildingLvs;
+    }
+}
 
 public class GameData
 {
     public Dictionary<MergeItemCategory, List<int>> storedEquipmentList = new();
-
+    public int row;
+    public int col;
     public int[,] mergeItems;
     public List<InfoHero> infoHeroes = new();
     public Dictionary<short, InfoExpedition> dictInfoExpeditions = new();
@@ -20,6 +105,7 @@ public class GameData
     public TimeSpan recruitRefreshRemainTime = TimeSpan.Zero;
     public HashSet<int> alreadyExpeditionHeroIdxs = new HashSet<int>();
     public short[] buildingLvs;
+    
 
     public GameData()
     {
@@ -69,6 +155,28 @@ public class GameData
         }
 
         traderExps.Add(TraderType.Keeper, 1);
+    }
+
+    public void Save()
+    {
+        string json = JsonUtility.ToJson(new SerializedGameData(this));
+        string path = Application.dataPath + "/Save";
+        Debug.Log(path);
+        File.WriteAllText(path + "/" + "Save" + 0, json);
+        Debug.Log(json);
+    }
+
+    public void Load()
+    {
+        string path = Application.dataPath + "/StageDatas";
+        if (File.Exists(path + "/" + "Save" + 0) == false)
+        {
+            Debug.LogError("No File Exists");
+            return;
+        }
+        string data = File.ReadAllText(path + "/" + "Save" + 0);
+        Debug.Log(data);
+        GameData gameData = JsonUtility.FromJson<GameData>(data);
     }
 
     public void RefreshExpedition()
