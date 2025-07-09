@@ -36,10 +36,11 @@ public class EltExpedition : MonoBehaviour
 
             if(info.state == ExpeditionState.Progress || info.state == ExpeditionState.Reward)
             {
-                int remainSec = (int)(info.startTime.AddMinutes(data.expeditionTime) - DateTime.Now).TotalSeconds;
-                if (remainSec <= 0)
-                    remainSec = 0;
-                textExpeditionRemainTime.text = $"{remainSec} ÃÊ";
+                int remainSec = (int)(info.startTime.AddSeconds(data.expeditionTime) - DateTime.Now).TotalSeconds;
+                if (remainSec > 0)
+                    textExpeditionRemainTime.text = $"{Utilities.GetStringRemainSec(remainSec)}";
+                else
+                    textExpeditionRemainTime.text = "";
             }
         }
 

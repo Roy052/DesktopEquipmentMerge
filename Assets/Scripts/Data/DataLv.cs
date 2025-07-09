@@ -21,6 +21,12 @@ public class DataLv : IRegistrable
             MaxLv = lv;
     }
 
+    public static DataLv Get(short lv)
+    {
+        dictLvs.TryGetValue(lv, out DataLv data);
+        return data;
+    }
+
     public static short GetLv(int exp)
     {
         foreach(var kvp in dictLvs)

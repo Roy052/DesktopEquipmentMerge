@@ -18,10 +18,8 @@ public class EltItem : MonoBehaviour
         this.id = id;
         if (imgIcon != null)
         {
-            if (id == 0)
-                imgIcon.sprite = null;
-            else
-                imgIcon.sprite = Singleton.resourceManager.dicEquipmentSprites[id];
+            Singleton.resourceManager.dicEquipmentSprites.TryGetValue(id, out var sprite);
+            imgIcon.sprite = sprite;
             imgIcon.color = this.id == 1 ? Color.red : Color.yellow;
         }
     }

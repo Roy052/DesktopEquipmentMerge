@@ -13,14 +13,22 @@ public class HeroMemberUI : WindowUI
     {
         base.Show();
         infoHeroes = Singleton.gm.gameData.infoHeroes;
+        
         for(int i = 0; i < infoHeroes.Count; i++)
         {
             var elt = Utilities.GetOrCreate(eltHeroMemberList, i, eltHeroMember.gameObject);
             elt.Set(infoHeroes[i], i);
             elt.funcClick = OnClickMember;
+            elt.objDisable.SetActive(Singleton.gm.gameData.alreadyExpeditionHeroIdxs.Contains(i));
             elt.SetActive(true);
         }
         Utilities.DeactivateSurplus(eltHeroMemberList, infoHeroes.Count);
+    }
+
+    public override void Hide()
+    {
+        base.Hide();
+        heroMemberInfoUI.Hide();
     }
 
     public void OnClickMember(int idx)

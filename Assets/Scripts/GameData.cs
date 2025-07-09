@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class GameData
 {
@@ -23,6 +24,9 @@ public class GameData
     public GameData()
     {
         mergeItems = new int[3, 3];
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                mergeItems[i, j] = -1;
         isHeroRecruited = new bool[3];
         buildingLvs = new short[(int)BuildingType.Max];
         
@@ -73,7 +77,7 @@ public class GameData
         foreach(var (infoId, info) in dictInfoExpeditions)
         {
             DataExpedition data = DataExpedition.Get(infoId);
-            if (info.state == ExpeditionState.Progress && DateTime.Now >= info.startTime.AddMinutes(data.expeditionTime))
+            if (info.state == ExpeditionState.Progress && DateTime.Now >= info.startTime.AddSeconds(data.expeditionTime))
                 info.state = ExpeditionState.Reward;
 
             if (info.state == ExpeditionState.End)
@@ -252,7 +256,7 @@ public class GameData
         {
             InfoHero info = new InfoHero()
             {
-                heroId = (short)UnityEngine.Random.Range(0, (int)RoleType.Max),
+                heroId = (short)UnityEngine.Random.Range(0, (int)RoleType.Archer),
                 exp = 0,
                 strName = $"Do Re {UnityEngine.Random.Range(0, 100)}",
                 weaponId = -1,
@@ -457,6 +461,25 @@ public class GameData
         return count;
     }
 
+    public List<int> GetMergeItemListByType(MergeItemType type)
+    {
+        List<int> list = new List<int>();
+        int row = mergeItems.GetLength(0);
+        int col = mergeItems.GetLength(1);
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < col; j++)
+            {
+                int itemId = mergeItems[i, j];
+                var dataMergeItem = DataMergeItem.Get(itemId);
+                if (dataMergeItem != null && dataMergeItem.type == type)
+                    list.Add(itemId);
+            }
+        }
+        list.Sort();
+        return list;
+    }
+
     public void OnRemoveMergeItem(int itemId, int count)
     {
         if (count == 0)
@@ -468,7 +491,7 @@ public class GameData
             {
                 if (itemId == mergeItems[i,j])
                 {
-                    mergeItems[i, j] = 0;
+                    mergeItems[i, j] = -1;
                     count -= 1;
                 }
 
@@ -492,7 +515,7 @@ public class GameData
             return;
 
         int nextId = DataMergeItem.GetNextGrade(id2)?.id ?? 0;
-        mergeItems[coord1.Item1, coord1.Item2] = 0;
+        mergeItems[coord1.Item1, coord1.Item2] = -1;
         mergeItems[coord2.Item1, coord2.Item2] = nextId;
 
         Observer.onRefreshMergeWindow?.Invoke();
@@ -513,7 +536,7 @@ public class GameData
         {
             for (int j = 0; j < yLength; j++)
             {
-                if (mergeItems[i, j] == 0)
+                if (mergeItems[i, j] == -1)
                     emptyCoord.Add((i, j));
             }
         }
@@ -541,5 +564,29 @@ public class GameData
         info.state = QuestState.Clear;
         traderExps.TryGetValue(dataQuest.traderType, out int exp);
         traderExps[dataQuest.traderType] = exp + dataQuest.rewardTraderExp;
+    }
+
+    public void ChangeEquipment(InfoHero infoHero, bool isWeapon, int selectItemId)
+    {
+        int row = mergeItems.GetLength(0);
+        int col = mergeItems.GetLength(1);
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < col; j++)
+            {
+                if (selectItemId == mergeItems[i, j])
+                {
+                    int beforeItemId = isWeapon ? infoHero.weaponId : infoHero.armorId;
+                    mergeItems[i, j] = beforeItemId;
+                    if (isWeapon)
+                        infoHero.weaponId = selectItemId;
+                    else
+                        infoHero.armorId = selectItemId;
+                }
+            }
+        }
+
+        Observer.onRefreshMergeWindow?.Invoke();
+        Observer.onRefreshHeroes?.Invoke();
     }
 }

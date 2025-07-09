@@ -15,6 +15,16 @@ public class ExpeditionMemberUI : WindowUI
     DataExpedition dataExpedition;
     bool isConditionClear = false;
 
+    public void Awake()
+    {
+        Observer.onRefreshHeroes += SetMember;
+    }
+
+    public void OnDestroy()
+    {
+        Observer.onRefreshHeroes -= SetMember;
+    }
+
     public override void Show()
     {
         base.Show();

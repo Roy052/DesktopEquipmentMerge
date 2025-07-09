@@ -41,4 +41,18 @@ public static class Utilities
         else
             return $"{count}";
     }
+
+    public static string GetStringRemainSec(int remainSec)
+    {
+        int hours = remainSec / 3600;
+        int minutes = (remainSec % 3600) / 60;
+        int seconds = remainSec % 60;
+
+        if (hours > 0)
+            return $"{hours:00}:{minutes:00}:{seconds:00}";
+        else if (minutes > 0)
+            return $"{minutes:00}:{seconds:00}";
+        else
+            return $"{seconds:00}";
+    }
 }
