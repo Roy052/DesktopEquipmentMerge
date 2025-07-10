@@ -86,7 +86,8 @@ public class SerializedGameData
         recruitRefreshRemainTimeTick = data.recruitRefreshRemainTime.Ticks;
         alreadyExpeditionHeroIdxs = data.alreadyExpeditionHeroIdxs.ToList();
         buildingLvs = data.buildingLvs;
-    }
+
+}
 }
 
 public class GameData
@@ -109,9 +110,11 @@ public class GameData
 
     public GameData()
     {
-        mergeItems = new int[3, 3];
-        for (int i = 0; i < 3; i++)
-            for (int j = 0; j < 3; j++)
+        row = 3;
+        col = 3;
+        mergeItems = new int[row, col];
+        for (int i = 0; i < row; i++)
+            for (int j = 0; j < col; j++)
                 mergeItems[i, j] = -1;
         isHeroRecruited = new bool[3];
         buildingLvs = new short[(int)BuildingType.Max];
@@ -157,26 +160,28 @@ public class GameData
         traderExps.Add(TraderType.Keeper, 1);
     }
 
-    public void Save()
+    public static void Save(GameData gameData)
     {
-        string json = JsonUtility.ToJson(new SerializedGameData(this));
+        string json = JsonUtility.ToJson(new SerializedGameData(gameData));
         string path = Application.dataPath + "/Save";
         Debug.Log(path);
         File.WriteAllText(path + "/" + "Save" + 0, json);
         Debug.Log(json);
     }
 
-    public void Load()
+    public static GameData Load()
     {
-        string path = Application.dataPath + "/StageDatas";
+        string path = Application.dataPath + "/Save";
         if (File.Exists(path + "/" + "Save" + 0) == false)
         {
             Debug.LogError("No File Exists");
-            return;
+            return null;
         }
         string data = File.ReadAllText(path + "/" + "Save" + 0);
         Debug.Log(data);
-        GameData gameData = JsonUtility.FromJson<GameData>(data);
+        SerializedGameData seGameData = JsonUtility.FromJson<SerializedGameData>(data);
+        GameData gameData = seGameData.ToGameData();
+        return gameData;
     }
 
     public void RefreshExpedition()
@@ -197,6 +202,8 @@ public class GameData
             dictInfoExpeditions.Remove(removeList[removeList.Count - 1]);
             removeList.RemoveAt(removeList.Count - 1);
         }
+
+        RefreshAlreadyExpeditionHero();
         Observer.onRefreshExpedition?.Invoke();
     }
 
@@ -399,30 +406,54 @@ public class GameData
             return;
         }
 
-        int totalWeight = 0;
-        for (int j = 0; j < dataProb.probs.Count; j++)
-            totalWeight += dataProb.probs[j];
+        int totalTypeWeight = 0;
+        for (int j = 0; j < dataProb.probTypes.Count; j++)
+            totalTypeWeight += dataProb.probTypes[j];
 
-        if (totalWeight == 0)
+        if (totalTypeWeight == 0)
         {
-            Debug.LogError($"Total Weight is 0");
+            Debug.LogError($"Type Total Weight is 0");
+            return;
+        }
+
+        int totalGradeWeight = 0;
+        for (int j = 0; j < dataProb.probGrades.Count; j++)
+            totalGradeWeight += dataProb.probGrades[j];
+
+        if (totalGradeWeight == 0)
+        {
+            Debug.LogError($"Grade Total Weight is 0");
             return;
         }
 
         Dictionary<int, long> dicItems = new Dictionary<int, long>();
         for (int i = 0; i < dataExpedition.equipmentCount; i++)
         {
-            int typeCount = dataProb.types.FindAll(x => x != MergeItemType.None).Count;
-            MergeItemType randomType = dataProb.types[UnityEngine.Random.Range(0, typeCount)];
-            int pickValue = UnityEngine.Random.Range(0, totalWeight);
+            int pickValue = UnityEngine.Random.Range(0, totalTypeWeight);
             int acc = 0;
-            short randomGrade = 0;
-            for(int j = 0; j < dataProb.probs.Count; j++)
+            MergeItemType randomType = dataProb.types[0];
+            for (int j = 0; j < dataProb.probTypes.Count; j++)
             {
-                if (dataProb.probs[j] == 0)
+                if (dataProb.probTypes[j] == 0)
                     continue;
 
-                acc += dataProb.probs[j];
+                acc += dataProb.probTypes[j];
+                if (pickValue < acc)
+                {
+                    randomType = dataProb.types[j];
+                    break;
+                }
+            }
+
+            pickValue = UnityEngine.Random.Range(0, totalGradeWeight);
+            acc = 0;
+            short randomGrade = 0;
+            for(int j = 0; j < dataProb.probGrades.Count; j++)
+            {
+                if (dataProb.probGrades[j] == 0)
+                    continue;
+
+                acc += dataProb.probGrades[j];
                 if(pickValue < acc)
                 {
                     randomGrade = (short)(j + 1);

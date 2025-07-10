@@ -10,7 +10,7 @@ public class EltItem : MonoBehaviour
 
     int id = -1;
     int grade = -1;
-    int idx = -1;
+    protected int idx = -1;
 
     public void Set(int id, int idx)
     {

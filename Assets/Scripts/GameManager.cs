@@ -24,6 +24,18 @@ public class GameManager : Singleton
         Set();
     }
 
+    public void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.S))
+            GameData.Save(gameData);
+        if (Input.GetKeyUp(KeyCode.L))
+        {
+            gameData = GameData.Load();
+            Observer.RefreshAll();
+        }
+
+    }
+
     public void Set()
     {
         gameData = new GameData();

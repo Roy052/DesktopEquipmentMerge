@@ -1,11 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-public class EltMergeItem : EltItem, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class EltMergeItem : EltItem, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    public UnityAction<int> funcMerge;
+
     Canvas canvas;
     GraphicRaycaster gr;
     List<RaycastResult> raycastResults = new List<RaycastResult>();
@@ -49,8 +52,8 @@ public class EltMergeItem : EltItem, IBeginDragHandler, IDragHandler, IEndDragHa
             var target = res.gameObject.GetComponent<EltMergeItem>();
             if (target != null && target != this && target.GetMergeItemId() != 0)
             {
-                OnClick();
-                target.OnClick();
+                OnMerge();
+                target.OnMerge();
                 isFound = true;
                 break;
             }
@@ -63,6 +66,11 @@ public class EltMergeItem : EltItem, IBeginDragHandler, IDragHandler, IEndDragHa
         }
     }
 
+    public void OnMerge()
+    {
+        funcMerge?.Invoke(idx);
+    }
+
     // 캔버스 스케일 보정 (캔버스가 Scale Mode: Scale With Screen Size 일 때 필요)
     float GetCanvasScale()
     {
@@ -70,4 +78,8 @@ public class EltMergeItem : EltItem, IBeginDragHandler, IDragHandler, IEndDragHa
         return canvas ? canvas.scaleFactor : 1f;
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        OnClick();
+    }
 }

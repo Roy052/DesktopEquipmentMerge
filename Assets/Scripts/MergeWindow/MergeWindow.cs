@@ -85,7 +85,7 @@ public class MergeWindow : GameWindow
                     panel[i, j] = Instantiate(objPrefab, objPrefab.transform.parent);
                     panel[i, j].SetActive(true);
                     temp = panel[i, j].GetComponent<EltMergeItem>();
-                    temp.funcClick = OnSelect;
+                    temp.funcMerge = OnMergeSelect;
                 }
                 else
                     temp = eltMergeItems[i, j];
@@ -97,7 +97,7 @@ public class MergeWindow : GameWindow
     }
 
     int idxFirst = -1;
-    public void OnSelect(int idx)
+    public void OnMergeSelect(int idx)
     {
         var coord = GetCoordByIdx(idx);
         var elt = eltMergeItems[coord.Item1, coord.Item2];

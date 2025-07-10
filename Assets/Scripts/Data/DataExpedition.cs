@@ -58,6 +58,7 @@ public class TempDataExpedition : IConvertable<DataExpedition>
     public int equipmentCount;
     public int rewardProbId;
     public int missionConditionId;
+    public int exp;
     public HeroConditionType heroConditionType1;
     public int heroCondition1Value1;
     public int heroCondition1Value2;
@@ -78,7 +79,8 @@ public class TempDataExpedition : IConvertable<DataExpedition>
             expeditionTime = expeditionTime,
             equipmentCount = equipmentCount,
             rewardProbId = rewardProbId,
-            missionConditionId = missionConditionId
+            missionConditionId = missionConditionId,
+            exp = exp
         };
 
         temp.heroConditions = new List<HeroConditionTypeValue>

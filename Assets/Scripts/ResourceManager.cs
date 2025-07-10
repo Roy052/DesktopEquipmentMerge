@@ -14,6 +14,10 @@ public class ResourceManager : Singleton
     public EquipmentIdSprite[] equipmentSprites;
     public Dictionary<int, Sprite> dicEquipmentSprites = new Dictionary<int, Sprite>();
     public Dictionary<string, Sprite> dicResourceSprites = new();
+    public Dictionary<TutorialType, List<short>> dicTutorialStrs = new()
+    {
+        {TutorialType.Start, new List<short>() {0, } }
+    };
     public Material mat_GrayScale;
 
     public void Awake()

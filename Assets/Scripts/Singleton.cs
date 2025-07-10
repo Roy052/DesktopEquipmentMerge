@@ -7,6 +7,7 @@ public class Singleton : MonoBehaviour
     public static DataManager dataManager;
     public static MainBackground mainBackground;
     public static SoundManager soundManager;
+    public static TutorialManager tutorialManager;
 
     public static MainSM mainSM;
 
