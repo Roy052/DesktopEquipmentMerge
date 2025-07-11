@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 9fb7851de7fa12345a38900a66b8f6a5
+guid: fe3bc328e203a184eae626c29106dd4c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2565081544686508280
-    second: Sword_2_0
+      213: -1820725343609444362
+    second: Res_Sword_3_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Sword_2_0
+      name: Res_Sword_3_0
       rect:
         serializedVersion: 2
-        x: 53
-        y: 10
-        width: 56
-        height: 137
+        x: 0
+        y: 8
+        width: 1024
+        height: 1503
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8f813f21310099320800000000000000
-      internalID: 2565081544686508280
+      spriteID: 6f7ab9452fb7bb6e0800000000000000
+      internalID: -1820725343609444362
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Sword_2_0: 2565081544686508280
+      Res_Sword_3_0: -1820725343609444362
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -3,6 +3,8 @@ using UnityEngine.EventSystems;
 
 public abstract class GameWindow : Singleton, IBeginDragHandler, IDragHandler
 {
+    public Vector2 PosOrigin;
+
     public bool IsShow => gameObject.activeSelf;
 
     RectTransform rt;
@@ -17,14 +19,13 @@ public abstract class GameWindow : Singleton, IBeginDragHandler, IDragHandler
 
     public void OnBeginDrag(PointerEventData e)
     {
-        // 화면→캔버스 좌표 변환
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvas.transform as RectTransform,
             e.position,
             canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera,
             out Vector2 localPos);
 
-        offset = localPos - rt.anchoredPosition;   // 처음 눌렀던 지점과의 거리 저장
+        offset = localPos - rt.anchoredPosition;
     }
 
     // 드래그 중 계속 호출
@@ -36,12 +37,14 @@ public abstract class GameWindow : Singleton, IBeginDragHandler, IDragHandler
             canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera,
             out Vector2 localPos);
 
-        rt.anchoredPosition = localPos - offset;   // “잡은 픽셀”을 기준으로 이동
+        rt.anchoredPosition = localPos - offset;
     }
 
     public virtual void Show()
     {
         gameObject.SetActive(true);
+        if (rt.localPosition.x > 960f || rt.localPosition.x < -960f || rt.localPosition.y > 540f || rt.localPosition.y < -540f)
+            rt.localPosition = PosOrigin;
     }
 
     public virtual void Hide()

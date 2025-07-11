@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 693b81475a7dfe846bcabb7f00c572ef
+guid: e0a261b08e4efda49b339ea5e525e424
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7810549075258930770
-    second: Sword_0_0
+      213: 4511004979187217954
+    second: Res_MoneyBag_1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Sword_0_0
+      name: Res_MoneyBag_1_0
       rect:
         serializedVersion: 2
-        x: 56
-        y: 25
-        width: 50
-        height: 107
+        x: 126
+        y: 57
+        width: 494
+        height: 590
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 256709b7005a46c60800000000000000
-      internalID: 7810549075258930770
+      spriteID: 226f874d02f4a9e30800000000000000
+      internalID: 4511004979187217954
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Sword_0_0: 7810549075258930770
+      Res_MoneyBag_1_0: 4511004979187217954
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

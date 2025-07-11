@@ -18,6 +18,7 @@ public class StorageWindow : GameWindow
         {
             if(itemId == DataItem.GoldId)
             {
+                slotGold.Set(DataItem.GoldId, 0);
                 textGoldCount.text = itemCount.ToString("#,0");
                 continue;
             }

@@ -2191,6 +2191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99aab8bde3bab4749b1f7290d82be983, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PosOrigin: {x: 600, y: 221}
   eltTrader: {fileID: 1619260900}
   eltQuest: {fileID: 384992607}
   textQuestName: {fileID: 1865548248}
@@ -3619,7 +3620,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.08627451}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3878,7 +3879,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 167.48, y: -220}
+  m_AnchoredPosition: {x: 168, y: -192}
   m_SizeDelta: {x: 340, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &538344961
@@ -3931,6 +3932,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c1200af18f3c1241b89226a0ad8dd47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PosOrigin: {x: 168, y: -192}
   tabs:
   - {fileID: 1575963303}
   - {fileID: 886133160}
@@ -7338,17 +7340,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d28e7de16156a4c459bfa787adf14edd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equipmentSprites:
-  - id: 10001
-    sprite: {fileID: 21300000, guid: 693b81475a7dfe846bcabb7f00c572ef, type: 3}
-  - id: 10002
-    sprite: {fileID: 21300000, guid: e9a4931645677fe4384c1cb8e91cfd25, type: 3}
-  - id: 10003
-    sprite: {fileID: 21300000, guid: 9fb7851de7fa12345a38900a66b8f6a5, type: 3}
-  - id: 10101
-    sprite: {fileID: 21300000, guid: 9fb7851de7fa12345a38900a66b8f6a5, type: 3}
-  - id: 10102
-    sprite: {fileID: 21300000, guid: 9fb7851de7fa12345a38900a66b8f6a5, type: 3}
   mat_GrayScale: {fileID: 2100000, guid: 299c5d0dc8dd27040a56e69db32f2d12, type: 2}
 --- !u!1 &1126919433
 GameObject:
@@ -9422,6 +9413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec7777d113b89a14db9d3a6b53ef8711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PosOrigin: {x: 600, y: -192}
   eltChest: {fileID: 1186206022}
   objPrefab: {fileID: 1948012934}
 --- !u!114 &1359723963
@@ -13199,6 +13191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cf72c9689ead9840b960c54bad84ba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PosOrigin: {x: -224, y: 221}
   expeditionUI: {fileID: 1711371175}
   expeditionMemberUI: {fileID: 1570290705}
 --- !u!114 &1789057199
@@ -13683,6 +13676,7 @@ MonoBehaviour:
   textName: {fileID: 1126919435}
   textLv: {fileID: 1470794638}
   rtGauge: {fileID: 2099065098}
+  textPower: {fileID: 0}
   objExpItemBox: {fileID: 1238811095}
   eltExpItem: {fileID: 2130720066}
   eltWeapon: {fileID: 598809566}
@@ -13808,7 +13802,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: 120}
+  m_SizeDelta: {x: 190, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1868201964
 MonoBehaviour:
@@ -15096,15 +15090,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3283440849124294089, guid: 81e2e2b0de67e454fa7f2ee0ec1e1496, type: 3}
       propertyPath: m_Color.b
-      value: 0.40258992
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3283440849124294089, guid: 81e2e2b0de67e454fa7f2ee0ec1e1496, type: 3}
       propertyPath: m_Color.g
-      value: 0.40258992
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3283440849124294089, guid: 81e2e2b0de67e454fa7f2ee0ec1e1496, type: 3}
       propertyPath: m_Color.r
-      value: 0.7830189
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6904840287664483907, guid: 81e2e2b0de67e454fa7f2ee0ec1e1496, type: 3}
       propertyPath: m_Pivot.x
@@ -15625,7 +15619,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -224, y: -220}
+  m_AnchoredPosition: {x: -224, y: -192}
   m_SizeDelta: {x: 340, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2143334561
@@ -15640,6 +15634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6412e7d8027b78d45ad4e60c10a6d1c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PosOrigin: {x: -224, y: -192}
   slotGold: {fileID: 128853138}
   textGoldCount: {fileID: 1180549812}
   slotItem: {fileID: 437320707}

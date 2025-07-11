@@ -18,9 +18,9 @@ public class EltItem : MonoBehaviour
         this.id = id;
         if (imgIcon != null)
         {
-            Singleton.resourceManager.dicEquipmentSprites.TryGetValue(id, out var sprite);
-            imgIcon.sprite = sprite;
-            imgIcon.color = this.id == 1 ? Color.red : Color.yellow;
+            DataItem dataItem = DataItem.Get(id);
+            if (dataItem != null && Singleton.resourceManager.dicResourceSprites.TryGetValue(dataItem.resImage, out var sprite))
+                imgIcon.sprite = sprite;
         }
     }
 

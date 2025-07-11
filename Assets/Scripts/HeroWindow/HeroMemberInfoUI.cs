@@ -9,6 +9,7 @@ public class HeroMemberInfoUI : WindowUI
     public Text textName;
     public Text textLv;
     public RectTransform rtGauge;
+    public Text textPower;
 
     [Header("ExpItem")]
     public GameObject objExpItemBox;
@@ -53,7 +54,11 @@ public class HeroMemberInfoUI : WindowUI
         int upValue = infoHero.exp - dataLv.expMin;
         rtGauge.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, GaugeMax * Mathf.Min(1, (upValue/ (float) bottomValue)));
 
-        Utilities.DeactivateSurplus(eltExpItems, 3);
+        int powerValue = 0;
+        powerValue = lv * 10;
+        powerValue += (DataMergeItem.Get(infoHero.weaponId)?.grade ?? 0) * 100;
+        powerValue += (DataMergeItem.Get(infoHero.armorId)?.grade ?? 0) * 100;
+        textPower.text = powerValue.ToString();
 
         eltWeapon.Set(infoHero.weaponId, -1);
         eltWeapon.funcClick = OnClickWeapon;
