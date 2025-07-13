@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 [Serializable]
 public class DataQuest : IRegistrable
@@ -36,6 +37,11 @@ public class DataQuest : IRegistrable
     {
         dictDataQuestsByTrader.TryGetValue(traderType, out var list);
         return list;
+    }
+
+    public static List<DataQuest> GetAll()
+    {
+        return dictDataQuests.Values.ToList();
     }
 }
 

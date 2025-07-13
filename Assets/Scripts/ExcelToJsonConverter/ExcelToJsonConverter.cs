@@ -87,6 +87,9 @@ public class ExcelToJsonConverter
     public bool ConvertExcelFileToJson(string filePath, string outputPath)
     {
         Debug.Log("Excel To Json Converter: Processing: " + filePath);
+        if (filePath.Contains("~$"))
+            return false;
+
         DataSet excelData = GetExcelDataSet(filePath);
 
         if (excelData == null)

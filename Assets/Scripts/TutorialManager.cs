@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Resources;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -9,15 +7,18 @@ using System.Collections.Generic;
 public enum TutorialType
 {
     Start,
-    Build,
+    Enter,
+    PullEquipment,
     Merge,
     Quest,
     Recruit,
-
+    Max,
 }
 
 public class TutorialManager : Singleton
 {
+    const float PosArrowY = 30f;
+
     public Image[] imageStarts;
 
     public RectTransform rtArrow;
@@ -25,15 +26,32 @@ public class TutorialManager : Singleton
     public GameObject objTextBox;
     public Text textName;
     public TextTyper textTyper;
+    public GameObject objClick;
+
+    Coroutine co_MovementArrow;
 
     public void Awake()
     {
         tutorialManager = this;
+        rtArrow.SetActive(false);
+        objTextBox.SetActive(false);
     }
 
     public void OnDestroy()
     {
         tutorialManager = null;
+    }
+
+    private void Update()
+    {
+        for(int i = 0; i < (int)TutorialType.Recruit + 1; i++)
+        {
+
+            if (Input.GetKeyUp(KeyCode.Alpha1 + i))
+            {
+                Play(TutorialType.Start + i);
+            }
+        }
     }
 
     public void Play(TutorialType type)
@@ -43,6 +61,9 @@ public class TutorialManager : Singleton
 
     public IEnumerator PlayTutorial(TutorialType type)
     {
+        isClicked = false;
+        objClick.SetActive(true);
+
         List<short> tutorialDialogList;
         switch (type)
         {
@@ -59,48 +80,90 @@ public class TutorialManager : Singleton
                     imageStarts[i].SetActive(false);
 
                 resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                for(int i = 0; i < tutorialDialogList.Count; i++)
-                {
-                    DataDialog dataDialog = DataDialog.Get(tutorialDialogList[i]);
-                    if (dataDialog == null)
-                        continue;
-                    textName.text = DataTextTag.FindText(dataDialog.tagName);
+                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return new WaitUntil(() => isClicked);
+                objTextBox.SetActive(false);
 
-                    string text = DataTextTag.FindText(dataDialog.tagText);
-                    textTyper.Play(text);
-                    yield return new WaitUntil(() => textTyper.isTyping == false);
-                    yield return new WaitForSeconds(Mathf.Max(1f, text.Length * 0.1f));
-                }
-                break;
-            case TutorialType.Build:
+                isClicked = false;
                 rtArrow.SetActive(true);
-                rtArrow.transform.localPosition = mainSM.buildings[0].transform.localPosition;
+                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[0].transform as RectTransform, mainCanvas);
+                co_MovementArrow = StartCoroutine(MovementArrow());
                 funcClick = () => mainSM.OnClickBuild(BuildingType.MergeTable);
+                yield return new WaitUntil(() => isClicked);
+                if (co_MovementArrow != null)
+                    StopCoroutine(co_MovementArrow);
+                break;
+            case TutorialType.Enter:
+                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
+                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return new WaitUntil(() => isClicked);
+                objTextBox.SetActive(false);
+
+                isClicked = false;
+                rtArrow.SetActive(true);
+                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[0].transform as RectTransform, mainCanvas) + new Vector2(0, 90f);
+                co_MovementArrow = StartCoroutine(MovementArrow());
+                funcClick = () => mainSM.buildings[0].OnClick();
+                yield return new WaitUntil(() => isClicked);
+                if(co_MovementArrow != null)
+                    StopCoroutine(co_MovementArrow);
+                break;
+            case TutorialType.PullEquipment:
+                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
+                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return new WaitUntil(() => isClicked);
+                objTextBox.SetActive(false);
+
+                isClicked = false;
+                rtArrow.SetActive(true);
+                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mergeWindow.eltChest.transform as RectTransform, mainCanvas);
+                co_MovementArrow = StartCoroutine(MovementArrow());
+                funcClick = () => mergeWindow.OnClickChest(MergeItemCategory.WeaponWarrior);
+                yield return new WaitUntil(() => isClicked);
+                if (co_MovementArrow != null)
+                    StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.Merge:
                 resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                for (int i = 0; i < tutorialDialogList.Count; i++)
-                {
-                    DataDialog dataDialog = DataDialog.Get(tutorialDialogList[i]);
-                    if (dataDialog == null)
-                        continue;
-                    textName.text = DataTextTag.FindText(dataDialog.tagName);
+                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return new WaitUntil(() => isClicked);
+                objTextBox.SetActive(false);
 
-                    string text = DataTextTag.FindText(dataDialog.tagText);
-                    textTyper.Play(text);
-                    yield return new WaitUntil(() => textTyper.isTyping == false);
-                    yield return new WaitForSeconds(Mathf.Max(1f, text.Length * 0.1f));
+                isClicked = false;
+                rtArrow.SetActive(true);
+                Vector2 originPos = Vector2.zero;
+                Vector2 endPos = Vector2.zero;
+
+                int row = gm.gameData.row;
+                int col = gm.gameData.col;
+                for(int i = 0; i < row; i++)
+                {
+                    for (int j = 0; j < col; j++)
+                    {
+                        if (mergeWindow.eltMergeItems[i, j].GetMergeItemId() == -1)
+                            continue;
+
+                        if (originPos == Vector2.zero)
+                            originPos = Utilities.GetLocalPosInCanvas(mergeWindow.eltMergeItems[i, j].transform as RectTransform, mainCanvas);
+                        else
+                            endPos = Utilities.GetLocalPosInCanvas(mergeWindow.eltMergeItems[i, j].transform as RectTransform, mainCanvas);
+                    }
                 }
 
-                rtArrow.SetActive(true);
-                rtArrow.transform.localPosition = mainSM.buildings[0].transform.localPosition;
-                funcClick = () => mergeWindow.OnClickChest(MergeItemCategory.WeaponWarrior);
-                StartCoroutine(MovementArrow());
-                yield return new WaitUntil(() => isClicked == false);
-
+                objClick.SetActive(false);
+                co_MovementArrow = StartCoroutine(MovementArrow(originPos, endPos));
+                Observer.onRefreshMergeWindow += () => isClicked = true;
+                yield return new WaitUntil(() => isClicked);
+                Observer.onRefreshMergeWindow -= () => isClicked = true;
+                StopCoroutine(co_MovementArrow);
                 break;
         }
         yield return null;
+
+        rtArrow.SetActive(false);
+        objTextBox.SetActive(false);
+        isClicked = false;
+        objClick.SetActive(false);
     }
 
     bool isClicked = false;
@@ -119,22 +182,70 @@ public class TutorialManager : Singleton
     IEnumerator MovementArrow()
     {
         float time = 0f;
-        Vector2 originPos = rtArrow.position;
-        Vector2 endPos = originPos + new Vector2(90f,0);
+        Vector2 originPos = rtArrow.localPosition;
+        Vector2 endPos = originPos + new Vector2(0, PosArrowY);
 
         while (true)
         {
             while(time < 1f)
             {
-                rtArrow.position = Vector2.Lerp(originPos, endPos, time);
-                time += Time.deltaTime;
+                rtArrow.localPosition = Vector2.Lerp(originPos, endPos, time);
+                time += Time.deltaTime * 2f;
+                yield return null;
+                Debug.Log($"{rtArrow.localPosition} : {time}");
             }
 
             while(time > 0f)
             {
-                rtArrow.position = Vector2.Lerp(originPos, endPos, time);
-                time -= Time.deltaTime;
+                rtArrow.localPosition = Vector2.Lerp(originPos, endPos, time);
+                time -= Time.deltaTime * 2f;
+                yield return null;
+                Debug.Log($"{rtArrow.localPosition} : {time}");
             }
+        }
+    }
+
+    IEnumerator MovementArrow(Vector2 originPos, Vector2 endPos)
+    {
+        float time = 0f;
+
+        while (true)
+        {
+            while (time < 1f)
+            {
+                rtArrow.localPosition = Vector2.Lerp(originPos, endPos, time);
+                time += Time.deltaTime * 2f;
+                yield return null;
+                Debug.Log($"{rtArrow.localPosition} : {time}");
+            }
+
+            while (time > 0f)
+            {
+                rtArrow.localPosition = Vector2.Lerp(originPos, endPos, time);
+                time -= Time.deltaTime * 2f;
+                yield return null;
+                Debug.Log($"{rtArrow.localPosition} : {time}");
+            }
+        }
+    }
+
+    IEnumerator PlayDialog(List<short> tutorialDialogList)
+    {
+        objTextBox.SetActive(true);
+
+        for (int i = 0; i < tutorialDialogList.Count; i++)
+        {
+            isClicked = false;
+            DataDialog dataDialog = DataDialog.Get(tutorialDialogList[i]);
+            if (dataDialog == null)
+                continue;
+            textName.text = DataTextTag.FindText(dataDialog.tagName);
+
+            string text = DataTextTag.FindText(dataDialog.tagText);
+            textTyper.Play(text);
+            yield return new WaitUntil(() => textTyper.isTyping == false);
+            yield return new WaitForSeconds(0.3f);
+            yield return new WaitUntil(() => isClicked);
         }
     }
 }

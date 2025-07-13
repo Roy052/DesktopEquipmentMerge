@@ -5,7 +5,8 @@ public enum TraderType
 {
     None = -1,
     Keeper,
-    DrakoKingdom,
+    SmallMax,
+    Drako,
     Max
 }
 

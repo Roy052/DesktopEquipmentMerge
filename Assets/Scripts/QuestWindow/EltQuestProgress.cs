@@ -6,6 +6,7 @@ public class EltQuestProgress : MonoBehaviour
 {
     const float MaxWidth = 100f;
 
+    public SlotItem slotItem;
     public Text textRequireItem;
     public Text textProgress;
 
@@ -24,6 +25,7 @@ public class EltQuestProgress : MonoBehaviour
         if (dataItem == null)
             return;
 
+        slotItem.Set(itemId, requireCount);
         textRequireItem.text = DataTextTag.FindText(dataItem.tagName);
         textProgress.text = $"{currentCount} / {requireCount}";
         rectProgressBar.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, MaxWidth * ((float)currentCount / requireCount));

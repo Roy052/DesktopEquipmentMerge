@@ -19,7 +19,8 @@ public class DataManager : Singleton
         Expedition,
         RewardProb,
         Hero,
-        Lv
+        Lv,
+        Dialog,
     }
 
     const string pathHead = "./Assets/Data/";
@@ -57,6 +58,7 @@ public class DataManager : Singleton
         LoadFromJson<DataRewardProb, TempDataRewardProb>(SheetName.RewardProb);
         LoadFromJson<DataHero>(SheetName.Hero);
         LoadFromJson<DataLv>(SheetName.Lv);
+        LoadFromJson<DataDialog>(SheetName.Dialog);
     }
 
     void LoadFromJson<T>(SheetName sheet) where T : IRegistrable

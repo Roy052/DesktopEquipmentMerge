@@ -48,11 +48,21 @@ public static class Utilities
         int minutes = (remainSec % 3600) / 60;
         int seconds = remainSec % 60;
 
-        if (hours > 0)
-            return $"{hours:00}:{minutes:00}:{seconds:00}";
-        else if (minutes > 0)
-            return $"{minutes:00}:{seconds:00}";
-        else
-            return $"{seconds:00}";
+        return $"{hours:00}:{minutes:00}:{seconds:00}";
+    }
+
+    public static Vector2 GetLocalPosInCanvas(RectTransform rectTf, Canvas canvas)
+    {
+        // 1) 월드 → 스크린 좌표
+        Vector2 screen = RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, rectTf.position);
+
+        // 2) 스크린 → 캔버스 내부(local) 좌표
+        RectTransform cvRect = canvas.transform as RectTransform;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(cvRect, screen,
+                                                                canvas.renderMode == RenderMode.ScreenSpaceOverlay
+                                                                    ? null       // Overlay 모드는 카메라가 필요 없음
+                                                                    : canvas.worldCamera,
+                                                                out Vector2 local);
+        return local;   // anchoredPosition 과 같은 기준(+Y가 위)
     }
 }

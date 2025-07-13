@@ -106,10 +106,12 @@ public class GameData
     public TimeSpan recruitRefreshRemainTime = TimeSpan.Zero;
     public HashSet<int> alreadyExpeditionHeroIdxs = new HashSet<int>();
     public short[] buildingLvs;
-    
+    public bool[] isTutorialShowed;
 
     public GameData()
     {
+        storedEquipmentList.Add(MergeItemCategory.WeaponWarrior, new List<int>() {10001, 10001 });
+
         row = 3;
         col = 3;
         mergeItems = new int[row, col];
@@ -118,46 +120,57 @@ public class GameData
                 mergeItems[i, j] = -1;
         isHeroRecruited = new bool[3];
         buildingLvs = new short[(int)BuildingType.Max];
-        
-        //Set Quests
-        for(TraderType type = TraderType.None + 1; type < TraderType.Max; type++)
-        {
-            HashSet<int> checkId = new HashSet<int>();
-            if (traderQuests.TryGetValue(type, out var list) == false)
-            {
-                list = new List<InfoQuest>();
-                traderQuests.Add(type, list);
-            }
-            else
-            {
-                foreach(var item in list)
-                    checkId.Add(item.questId);
-            }
+        buildingLvs[(int)BuildingType.Storage] = 1;
 
-            var dataQuestList = DataQuest.GetAllByTrader(type);
-            if (dataQuestList == null)
-                continue;
-            
-            foreach (var dataQuest in dataQuestList)
-            {
-                if (checkId.Contains(dataQuest.id))
-                    continue;
-
-                InfoQuest temp = new()
-                {
-                    state = IsConditionClear(dataQuest.conditions) ? QuestState.NotAccept : QuestState.NotOpened,
-                    questId = dataQuest.id,
-                    questProgress = new List<int>()
-                };
-                foreach (var require in dataQuest.requireItems)
-                    temp.questProgress.Add(0);
-                list.Add(temp);
-
-                checkId.Add(dataQuest.id);
-            }
-        }
+        SetQuestInfo();
 
         traderExps.Add(TraderType.Keeper, 1);
+
+        isTutorialShowed = new bool[(int)TutorialType.Max];
+    }
+
+    void SetQuestInfo()
+    {
+        var questList = DataQuest.GetAll();
+        foreach (var dataQuest in questList)
+        {
+            if (traderQuests.TryGetValue(dataQuest.traderType, out var list) == false)
+            {
+                list = new List<InfoQuest>();
+                traderQuests.Add(dataQuest.traderType, list);
+            }
+
+            InfoQuest temp = new()
+            {
+                state = IsConditionClear(dataQuest.conditions) ? QuestState.NotAccept : QuestState.NotOpened,
+                questId = dataQuest.id,
+                questProgress = new List<int>()
+            };
+            foreach (var require in dataQuest.requireItems)
+                temp.questProgress.Add(0);
+            list.Add(temp);
+        }
+    }
+
+    void RefreshQuestInfo()
+    {
+        var questList = DataQuest.GetAll();
+        foreach(var (traderType, infoQuestList) in traderQuests)
+        {
+            foreach(var infoQuest in infoQuestList)
+            {
+                if (infoQuest.state == QuestState.NotOpened)
+                {
+                    DataQuest dataQuest = DataQuest.Get(infoQuest.questId);
+                    if(dataQuest == null)
+                    {
+                        Debug.LogError($"Data Quest Not Exist {infoQuest.questId}");
+                        continue;
+                    }
+                    infoQuest.state = IsConditionClear(dataQuest.conditions) ? QuestState.NotAccept : QuestState.NotOpened;
+                }
+            }      
+        }
     }
 
     public static void Save(GameData gameData)
@@ -519,9 +532,18 @@ public class GameData
                 case ConditionType.None:
                     break;
                 case ConditionType.ItemCount:
-                    itemCounts.TryGetValue((short)condition.value1, out long itemCount);
-                    if (itemCount < condition.value2)
-                        return false;
+                    if(condition.value1 / 10000 == 1)
+                    {
+                        int itemCount = GetCountMergeItemId(condition.value1);
+                        if (itemCount < condition.value2)
+                            return false;
+                    }
+                    else
+                    {
+                        itemCounts.TryGetValue(condition.value1, out long itemCount);
+                        if (itemCount < condition.value2)
+                            return false;
+                    }
                     break;
                 case ConditionType.TraderLv:
                     traderExps.TryGetValue((TraderType)condition.value1, out int exp);
@@ -658,6 +680,7 @@ public class GameData
         mergeItems[coord2.Item1, coord2.Item2] = nextId;
 
         Observer.onRefreshMergeWindow?.Invoke();
+        Observer.onRefreshBuilding?.Invoke();
     }
 
     public void OnChestToAddMergeItem(MergeItemCategory category)
@@ -703,6 +726,9 @@ public class GameData
         info.state = QuestState.Clear;
         traderExps.TryGetValue(dataQuest.traderType, out int exp);
         traderExps[dataQuest.traderType] = exp + dataQuest.rewardTraderExp;
+
+        RefreshQuestInfo();
+        Observer.onRefreshQuests?.Invoke();
     }
 
     public void ChangeEquipment(InfoHero infoHero, bool isWeapon, int selectItemId)

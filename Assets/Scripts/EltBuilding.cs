@@ -24,9 +24,7 @@ public class EltBuilding : MonoBehaviour
         this.lv = lv;
 
         imgBuilding.material = lv == 0 ? Singleton.resourceManager.mat_GrayScale : null;
-        btnBuild.SetActive(lv == 0);
-        btnLvUp.SetActive(lv != 0);
-
+        
         slotRequireItem.SetActive(false);
         DataBuilding dataBuilding = DataBuilding.Get(type, lv);
         if(dataBuilding == null)
@@ -35,7 +33,11 @@ public class EltBuilding : MonoBehaviour
             return;
         }
 
-        for(int i = 0; i < dataBuilding.requireItems.Count; i++)
+        bool isConditionClear = Singleton.gm.gameData.IsConditionClear(dataBuilding.conditions);
+        btnBuild.SetActive(isConditionClear && lv == 0);
+        btnLvUp.SetActive(isConditionClear && lv != 0);
+
+        for (int i = 0; i < dataBuilding.requireItems.Count; i++)
         {
             var requireItem = dataBuilding.requireItems[i];
             if (requireItem.itemId == -1)

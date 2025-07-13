@@ -10,6 +10,7 @@ public class QuestWindow : GameWindow
     public EltQuest eltQuest;
 
     [Header("QuestDesc")]
+    public GameObject objQuestDescContents;
     public Text textQuestName;
     public Text textQuestDesc;
     public LayoutElement layoutProgress;
@@ -25,6 +26,17 @@ public class QuestWindow : GameWindow
     InfoQuest currentInfoQuest = null;
     DataQuest currentDataQuest = null;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        Observer.onRefreshQuests += Set;
+    }
+
+    private void OnDestroy()
+    {
+        Observer.onRefreshQuests -= Set;
+    }
+
     public override void Show()
     {
         base.Show();
@@ -36,6 +48,7 @@ public class QuestWindow : GameWindow
         eltTrader.SetActive(false);
         eltQuest.SetActive(false);
         eltQuestProgress.SetActive(false);
+        objQuestDescContents.SetActive(false);
 
         int tIdx = 0;
         foreach (var (type, exp) in Singleton.gm.gameData.traderExps)
@@ -94,6 +107,7 @@ public class QuestWindow : GameWindow
             return;
 
         currentInfoQuest = info;
+        objQuestDescContents.SetActive(true);
 
         DataQuest data = DataQuest.Get(info.questId);
         currentDataQuest = data;

@@ -11,12 +11,14 @@ public class MainSM : Singleton
     private void Awake()
     {
         mainSM = this;
+        mainCanvas = GetComponent<Canvas>();
         Observer.onRefreshBuilding += RefreshBuilding;
     }
 
     private void OnDestroy()
     {
         mainSM = null;
+        mainCanvas = null;
         Observer.onRefreshBuilding -= RefreshBuilding;
     }
 

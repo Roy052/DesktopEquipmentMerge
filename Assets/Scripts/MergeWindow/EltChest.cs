@@ -6,13 +6,16 @@ using UnityEngine.UI;
 public class EltChest : MonoBehaviour
 {
     public Text textCount;
+    public Image imgIcon;
     [NonSerialized]public UnityAction<MergeItemCategory> funcClick;
+    public Sprite[] spriteTypes;
 
     MergeItemCategory category;
 
     public void Set(MergeItemCategory category)
     {
         this.category = category;
+        imgIcon.sprite = spriteTypes[(int)category];
         Refresh();
     }
 

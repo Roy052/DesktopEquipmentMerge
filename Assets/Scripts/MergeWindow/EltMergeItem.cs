@@ -24,7 +24,7 @@ public class EltMergeItem : EltItem, IPointerClickHandler, IBeginDragHandler, ID
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (GetMergeItemId() == 0)
+        if (GetMergeItemId() == -1)
             return;
 
         originalPosition = rectTransform.anchoredPosition;
@@ -32,7 +32,7 @@ public class EltMergeItem : EltItem, IPointerClickHandler, IBeginDragHandler, ID
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (GetMergeItemId() == 0)
+        if (GetMergeItemId() == -1)
             return;
 
         rectTransform.anchoredPosition += eventData.delta / GetCanvasScale();
@@ -40,7 +40,7 @@ public class EltMergeItem : EltItem, IPointerClickHandler, IBeginDragHandler, ID
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (GetMergeItemId() == 0)
+        if (GetMergeItemId() == -1)
             return;
 
         bool isFound = false;
@@ -50,7 +50,7 @@ public class EltMergeItem : EltItem, IPointerClickHandler, IBeginDragHandler, ID
         foreach (var res in raycastResults)
         {
             var target = res.gameObject.GetComponent<EltMergeItem>();
-            if (target != null && target != this && target.GetMergeItemId() != 0)
+            if (target != null && target != this && target.GetMergeItemId() != -1)
             {
                 OnMerge();
                 target.OnMerge();

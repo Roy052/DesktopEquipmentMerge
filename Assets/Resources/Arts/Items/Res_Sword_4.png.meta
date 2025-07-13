@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -116,9 +116,9 @@ TextureImporter:
       name: Res_Sword_4_0
       rect:
         serializedVersion: 2
-        x: 1
+        x: 123
         y: 11
-        width: 1022
+        width: 1287
         height: 1486
       alignment: 0
       pivot: {x: 0, y: 0}

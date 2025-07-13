@@ -20,7 +20,12 @@ public class EltItem : MonoBehaviour
         {
             DataItem dataItem = DataItem.Get(id);
             if (dataItem != null && Singleton.resourceManager.dicResourceSprites.TryGetValue(dataItem.resImage, out var sprite))
+            {
+                imgIcon.SetActive(true);
                 imgIcon.sprite = sprite;
+            }
+            else
+                imgIcon.SetActive(false);
         }
     }
 

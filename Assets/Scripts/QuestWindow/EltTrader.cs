@@ -15,6 +15,11 @@ public class EltTrader : MonoBehaviour
 
     public void Set(DataTrader data, short lv)
     {
+        if (data != null && Singleton.resourceManager.dicResourceSprites.TryGetValue(data.resImage, out var sprite))
+        {
+            imgIcon.SetActive(true);
+            imgIcon.sprite = sprite;
+        }
         dataTrader = data;
         textName.text = DataTextTag.FindText(data.tagName);
         textLv.text = lv.ToString();

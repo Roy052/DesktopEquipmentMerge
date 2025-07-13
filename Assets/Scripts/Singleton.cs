@@ -10,6 +10,7 @@ public class Singleton : MonoBehaviour
     public static TutorialManager tutorialManager;
 
     public static MainSM mainSM;
+    public static Canvas mainCanvas;
 
     //Window
     public static MergeWindow mergeWindow;
