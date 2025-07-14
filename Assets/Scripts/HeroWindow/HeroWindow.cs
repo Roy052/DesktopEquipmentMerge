@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum HeroUI
+{
+    HeroRecruit,
+    HeroMember,
+}
+
 public class HeroWindow : GameWindow
 {
-    public enum HeroUI
-    {
-        HeroRecruit,
-        HeroMember,
-    }
-
     public Toggle[] tabs;
     public WindowUI[] uis;
 

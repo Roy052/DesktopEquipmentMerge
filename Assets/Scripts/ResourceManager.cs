@@ -8,9 +8,11 @@ public class ResourceManager : Singleton
     public Dictionary<TutorialType, List<short>> dicTutorialStrs = new()
     {
         {TutorialType.Start, new List<short>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 } },
-        {TutorialType.Enter, new List<short>() { 19 } },
+        {TutorialType.EnterMerge, new List<short>() { 19 } },
         {TutorialType.PullEquipment, new List<short>() { 20 } },
         {TutorialType.Merge, new List<short>() { 21 } },
+        {TutorialType.BuildOthers, new List<short>() { 22, 23, 24, 25 } },
+        {TutorialType.EnterInn, new List<short>() { 19 } },
 
     };
     public Material mat_GrayScale;

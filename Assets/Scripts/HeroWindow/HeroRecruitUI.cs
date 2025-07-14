@@ -17,12 +17,12 @@ public class HeroRecruitUI : WindowUI
     public void Start()
     {
         Show();
-        Observer.onRefreshRecruit += SetMember;
+        Observer.onRefreshHeroes += SetMember;
     }
 
     public void OnDestroy()
     {
-        Observer.onRefreshRecruit -= SetMember;
+        Observer.onRefreshHeroes -= SetMember;
     }
 
     public override void Show()

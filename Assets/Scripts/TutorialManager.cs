@@ -7,11 +7,15 @@ using System.Collections.Generic;
 public enum TutorialType
 {
     Start,
-    Enter,
+    EnterMerge,
     PullEquipment,
     Merge,
     Quest,
+    BuildOthers,
+    EnterInn,
     Recruit,
+    Expedition,
+    ExpeditionMember,
     Max,
 }
 
@@ -88,12 +92,16 @@ public class TutorialManager : Singleton
                 rtArrow.SetActive(true);
                 rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[0].transform as RectTransform, mainCanvas);
                 co_MovementArrow = StartCoroutine(MovementArrow());
-                funcClick = () => mainSM.OnClickBuild(BuildingType.MergeTable);
+
+                objClick.SetActive(false);
+                Observer.onRefreshBuilding += ChangeIsClicked;
                 yield return new WaitUntil(() => isClicked);
+                Observer.onRefreshBuilding -= ChangeIsClicked;
+
                 if (co_MovementArrow != null)
                     StopCoroutine(co_MovementArrow);
                 break;
-            case TutorialType.Enter:
+            case TutorialType.EnterMerge:
                 resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
                 yield return StartCoroutine(PlayDialog(tutorialDialogList));
                 yield return new WaitUntil(() => isClicked);
@@ -103,9 +111,11 @@ public class TutorialManager : Singleton
                 rtArrow.SetActive(true);
                 rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[0].transform as RectTransform, mainCanvas) + new Vector2(0, 90f);
                 co_MovementArrow = StartCoroutine(MovementArrow());
-                funcClick = () => mainSM.buildings[0].OnClick();
-                yield return new WaitUntil(() => isClicked);
-                if(co_MovementArrow != null)
+
+                objClick.SetActive(false);
+                yield return new WaitUntil(() => mergeWindow.IsShow);
+
+                if (co_MovementArrow != null)
                     StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.PullEquipment:
@@ -118,8 +128,10 @@ public class TutorialManager : Singleton
                 rtArrow.SetActive(true);
                 rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mergeWindow.eltChest.transform as RectTransform, mainCanvas);
                 co_MovementArrow = StartCoroutine(MovementArrow());
-                funcClick = () => mergeWindow.OnClickChest(MergeItemCategory.WeaponWarrior);
-                yield return new WaitUntil(() => isClicked);
+
+                objClick.SetActive(false);
+                yield return new WaitUntil(() => gm.gameData.GetCountMergeItemId(10001) >= 2);
+
                 if (co_MovementArrow != null)
                     StopCoroutine(co_MovementArrow);
                 break;
@@ -149,13 +161,99 @@ public class TutorialManager : Singleton
                             endPos = Utilities.GetLocalPosInCanvas(mergeWindow.eltMergeItems[i, j].transform as RectTransform, mainCanvas);
                     }
                 }
+                co_MovementArrow = StartCoroutine(MovementArrow(originPos, endPos));
 
                 objClick.SetActive(false);
-                co_MovementArrow = StartCoroutine(MovementArrow(originPos, endPos));
-                Observer.onRefreshMergeWindow += () => isClicked = true;
+                Observer.onRefreshMergeWindow += ChangeIsClicked;
                 yield return new WaitUntil(() => isClicked);
-                Observer.onRefreshMergeWindow -= () => isClicked = true;
+                Observer.onRefreshMergeWindow -= ChangeIsClicked;
+
                 StopCoroutine(co_MovementArrow);
+                break;
+            case TutorialType.BuildOthers:
+                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
+                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return new WaitUntil(() => isClicked);
+                objTextBox.SetActive(false);
+
+                isClicked = false;
+                rtArrow.SetActive(true);
+                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[(int)BuildingType.BaseCamp].transform as RectTransform, mainCanvas);
+                co_MovementArrow = StartCoroutine(MovementArrow());
+
+                objClick.SetActive(false);
+                yield return new WaitUntil(() => gm.gameData.buildingLvs[(int)BuildingType.BaseCamp] >= 1);
+
+                if (co_MovementArrow != null)
+                    StopCoroutine(co_MovementArrow);
+
+                isClicked = false;
+                rtArrow.SetActive(true);
+                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[(int)BuildingType.Inn].transform as RectTransform, mainCanvas);
+                co_MovementArrow = StartCoroutine(MovementArrow());
+
+                objClick.SetActive(false);
+                yield return new WaitUntil(() => gm.gameData.buildingLvs[(int)BuildingType.Inn] >= 1);
+
+                if (co_MovementArrow != null)
+                    StopCoroutine(co_MovementArrow);
+                break;
+            case TutorialType.EnterInn:
+                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
+                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return new WaitUntil(() => isClicked);
+                objTextBox.SetActive(false);
+
+                isClicked = false;
+                rtArrow.SetActive(true);
+                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[(int)BuildingType.Inn].transform as RectTransform, mainCanvas) + new Vector2(0, 90f);
+                co_MovementArrow = StartCoroutine(MovementArrow());
+
+                objClick.SetActive(false);
+                yield return new WaitUntil(() => heroWindow.IsShow);
+
+                if (co_MovementArrow != null)
+                    StopCoroutine(co_MovementArrow);
+                break;
+            case TutorialType.Recruit:
+                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
+                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return new WaitUntil(() => isClicked);
+                objTextBox.SetActive(false);
+
+                isClicked = false;
+                rtArrow.SetActive(true);
+                RectTransform rtRecruit = (heroWindow.uis[(int)HeroUI.HeroRecruit] as HeroRecruitUI).eltHeroRecruit.transform.parent as RectTransform;
+                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(rtRecruit, mainCanvas);
+                co_MovementArrow = StartCoroutine(MovementArrow());
+
+                objClick.SetActive(false);
+                Observer.onRefreshHeroes += ChangeIsClicked;
+                yield return new WaitUntil(() => isClicked);
+                Observer.onRefreshHeroes -= ChangeIsClicked;
+
+                if (co_MovementArrow != null)
+                    StopCoroutine(co_MovementArrow);
+                break;
+            case TutorialType.Expedition:
+                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
+                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return new WaitUntil(() => isClicked);
+                objTextBox.SetActive(false);
+
+                isClicked = false;
+                rtArrow.SetActive(true);
+                RectTransform rtExpedition = expeditionWindow.expeditionUI.eltExpedition.btnSelectExpeditionMember.transform as RectTransform;
+                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(rtExpedition, mainCanvas);
+                co_MovementArrow = StartCoroutine(MovementArrow());
+
+                objClick.SetActive(false);
+                yield return new WaitUntil(() => expeditionWindow.expeditionMemberUI.IsShow);
+
+                if (co_MovementArrow != null)
+                    StopCoroutine(co_MovementArrow);
+                break;
+            case TutorialType.ExpeditionMember:
                 break;
         }
         yield return null;
@@ -229,6 +327,24 @@ public class TutorialManager : Singleton
         }
     }
 
+    IEnumerator MovementArrowOneSide(Vector2 originPos, Vector2 endPos)
+    {
+        float time = 0f;
+
+        while (true)
+        {
+            while (time < 1f)
+            {
+                rtArrow.localPosition = Vector2.Lerp(originPos, endPos, time);
+                time += Time.deltaTime * 2f;
+                yield return null;
+                Debug.Log($"{rtArrow.localPosition} : {time}");
+            }
+
+            rtArrow.localPosition = originPos;
+        }
+    }
+
     IEnumerator PlayDialog(List<short> tutorialDialogList)
     {
         objTextBox.SetActive(true);
@@ -247,5 +363,10 @@ public class TutorialManager : Singleton
             yield return new WaitForSeconds(0.3f);
             yield return new WaitUntil(() => isClicked);
         }
+    }
+
+    void ChangeIsClicked()
+    {
+        isClicked = true;
     }
 }

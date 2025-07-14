@@ -370,7 +370,7 @@ public class GameData
         itemCounts[0] -= info.price;
         infoHeroes.Add(info);
         isHeroRecruited[idx] = true;
-        Observer.onRefreshRecruit?.Invoke();
+        Observer.onRefreshHeroes?.Invoke();
     }
 
     public void RefreshRecruitList()
@@ -553,6 +553,10 @@ public class GameData
                     break;
                 case ConditionType.MissionClear:
                     if (IsMissionClear(condition.value1) == false)
+                        return false;
+                    break;
+                case ConditionType.BuildingLv:
+                    if (buildingLvs[condition.value1] < condition.value2)
                         return false;
                     break;
             }

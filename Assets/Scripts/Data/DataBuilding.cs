@@ -42,7 +42,7 @@ public enum ConditionType
     ItemCount = 0, //특수 아이템
     TraderLv,
     MissionClear,
-    TutorialClear,
+    BuildingLv,
 }
 
 public class ConditionTypeValue

@@ -3,7 +3,6 @@ using UnityEngine.Events;
 
 public static class Observer
 {
-    public static UnityAction onRefreshRecruit;
     public static UnityAction onRefreshExpedition;
     public static UnityAction onRefreshChest;
     public static UnityAction onRefreshBuilding;
@@ -13,7 +12,6 @@ public static class Observer
 
     public static void RefreshAll()
     {
-        onRefreshRecruit?.Invoke();
         onRefreshExpedition?.Invoke();
         onRefreshChest?.Invoke();
         onRefreshBuilding?.Invoke();
