@@ -87,7 +87,7 @@ public class SerializedGameData
         alreadyExpeditionHeroIdxs = data.alreadyExpeditionHeroIdxs.ToList();
         buildingLvs = data.buildingLvs;
 
-}
+    }
 }
 
 public class GameData
@@ -486,10 +486,24 @@ public class GameData
             items.Add((kvp.Key, kvp.Value));
 
         AddItems(items);
-        
+
         //Heroes
+        List<int> exps = new();
         foreach(int idx in info.heroIdxes)
+        {
+            exps.Add(infoHeroes[idx].exp);
             infoHeroes[idx].exp += dataExpedition.exp;
+        }
+
+        ExpeditionResult result = new()
+        {
+            itemLists = items,
+            heroIds = new(info.heroIdxes),
+            heroBeforeExps = exps,
+            exp = dataExpedition.exp,
+        };
+        Singleton.expeditionWindow.expeditionResultUI.Set(result);
+        Singleton.expeditionWindow.expeditionResultUI.Show();
 
         Observer.onRefreshExpedition?.Invoke();
         Observer.onRefreshChest?.Invoke();

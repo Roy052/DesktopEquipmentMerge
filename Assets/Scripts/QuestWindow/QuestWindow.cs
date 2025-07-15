@@ -26,6 +26,12 @@ public class QuestWindow : GameWindow
     InfoQuest currentInfoQuest = null;
     DataQuest currentDataQuest = null;
 
+    public TraderType GetTraderType() => currentTraderType;
+
+    public DataQuest GetDataQuest() => currentDataQuest;
+
+    public InfoQuest GetInfoQuest() => currentInfoQuest;
+
     protected override void Awake()
     {
         base.Awake();

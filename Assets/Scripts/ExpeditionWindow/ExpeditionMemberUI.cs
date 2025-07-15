@@ -93,4 +93,9 @@ public class ExpeditionMemberUI : WindowUI
     {
         isConditionClear = Singleton.gm.gameData.IsHeroConditionClear(dataExpedition.id, selectedMembers.ToList());
     }
+
+    public bool IsEmptyMember()
+    {
+        return selectedMembers.Count == 0;
+    }
 }

@@ -4,6 +4,7 @@ public class ExpeditionWindow : GameWindow
 {
     public ExpeditionUI expeditionUI;
     public ExpeditionMemberUI expeditionMemberUI;
+    public ExpeditionResultUI expeditionResultUI;
 
     protected override void Awake()
     {

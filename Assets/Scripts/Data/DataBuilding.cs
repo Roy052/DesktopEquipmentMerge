@@ -5,9 +5,9 @@ public enum BuildingType
 {
     MergeTable,
     Storage,
-    BaseCamp,
-    Inn,
-    Guildhall,
+    ExpeditionCamp,
+    HeroInn,
+    Traderhall,
     Max
 }
 
