@@ -19,7 +19,8 @@ public class HeroMemberUI : WindowUI
             var elt = Utilities.GetOrCreate(eltHeroMemberList, i, eltHeroMember.gameObject);
             elt.Set(infoHeroes[i], i);
             elt.funcClick = OnClickMember;
-            elt.objDisable.SetActive(Singleton.gm.gameData.alreadyExpeditionHeroIdxs.Contains(i));
+            elt.objInExpedition.SetActive(infoHeroes[i].state == HeroState.InExpedition);
+            elt.objInInjury.SetActive(infoHeroes[i].state == HeroState.InInjury);
             elt.SetActive(true);
         }
         Utilities.DeactivateSurplus(eltHeroMemberList, infoHeroes.Count);

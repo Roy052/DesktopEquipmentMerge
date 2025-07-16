@@ -16,6 +16,14 @@ public class InfoExpedition
     public int expeditionUid;
     public short expeditionId;
     public ExpeditionState state;
-    public DateTime startTime;
+    public long startTimeTicks;
     public List<int> heroIdxes;
+
+    public DateTime startTime
+    {
+        get
+        {
+            return new DateTime(startTimeTicks);
+        }
+    }
 }

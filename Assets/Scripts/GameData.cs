@@ -38,7 +38,6 @@ public class SerializedGameData
     public List<InfoHero> infoHeroRecruits = new();
     public bool[] isHeroRecruited;
     public long recruitRefreshRemainTimeTick;
-    public List<int> alreadyExpeditionHeroIdxs = new List<int>();
     public short[] buildingLvs;
 
     public GameData ToGameData()
@@ -61,7 +60,6 @@ public class SerializedGameData
         data.infoHeroRecruits = infoHeroRecruits;
         data.isHeroRecruited = isHeroRecruited;
         data.recruitRefreshRemainTime = TimeSpan.FromTicks(recruitRefreshRemainTimeTick);
-        data.alreadyExpeditionHeroIdxs = alreadyExpeditionHeroIdxs.ToHashSet();
         data.buildingLvs = buildingLvs;
 
         return data;
@@ -84,7 +82,6 @@ public class SerializedGameData
         infoHeroRecruits = data.infoHeroRecruits;
         isHeroRecruited = data.isHeroRecruited;
         recruitRefreshRemainTimeTick = data.recruitRefreshRemainTime.Ticks;
-        alreadyExpeditionHeroIdxs = data.alreadyExpeditionHeroIdxs.ToList();
         buildingLvs = data.buildingLvs;
 
     }
@@ -104,7 +101,6 @@ public class GameData
     public List<InfoHero> infoHeroRecruits = new();
     public bool[] isHeroRecruited;
     public TimeSpan recruitRefreshRemainTime = TimeSpan.Zero;
-    public HashSet<int> alreadyExpeditionHeroIdxs = new HashSet<int>();
     public short[] buildingLvs;
     public bool[] isTutorialShowed;
 
@@ -222,20 +218,13 @@ public class GameData
 
     public void RefreshAlreadyExpeditionHero()
     {
-        alreadyExpeditionHeroIdxs.Clear();
-
         foreach(var (infoId, info) in dictInfoExpeditions)
         {
             if (info.state == ExpeditionState.End)
                 continue;
 
-            foreach(var id in info.heroIdxes)
-            {
-                if (alreadyExpeditionHeroIdxs.Add(id) == false)
-                    Debug.Log($"Already Exist Hero Id");
-
-                alreadyExpeditionHeroIdxs.Add(id);
-            }
+            foreach(var idx in info.heroIdxes)
+                infoHeroes[idx].state = HeroState.InExpedition; 
         }
     }
 
@@ -493,6 +482,7 @@ public class GameData
         {
             exps.Add(infoHeroes[idx].exp);
             infoHeroes[idx].exp += dataExpedition.exp;
+            infoHeroes[idx].state = HeroState.None;
         }
 
         ExpeditionResult result = new()

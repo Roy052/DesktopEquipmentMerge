@@ -4,7 +4,8 @@ using UnityEngine.Events;
 public class EltHeroMember : EltHero
 {
     public UnityAction<int> funcClick;
-    public GameObject objDisable;
+    public GameObject objInExpedition;
+    public GameObject objInInjury;
 
     int idx;
 

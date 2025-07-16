@@ -17,9 +17,10 @@ public enum TutorialType
     ClickAccept,
     ClickSubmit,
     ClickReward,
-    BuildOthers,
-    EnterInn,
+    BuildHeroInn,
+    EnterHeroInn,
     Recruit,
+    BuildExpedition,
     EnterExpedition,
     Expedition,
     ExpeditionMember,
@@ -43,6 +44,7 @@ public class TutorialManager : Singleton
     public GameObject objClick;
 
     Coroutine co_MovementArrow;
+    Coroutine co_CurrentTutorial;
 
     public void Awake()
     {
@@ -58,19 +60,38 @@ public class TutorialManager : Singleton
 
     private void Update()
     {
-        for(int i = 0; i < (int)TutorialType.Recruit + 1; i++)
-        {
+        if (co_CurrentTutorial != null)
+            return;
 
-            if (Input.GetKeyUp(KeyCode.Alpha1 + i))
+        bool isAllCleared = true;
+        for (int i = 0; i < (int)TutorialType.Max; i++)
+        {
+            if (gm.gameData.isTutorialShowed[i] == false)
             {
-                Play(TutorialType.Start + i);
+                switch ((TutorialType)i)
+                {
+                    case TutorialType.ClickExpeditionReward:
+                        if (gm.gameData.dictInfoExpeditions.Count == 0 || gm.gameData.dictInfoExpeditions[0].state != ExpeditionState.Reward)
+                            continue;
+                        break;
+                }
+
+                Play((TutorialType)i);
+                isAllCleared = false;
+                break;
             }
         }
+
+        if (isAllCleared)
+            Destroy(gameObject);
     }
 
     public void Play(TutorialType type)
     {
-        StartCoroutine(PlayTutorial(type));
+        if (co_CurrentTutorial != null)
+            return;
+
+        co_CurrentTutorial = StartCoroutine(PlayTutorial(type));
     }
 
     public IEnumerator PlayTutorial(TutorialType type)
@@ -78,7 +99,6 @@ public class TutorialManager : Singleton
         isClicked = false;
         objClick.SetActive(true);
 
-        List<short> tutorialDialogList;
         switch (type)
         {
             case TutorialType.Start:
@@ -93,8 +113,8 @@ public class TutorialManager : Singleton
                 for (int i = 0; i < imageStarts.Length; i++)
                     imageStarts[i].SetActive(false);
 
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -112,8 +132,7 @@ public class TutorialManager : Singleton
                     StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.EnterMerge:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -129,8 +148,7 @@ public class TutorialManager : Singleton
                     StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.PullEquipment:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -146,8 +164,7 @@ public class TutorialManager : Singleton
                     StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.Merge:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -181,8 +198,7 @@ public class TutorialManager : Singleton
                 StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.BuildQuest:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -200,8 +216,7 @@ public class TutorialManager : Singleton
                     StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.EnterQuest:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -217,8 +232,7 @@ public class TutorialManager : Singleton
                     StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.ClickTrader:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -234,8 +248,7 @@ public class TutorialManager : Singleton
                     StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.ClickQuest:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -251,8 +264,7 @@ public class TutorialManager : Singleton
                     StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.ClickAccept:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -268,8 +280,7 @@ public class TutorialManager : Singleton
                     StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.ClickSubmit:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -285,8 +296,7 @@ public class TutorialManager : Singleton
                     StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.ClickReward:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -301,22 +311,10 @@ public class TutorialManager : Singleton
                 if (co_MovementArrow != null)
                     StopCoroutine(co_MovementArrow);
                 break;
-            case TutorialType.BuildOthers:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+            case TutorialType.BuildHeroInn:
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
-
-                isClicked = false;
-                rtArrow.SetActive(true);
-                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[(int)BuildingType.ExpeditionCamp].transform as RectTransform, mainCanvas);
-                co_MovementArrow = StartCoroutine(MovementArrow());
-
-                objClick.SetActive(false);
-                yield return new WaitUntil(() => gm.gameData.buildingLvs[(int)BuildingType.ExpeditionCamp] >= 1);
-
-                if (co_MovementArrow != null)
-                    StopCoroutine(co_MovementArrow);
 
                 isClicked = false;
                 rtArrow.SetActive(true);
@@ -329,9 +327,8 @@ public class TutorialManager : Singleton
                 if (co_MovementArrow != null)
                     StopCoroutine(co_MovementArrow);
                 break;
-            case TutorialType.EnterInn:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+            case TutorialType.EnterHeroInn:
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -347,8 +344,7 @@ public class TutorialManager : Singleton
                     StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.Recruit:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -366,9 +362,24 @@ public class TutorialManager : Singleton
                 if (co_MovementArrow != null)
                     StopCoroutine(co_MovementArrow);
                 break;
+            case TutorialType.BuildExpedition:
+                yield return StartCoroutine(PlayDialog(type));
+                yield return new WaitUntil(() => isClicked);
+                objTextBox.SetActive(false);
+
+                isClicked = false;
+                rtArrow.SetActive(true);
+                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[(int)BuildingType.HeroInn].transform as RectTransform, mainCanvas);
+                co_MovementArrow = StartCoroutine(MovementArrow());
+
+                objClick.SetActive(false);
+                yield return new WaitUntil(() => gm.gameData.buildingLvs[(int)BuildingType.ExpeditionCamp] >= 1);
+
+                if (co_MovementArrow != null)
+                    StopCoroutine(co_MovementArrow);
+                break;
             case TutorialType.EnterExpedition:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -384,8 +395,7 @@ public class TutorialManager : Singleton
                     StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.Expedition:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -402,8 +412,7 @@ public class TutorialManager : Singleton
                     StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.ExpeditionMember:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -420,8 +429,7 @@ public class TutorialManager : Singleton
                     StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.ClickExpedition:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -438,8 +446,7 @@ public class TutorialManager : Singleton
                     StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.ClickExpeditionReward:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
@@ -456,8 +463,7 @@ public class TutorialManager : Singleton
                     StopCoroutine(co_MovementArrow);
                 break;
             case TutorialType.End:
-                resourceManager.dicTutorialStrs.TryGetValue(type, out tutorialDialogList);
-                yield return StartCoroutine(PlayDialog(tutorialDialogList));
+                yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 break;
         }
@@ -467,6 +473,7 @@ public class TutorialManager : Singleton
         objTextBox.SetActive(false);
         isClicked = false;
         objClick.SetActive(false);
+        co_CurrentTutorial = null;
     }
 
     bool isClicked = false;
@@ -550,14 +557,18 @@ public class TutorialManager : Singleton
         }
     }
 
-    IEnumerator PlayDialog(List<short> tutorialDialogList)
+    IEnumerator PlayDialog(TutorialType type)
     {
+        var tutorialDialogList = DataDialog.GetListByType(type);
+        if (tutorialDialogList == null)
+            yield break;
+
         objTextBox.SetActive(true);
 
         for (int i = 0; i < tutorialDialogList.Count; i++)
         {
             isClicked = false;
-            DataDialog dataDialog = DataDialog.Get(tutorialDialogList[i]);
+            var dataDialog = tutorialDialogList[i];
             if (dataDialog == null)
                 continue;
             textName.text = DataTextTag.FindText(dataDialog.tagName);

@@ -21,6 +21,7 @@ public class DataManager : Singleton
         Hero,
         Lv,
         Dialog,
+        InjuryProb,
     }
 
     const string pathHead = "./Assets/Data/";
@@ -59,6 +60,7 @@ public class DataManager : Singleton
         LoadFromJson<DataHero>(SheetName.Hero);
         LoadFromJson<DataLv>(SheetName.Lv);
         LoadFromJson<DataDialog>(SheetName.Dialog);
+        LoadFromJson<DataInjuryProb>(SheetName.InjuryProb);
     }
 
     void LoadFromJson<T>(SheetName sheet) where T : IRegistrable

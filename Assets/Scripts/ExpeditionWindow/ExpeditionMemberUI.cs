@@ -40,7 +40,6 @@ public class ExpeditionMemberUI : WindowUI
     public void SetMember()
     {
         var list = Singleton.gm.gameData.infoHeroes;
-        var alreadyList = Singleton.gm.gameData.alreadyExpeditionHeroIdxs;
         if (list == null)
         {
             Debug.LogError("No Member Exist");
@@ -49,7 +48,7 @@ public class ExpeditionMemberUI : WindowUI
 
         for (int i = 0; i < list.Count; i++)
         {
-            if (alreadyList.Contains(i))
+            if (list[i].state == HeroState.InExpedition || list[i].state == HeroState.InInjury)
                 continue;
 
             var elt = Utilities.GetOrCreate(eltHeroes, i, eltHero.gameObject);
