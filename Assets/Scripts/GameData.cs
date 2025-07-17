@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [System.Serializable]
@@ -89,6 +90,10 @@ public class SerializedGameData
 
 public class GameData
 {
+    const int MinorInjurySeconds = 60;
+    const int InjurySeconds = 120;
+    const int SeriousInjurySeconds = 240;
+
     public Dictionary<MergeItemCategory, List<int>> storedEquipmentList = new();
     public int row;
     public int col;
@@ -214,6 +219,30 @@ public class GameData
 
         RefreshAlreadyExpeditionHero();
         Observer.onRefreshExpedition?.Invoke();
+    }
+
+    public void RefreshInjury()
+    {
+        List<int> removeList = new();
+        foreach (var info in infoHeroes)
+        {
+            if (info.state != HeroState.InInjury)
+                continue;
+
+            if (info.state == HeroState.InInjury)
+            {
+                if ((info.injury == InjuryType.MinorInjury && DateTime.Now >= info.injuredTime.AddSeconds(MinorInjurySeconds))
+                    || (info.injury == InjuryType.Injury && DateTime.Now >= info.injuredTime.AddSeconds(InjurySeconds))
+                    || (info.injury == InjuryType.SeriousInjury && DateTime.Now >= info.injuredTime.AddSeconds(SeriousInjurySeconds)))
+                {
+                    info.state = HeroState.None;
+                    info.injury = InjuryType.None;
+                    info.injuredTimeTicks = 0;
+                }
+            }
+        }
+
+        Observer.onRefreshHeroes?.Invoke();
     }
 
     public void RefreshAlreadyExpeditionHero()
@@ -352,11 +381,10 @@ public class GameData
     public void RecruitUnit(int idx)
     {
         InfoHero info = infoHeroRecruits[idx];
-        itemCounts.TryGetValue(0, out long currentItemCount);
-        if (currentItemCount < info.price)
+        if (IsItemEnough(DataItem.GoldId, info.hireCost) == false)
             return;
 
-        itemCounts[0] -= info.price;
+        itemCounts[0] -= info.hireCost;
         infoHeroes.Add(info);
         isHeroRecruited[idx] = true;
         Observer.onRefreshHeroes?.Invoke();
@@ -378,7 +406,7 @@ public class GameData
                 strName = $"Do Re {UnityEngine.Random.Range(0, 100)}",
                 weaponId = -1,
                 armorId = -1,
-                price = UnityEngine.Random.Range(10, 15)
+                hireCost = UnityEngine.Random.Range(10, 15)
             };
             infoHeroRecruits.Add(info);
             isHeroRecruited[i] = false;
@@ -480,9 +508,50 @@ public class GameData
         List<int> exps = new();
         foreach(int idx in info.heroIdxes)
         {
+            //Injury
+            int lv = DataLv.GetLv(infoHeroes[idx].exp);
+            var dataInjury = DataInjuryProb.Get(lv - dataExpedition.recommendLv);
+
+            if (dataInjury == null)
+            {
+                Debug.LogError($"Not Exist Data Injury {lv - dataExpedition.recommendLv}");
+                return;
+            }
+
+            InjuryType injuryType = InjuryType.None;
+            int totalInjuryWeight = 0;
+            foreach(var value in dataInjury.injuryProbs)
+                totalInjuryWeight += value;
+
+            if(totalInjuryWeight == 0)
+            {
+                Debug.LogError($"totalInjuryWeight is 0");
+                return;
+            }
+
+            int pickValue = UnityEngine.Random.Range(0, totalInjuryWeight);
+            int acc = 0;
+            for(int i = 0; i < dataInjury.injuryProbs.Count; i++)
+            {
+                if (dataInjury.injuryProbs[i] == 0)
+                    continue;
+
+                acc += dataInjury.injuryProbs[i];
+                if(pickValue < acc)
+                {
+                    injuryType = (InjuryType)i;
+                    break;
+                }
+            }
+
+            infoHeroes[idx].injury = injuryType;
+            if (injuryType != InjuryType.None)
+                infoHeroes[idx].injuredTime = DateTime.Now;
+
+            //Exps
             exps.Add(infoHeroes[idx].exp);
             infoHeroes[idx].exp += dataExpedition.exp;
-            infoHeroes[idx].state = HeroState.None;
+            infoHeroes[idx].state = infoHeroes[idx].injury != InjuryType.None ? HeroState.InInjury : HeroState.None;
         }
 
         ExpeditionResult result = new()
@@ -544,8 +613,7 @@ public class GameData
                     }
                     else
                     {
-                        itemCounts.TryGetValue(condition.value1, out long itemCount);
-                        if (itemCount < condition.value2)
+                        if (IsItemEnough(condition.value1, condition.value2) == false)
                             return false;
                     }
                     break;
@@ -761,5 +829,11 @@ public class GameData
 
         Observer.onRefreshMergeWindow?.Invoke();
         Observer.onRefreshHeroes?.Invoke();
+    }
+
+    public bool IsItemEnough(int itemId, long itemCount)
+    {
+        itemCounts.TryGetValue(itemId, out long currentItemCount);
+        return currentItemCount >= itemCount;
     }
 }

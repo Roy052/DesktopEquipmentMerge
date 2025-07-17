@@ -9,11 +9,14 @@ public class ExpeditionMemberUI : WindowUI
     public EltHeroExpeditionMember eltHero;
     public Image imgGoExpedition;
     public Button btnGoExpedition;
+    public SlotItem slotCost;
+    public Text textExpeditionCost;
 
     List<EltHeroExpeditionMember> eltHeroes = new List<EltHeroExpeditionMember>();
     HashSet<int> selectedMembers = new HashSet<int>();
     DataExpedition dataExpedition;
     bool isConditionClear = false;
+    long currentCost = 0;
 
     public void Awake()
     {
@@ -28,6 +31,7 @@ public class ExpeditionMemberUI : WindowUI
     public override void Show()
     {
         base.Show();
+        slotCost.Set(DataItem.GoldId, 0);
         SetMember();
     }
 
@@ -39,6 +43,9 @@ public class ExpeditionMemberUI : WindowUI
 
     public void SetMember()
     {
+        selectedMembers.Clear();
+        currentCost = 0;
+
         var list = Singleton.gm.gameData.infoHeroes;
         if (list == null)
         {
@@ -62,10 +69,17 @@ public class ExpeditionMemberUI : WindowUI
     public void OnClickHero(int idx, bool isSelect)
     {
         if (isSelect)
+        {
             selectedMembers.Add(idx);
+            currentCost += Singleton.gm.gameData.infoHeroes[idx].expeditionCost;
+        }
         else
+        {
             selectedMembers.Remove(idx);
+            currentCost -= Singleton.gm.gameData.infoHeroes[idx].expeditionCost;
+        }
 
+        textExpeditionCost.text = currentCost.ToString();
         RefreshBtn();
     }
 
@@ -75,6 +89,9 @@ public class ExpeditionMemberUI : WindowUI
             return;
 
         if (selectedMembers.Count == 0)
+            return;
+
+        if (Singleton.gm.gameData.IsItemEnough(DataItem.GoldId, currentCost) == false)
             return;
 
         InfoExpedition info = new InfoExpedition()

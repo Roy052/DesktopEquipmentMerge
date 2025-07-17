@@ -10,10 +10,7 @@ public class DataInjuryProb : IRegistrable
     public static Dictionary<int, DataInjuryProb> dictDataInjuryProbs = new Dictionary<int, DataInjuryProb>();
 
     public int diff;
-    public int noProb;
-    public int minorProb;
-    public int normalProb;
-    public int seriousProb;
+    public List<int> injuryProbs;
 
     public void Register()
     {
@@ -30,9 +27,36 @@ public class DataInjuryProb : IRegistrable
             diff = MaxDiff;
 
         if (diff < MinDiff)
-            diff= MinDiff;
+            diff = MinDiff;
 
         dictDataInjuryProbs.TryGetValue(diff, out var value);
         return value;
+    }
+}
+
+[Serializable]
+public class TempDataInjuryProb : IConvertable<DataInjuryProb>
+{
+    public int diff;
+    public int noProb;
+    public int minorProb;
+    public int normalProb;
+    public int seriousProb;
+
+    public DataInjuryProb ConvertTo()
+    {
+        DataInjuryProb temp = new DataInjuryProb()
+        {
+            diff = diff,
+            injuryProbs = new()
+            {
+                noProb,
+                minorProb,
+                normalProb,
+                seriousProb
+            }
+        };
+
+        return temp;
     }
 }

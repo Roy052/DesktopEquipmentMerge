@@ -29,6 +29,7 @@ public class DataExpedition : IRegistrable
     public int rewardProbId;
     public int missionConditionId;
     public int exp;
+    public int recommendLv;
     public List<HeroConditionTypeValue> heroConditions;
 
     public void Register()
@@ -59,6 +60,7 @@ public class TempDataExpedition : IConvertable<DataExpedition>
     public int rewardProbId;
     public int missionConditionId;
     public int exp;
+    public int recommendLv;
     public HeroConditionType heroConditionType1;
     public int heroCondition1Value1;
     public int heroCondition1Value2;
@@ -80,7 +82,8 @@ public class TempDataExpedition : IConvertable<DataExpedition>
             equipmentCount = equipmentCount,
             rewardProbId = rewardProbId,
             missionConditionId = missionConditionId,
-            exp = exp
+            exp = exp,
+            recommendLv = recommendLv,
         };
 
         temp.heroConditions = new List<HeroConditionTypeValue>

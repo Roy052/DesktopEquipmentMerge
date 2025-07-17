@@ -48,7 +48,11 @@ public class GameManager : Singleton
     {
         while (true)
         {
-            Singleton.gm.gameData.RefreshExpedition();
+            if (gameData == null)
+                yield break;
+
+            gameData.RefreshExpedition();
+            gameData.RefreshInjury();
             yield return new WaitForSeconds(1f);
         }
     }

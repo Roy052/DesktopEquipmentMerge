@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System;
-using UnityEngine;
 
 public enum ExpeditionState
 {
@@ -10,7 +9,7 @@ public enum ExpeditionState
     End
 }
 
-[System.Serializable]
+[Serializable]
 public class InfoExpedition
 {
     public int expeditionUid;
@@ -24,6 +23,10 @@ public class InfoExpedition
         get
         {
             return new DateTime(startTimeTicks);
+        }
+        set
+        {
+            startTimeTicks = value.Ticks;
         }
     }
 }
