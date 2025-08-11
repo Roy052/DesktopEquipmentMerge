@@ -21,6 +21,7 @@ public class DataBuilding : IRegistrable
     public string tagName;
     public List<ConditionTypeValue> conditions;
     public List<ItemIdCount> requireItems;
+    public List<double> buildingValues;
 
     public void Register()
     {
@@ -80,6 +81,8 @@ public class TempDataBuilding : IConvertable<DataBuilding>
     public int requireItemCount2;
     public int requireItemId3;
     public int requireItemCount3;
+    public double buildingValue1;
+    public double buildingValue2;
 
     public DataBuilding ConvertTo()
     {
@@ -130,6 +133,8 @@ public class TempDataBuilding : IConvertable<DataBuilding>
                 itemCount = requireItemCount3,
             }
         };
+
+        temp.buildingValues = new List<double> { buildingValue1, buildingValue2 };
 
         return temp;
     }

@@ -32,6 +32,11 @@ public class MainSM : Singleton
         gm.gameData.BuildBuilding(type);
     }
 
+    public void OnClickLevelup(BuildingType type)
+    {
+        gm.gameData.LevelupBuilding(type);
+    }
+
     void RefreshBuilding()
     {
         var buildingLvs = gm.gameData.buildingLvs;

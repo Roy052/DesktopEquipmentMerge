@@ -575,9 +575,43 @@ public class GameData
         return info;
     }
 
-    public void BuildBuilding(BuildingType buildingType)
+    public void BuildBuilding(BuildingType type)
     {
-        buildingLvs[(int)buildingType] = 1;
+        buildingLvs[(int)type] = 1;
+        Observer.onRefreshBuilding?.Invoke();
+    }
+
+    public void LevelupBuilding(BuildingType type)
+    {
+        DataBuilding dataBuilding = DataBuilding.Get(type, buildingLvs[(int)type]);
+        if(dataBuilding == null)
+        {
+            Debug.LogError($"Not Exist Data Buildling : {type}, {buildingLvs[(int)type]}");
+            return;
+        }
+
+        if(PayCost(dataBuilding.requireItems) == false)
+        {
+            Debug.LogError("Not Enough Item");
+            return;
+        }
+
+        buildingLvs[(int)type] += 1;
+        switch (type)
+        {
+            case BuildingType.MergeTable:
+                break;
+            case BuildingType.Storage:
+                break;
+            case BuildingType.ExpeditionCamp:
+                break;
+            case BuildingType.HeroInn:
+                break;
+            case BuildingType.Traderhall:
+                break;
+            case BuildingType.Max:
+                break;
+        }
         Observer.onRefreshBuilding?.Invoke();
     }
 
@@ -835,5 +869,21 @@ public class GameData
     {
         itemCounts.TryGetValue(itemId, out long currentItemCount);
         return currentItemCount >= itemCount;
+    }
+
+    public bool PayCost(List<ItemIdCount> requireItems)
+    {
+        foreach(var requireItem in requireItems)
+        {
+            if (IsItemEnough(requireItem.itemId, requireItem.itemCount) == false)
+                return false;
+        }
+
+        foreach (var requireItem in requireItems)
+        {
+            itemCounts[requireItem.itemId] -= requireItem.itemCount;
+        }
+
+        return true;
     }
 }
