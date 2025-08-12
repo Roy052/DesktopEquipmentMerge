@@ -160,7 +160,11 @@ public class QuestWindow : GameWindow
         int submitCount = System.Math.Min(currentCount, currentRequireItem);
 
         currentInfoQuest.questProgress[idx] += submitCount;
-        gm.gameData.OnRemoveMergeItem(itemId, submitCount);
+        List<ItemIdCount> items = new()
+        {
+            new ItemIdCount() { itemId = itemId, itemCount = submitCount }
+        };
+        gm.gameData.PayCost(items);
 
         bool isComplete = true;
         for (int i = 0; i < currentInfoQuest.questProgress.Count; i++)

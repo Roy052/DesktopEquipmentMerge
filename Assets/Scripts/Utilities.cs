@@ -3,6 +3,9 @@ using UnityEngine;
 
 public static class Utilities
 {
+    const int digit1 = 10000;
+    const int digit2 = 100;
+
     public static WaitForSeconds WaitForOneSecond = new WaitForSeconds(1);
     public static WaitForSeconds WaitForHalfSecond = new WaitForSeconds(0.5f);
 
@@ -64,5 +67,24 @@ public static class Utilities
                                                                     : canvas.worldCamera,
                                                                 out Vector2 local);
         return local;   // anchoredPosition 과 같은 기준(+Y가 위)
+    }
+
+    public static bool IsMergeItem(int itemId)
+    {
+        return itemId / digit1 == 1;
+    }
+
+    public static bool CanStoreItem(int itemId)
+    {
+        if (itemId / digit1 == 1)
+        {
+            MergeItemType mergeItemType = (MergeItemType)((itemId % digit1) / digit2);
+            if (mergeItemType == MergeItemType.MoneyBag || mergeItemType == MergeItemType.ExpBook)
+                return true;
+        }
+        else if (itemId / digit1 == 2)
+            return true;
+
+        return false;
     }
 }

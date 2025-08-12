@@ -590,16 +590,37 @@ public class GameData
             return;
         }
 
-        if(PayCost(dataBuilding.requireItems) == false)
+        if(CanCost(dataBuilding.requireItems) == false)
         {
             Debug.LogError("Not Enough Item");
             return;
         }
 
+        PayCost(dataBuilding.requireItems);
+
         buildingLvs[(int)type] += 1;
+
+        DataBuilding dataBuildingNext = DataBuilding.Get(type, buildingLvs[(int)type]);
+        if (dataBuilding == null)
+        {
+            Debug.LogError($"Not Exist Data Buildling : {type}, {buildingLvs[(int)type]}");
+            return;
+        }
+
         switch (type)
         {
             case BuildingType.MergeTable:
+                int newRow = (int)dataBuildingNext.buildingValues[0];
+                int newCol = (int)dataBuildingNext.buildingValues[0];
+                var tempMergeItems = new int[row, col];
+                for (int i = 0; i < row; i++)
+                    for (int j = 0; j < col; j++)
+                        tempMergeItems[i, j] = mergeItems[i, j];
+
+                mergeItems = tempMergeItems;
+                row = newRow;
+                col = newCol;
+                Observer.onRefreshMergeWindow?.Invoke();
                 break;
             case BuildingType.Storage:
                 break;
@@ -751,14 +772,29 @@ public class GameData
         return list;
     }
 
+    public void OnStoreMergeItem(int x, int y)
+    {
+        int itemId = mergeItems[x, y];
+        if (Utilities.CanStoreItem(itemId) == false)
+            return;
+
+        if (itemCounts.ContainsKey(itemId))
+            itemCounts[itemId] += 1;
+        else
+            itemCounts[itemId] = 1;
+
+        mergeItems[x, y] = -1;
+        Observer.onRefreshMergeWindow?.Invoke();
+    }
+
     public void OnRemoveMergeItem(int itemId, int count)
     {
         if (count == 0)
             return;
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < row; i++)
         {
-            for (int j = 0; j < 3; j++)
+            for (int j = 0; j < col; j++)
             {
                 if (itemId == mergeItems[i,j])
                 {
@@ -871,19 +907,25 @@ public class GameData
         return currentItemCount >= itemCount;
     }
 
-    public bool PayCost(List<ItemIdCount> requireItems)
+    public bool CanCost(List<ItemIdCount> requireItems)
     {
-        foreach(var requireItem in requireItems)
+        foreach (var requireItem in requireItems)
         {
             if (IsItemEnough(requireItem.itemId, requireItem.itemCount) == false)
                 return false;
         }
 
+        return true;
+    }
+
+    public void PayCost(List<ItemIdCount> requireItems)
+    {
         foreach (var requireItem in requireItems)
         {
-            itemCounts[requireItem.itemId] -= requireItem.itemCount;
+            if (Utilities.IsMergeItem(requireItem.itemId))
+                OnRemoveMergeItem(requireItem.itemId, requireItem.itemCount);
+            else
+                itemCounts[requireItem.itemId] -= requireItem.itemCount;
         }
-
-        return true;
     }
 }

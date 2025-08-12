@@ -799,6 +799,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!114 &48615360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1055,6 +1056,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!1 &66224146
 GameObject:
   m_ObjectHideFlags: 0
@@ -1203,6 +1205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!114 &66224152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1514,6 +1517,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!1 &98128916
 GameObject:
   m_ObjectHideFlags: 0
@@ -2873,6 +2877,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!1 &384992603
 GameObject:
   m_ObjectHideFlags: 0
@@ -2984,6 +2989,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!114 &384992609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3262,6 +3268,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!114 &439371456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4492,6 +4499,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!114 &598809570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4703,6 +4711,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!114 &609647703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5267,6 +5276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!114 &766686576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5524,6 +5534,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!114 &794205198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6260,6 +6271,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!224 &867703542 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6904840287664483907, guid: 81e2e2b0de67e454fa7f2ee0ec1e1496, type: 3}
@@ -7298,6 +7310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!114 &1025057069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7826,6 +7839,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!1 &1059966400
 GameObject:
   m_ObjectHideFlags: 0
@@ -8102,6 +8116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!114 &1096115300 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7931507259575470049, guid: 81e2e2b0de67e454fa7f2ee0ec1e1496, type: 3}
@@ -8716,6 +8731,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!114 &1157160005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8897,6 +8913,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!1 &1171295977
 GameObject:
   m_ObjectHideFlags: 0
@@ -9240,6 +9257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!1 &1201790957
 GameObject:
   m_ObjectHideFlags: 0
@@ -9424,6 +9442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!114 &1212639556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10357,6 +10376,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!114 &1355585128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10656,6 +10676,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!114 &1364055549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11180,6 +11201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!114 &1438351716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11657,6 +11679,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!1 &1470794636
 GameObject:
   m_ObjectHideFlags: 0
@@ -11883,6 +11906,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!1 &1485422428
 GameObject:
   m_ObjectHideFlags: 0
@@ -13547,6 +13571,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!1 &1621215204
 GameObject:
   m_ObjectHideFlags: 0
@@ -13694,6 +13719,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!1 &1624278122
 GameObject:
   m_ObjectHideFlags: 0
@@ -15718,6 +15744,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!1 &1927654585
 GameObject:
   m_ObjectHideFlags: 0
@@ -16049,6 +16076,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!1 &1949026408
 GameObject:
   m_ObjectHideFlags: 0
@@ -16780,6 +16808,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!114 &2063439153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17535,6 +17564,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClick: 0
+  scaling: 0
 --- !u!114 &2130720070
 MonoBehaviour:
   m_ObjectHideFlags: 0
