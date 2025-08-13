@@ -16,6 +16,9 @@ public class MergeWindow : GameWindow
     public GameObject[,] panel;
     public EltMergeItem[,] eltMergeItems;
 
+    [Header("ItemDescUI")]
+    public ItemDescUI itemDescUI;
+
     protected override void Awake()
     {
         base.Awake();
@@ -100,6 +103,7 @@ public class MergeWindow : GameWindow
                     panel[i, j].SetActive(true);
                     temp = panel[i, j].GetComponent<EltMergeItem>();
                     temp.funcMerge = OnMergeSelect;
+                    temp.funcClick = OnShowItemDescUI;
                 }
                 else
                     temp = eltMergeItems[i, j];
@@ -126,6 +130,17 @@ public class MergeWindow : GameWindow
             gm.gameData.OnMergeItems(coord1, coord);
             idxFirst = -1;
         }
+    }
+
+    public void OnShowItemDescUI(int idx)
+    {
+        var coord = GetCoordByIdx(idx);
+        var elt = eltMergeItems[coord.Item1, coord.Item2];
+        if (elt == null)
+            return;
+
+        itemDescUI.SetActive(true);
+        itemDescUI.Set(elt.GetMergeItemId(), coord.Item1, coord.Item2);
     }
 
     public void OnClickChest(MergeItemCategory category)
