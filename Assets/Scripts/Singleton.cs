@@ -17,4 +17,7 @@ public class Singleton : MonoBehaviour
     public static HeroWindow heroWindow;
     public static ExpeditionWindow expeditionWindow;
     public static QuestWindow questWindow;
+
+    //Etc
+    public static MsgBox msgBox;
 }

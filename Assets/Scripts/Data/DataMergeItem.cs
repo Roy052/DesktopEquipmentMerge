@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public enum MergeItemCategory
 {
@@ -87,5 +88,14 @@ public class DataMergeItem : IRegistrable
     public static short GetMergeItemId(MergeItemType type, short grade)
     {
         return (short)(10000 + ((int)type * 100) + grade);
+    }
+
+    public static MergeItemCategory GetCategory(MergeItemType type)
+    {
+        var temp = dictDataMergeItems.Values.First(x => x.type == type);
+        if (temp == null)
+            return MergeItemCategory.All;
+
+        return temp.category;
     }
 }

@@ -259,6 +259,16 @@ public class GameData
 
     public void AddItems(List<(int, long)> items)
     {
+        //Change Money
+        var dataBuilding = DataBuilding.Get(BuildingType.Storage, Singleton.gm.gameData.buildingLvs[(int)BuildingType.Storage]);
+        if (dataBuilding == null)
+        {
+            Debug.LogError($"DataBuilding Storage {Singleton.gm.gameData.buildingLvs[(int)BuildingType.Storage]} Not Exist");
+            return;
+        }
+
+        int maxCount = (int)dataBuilding.buildingValues[0];
+
         for (int i = 0; i < items.Count; i++)
         {
             var item = items[i];
@@ -298,6 +308,12 @@ public class GameData
 
                         if (storedEquipmentList.TryGetValue(category, out var list) == false)
                         {
+                            if (itemCount > maxCount)
+                            {
+                                //Calculate Money
+                                itemCount = maxCount;
+                            }
+
                             List<int> tempList = new((int)itemCount);
                             for (int j = 0; j < itemCount; j++)
                                 tempList.Add(itemId);
@@ -305,6 +321,12 @@ public class GameData
                         }
                         else
                         {
+                            if (list.Count + itemCount > maxCount)
+                            {
+                                //Calculate Money
+                                itemCount = Math.Max(0, maxCount - list.Count);
+                            }
+
                             for (int j = 0; j < itemCount; j++)
                                 list.Add(itemId);
                         }
@@ -329,6 +351,12 @@ public class GameData
 
                         if (storedEquipmentList.TryGetValue(category, out var list) == false)
                         {
+                            if (itemCount > maxCount)
+                            {
+                                //Calculate Money
+                                itemCount = maxCount;
+                            }
+
                             List<int> tempList = new((int)itemCount);
                             for (int j = 0; j < itemCount; j++)
                                 tempList.Add(itemId);
@@ -336,6 +364,12 @@ public class GameData
                         }
                         else
                         {
+                            if (list.Count + itemCount > maxCount)
+                            {
+                                //Calculate Money
+                                itemCount = Math.Max(0, maxCount - list.Count);
+                            }
+
                             for (int j = 0; j < itemCount; j++)
                                 list.Add(itemId);
                         }
@@ -345,6 +379,12 @@ public class GameData
                 {
                     if (storedEquipmentList.TryGetValue(dataMergeItem.category, out var list) == false)
                     {
+                        if (itemCount > maxCount)
+                        {
+                            //Calculate Money
+                            itemCount = maxCount;
+                        }
+
                         List<int> tempList = new((int)itemCount);
                         for (int j = 0; j < itemCount; j++)
                             tempList.Add(itemId);
@@ -352,6 +392,12 @@ public class GameData
                     }
                     else
                     {
+                        if (list.Count + itemCount > maxCount)
+                        {
+                            //Calculate Money
+                            itemCount = Math.Max(0, maxCount - list.Count);
+                        }
+
                         for (int j = 0; j < itemCount; j++)
                             list.Add(itemId);
                     }
@@ -437,8 +483,8 @@ public class GameData
         }
 
         int totalTypeWeight = 0;
-        for (int j = 0; j < dataProb.probTypes.Count; j++)
-            totalTypeWeight += dataProb.probTypes[j];
+        for (int i = 0; i < dataProb.probTypes.Count; i++)
+            totalTypeWeight += dataProb.probTypes[i];
 
         if (totalTypeWeight == 0)
         {
@@ -447,8 +493,8 @@ public class GameData
         }
 
         int totalGradeWeight = 0;
-        for (int j = 0; j < dataProb.probGrades.Count; j++)
-            totalGradeWeight += dataProb.probGrades[j];
+        for (int i = 0; i < dataProb.probGrades.Count; i++)
+            totalGradeWeight += dataProb.probGrades[i];
 
         if (totalGradeWeight == 0)
         {

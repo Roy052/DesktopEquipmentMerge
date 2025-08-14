@@ -57,6 +57,42 @@ public class EltExpedition : MonoBehaviour
 
     public void OnClickGetRewardExpedition()
     {
-        Singleton.gm.gameData.GetRewardExpedition(dataExpedition.id);
+        //Check Full
+        DataRewardProb dataProb = DataRewardProb.Get(dataExpedition.rewardProbId);
+        if (dataProb == null)
+        {
+            Debug.LogError($"DataRewardProb {dataExpedition.rewardProbId} Not Exist");
+            return;
+        }
+
+        bool canFullStorage = false;
+        for (int i = 0; i < dataProb.types.Count; i++)
+        {
+            int currentCount = 0;
+            MergeItemCategory category = DataMergeItem.GetCategory(dataProb.types[i]);
+            if (Singleton.gm.gameData.storedEquipmentList.TryGetValue(category, out var list))
+                currentCount = list.Count;
+            else
+                currentCount = 0;
+
+            var dataBuilding = DataBuilding.Get(BuildingType.Storage, Singleton.gm.gameData.buildingLvs[(int)BuildingType.Storage]);
+            if (dataBuilding == null)
+                break;
+
+            int maxCount = (int)dataBuilding.buildingValues[0];
+            if (currentCount + dataExpedition.equipmentCount > maxCount)
+            {
+                canFullStorage = true;
+                break;
+            }
+        }
+
+        if (canFullStorage)
+        {
+            Singleton.msgBox.SetActive(true);
+            Singleton.msgBox.SetYesNo("Notice", "Left Change By Money", () => { Singleton.gm.gameData.GetRewardExpedition(dataExpedition.id); });
+        }
+        else
+            Singleton.gm.gameData.GetRewardExpedition(dataExpedition.id);
     }
 }
