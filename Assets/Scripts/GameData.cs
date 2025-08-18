@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [System.Serializable]
@@ -411,6 +409,8 @@ public class GameData
                     itemCounts[itemId] = itemCount;
             }
         }
+
+        Observer.onRefreshItems?.Invoke();
     }
 
     public void AddInfoUnit(InfoHero infoHero)

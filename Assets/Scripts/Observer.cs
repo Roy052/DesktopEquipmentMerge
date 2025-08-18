@@ -9,6 +9,7 @@ public static class Observer
     public static UnityAction onRefreshMergeWindow;
     public static UnityAction onRefreshHeroes;
     public static UnityAction onRefreshQuests;
+    public static UnityAction onRefreshItems;
 
     public static void RefreshAll()
     {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public enum BuildingType
 {
+    None = -1,
     MergeTable,
     Storage,
     ExpeditionCamp,

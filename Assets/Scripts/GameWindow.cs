@@ -5,6 +5,11 @@ public abstract class GameWindow : Singleton, IBeginDragHandler, IDragHandler
 {
     public Vector2 PosOrigin;
 
+    [Header("LvUpUI")]
+    public GameObject objAlarm;
+    public BuildingType type = BuildingType.None;
+    public BuildingLvUpUI buildingLvUpUI;
+
     public bool IsShow => gameObject.activeSelf;
 
     RectTransform rt;
@@ -15,6 +20,13 @@ public abstract class GameWindow : Singleton, IBeginDragHandler, IDragHandler
     {
         rt = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
+
+        Observer.onRefreshItems += RefreshLvUpBtn;
+    }
+
+    protected virtual void OnDestroy()
+    {
+        Observer.onRefreshItems -= RefreshLvUpBtn;
     }
 
     public void OnBeginDrag(PointerEventData e)
@@ -50,5 +62,32 @@ public abstract class GameWindow : Singleton, IBeginDragHandler, IDragHandler
     public virtual void Hide()
     {
         gameObject.SetActive(false);
+    }
+
+
+    public void RefreshLvUpBtn()
+    {
+        short lv = gm.gameData.buildingLvs[(int)type];
+        DataBuilding dataBuilding = DataBuilding.Get(type, lv);
+        if (dataBuilding == null)
+        {
+            Debug.LogError($"Data Building Not Exist {type} {lv}");
+            return;
+        }
+
+        bool isConditionClear = gm.gameData.IsConditionClear(dataBuilding.conditions);
+        objAlarm.SetActive(isConditionClear);
+    }
+
+    public void OnClickBuildingLvUp()
+    {
+        if (type == BuildingType.None)
+            return;
+
+        if (buildingLvUpUI == null)
+            return;
+
+        buildingLvUpUI.SetActive(true);
+        buildingLvUpUI.Set(type, gm.gameData.buildingLvs[(int)type]);
     }
 }

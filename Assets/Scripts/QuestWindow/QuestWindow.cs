@@ -38,8 +38,9 @@ public class QuestWindow : GameWindow
         Observer.onRefreshQuests += Set;
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         Observer.onRefreshQuests -= Set;
     }
 

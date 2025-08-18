@@ -28,8 +28,9 @@ public class MergeWindow : GameWindow
         eltChest.SetActive(false);
     }
 
-    public void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         mergeWindow = null;
         Observer.onRefreshMergeWindow -= RefreshMergeWindow;
         Observer.onRefreshChest -= RefreshChest;
