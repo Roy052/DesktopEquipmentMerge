@@ -79,17 +79,21 @@ public class HeroMemberInfoUI : WindowUI
 
             var elt = Utilities.GetOrCreate(eltExpItems, i, eltExpItem.gameObject);
             elt.Set(itemId, i);
-            elt.funcClick = OnClickExpItem;
+            elt.funcClick = OnClickUseExpItem;
             elt.SetActive(true);
+
+            bool isItemExist = Singleton.gm.gameData.itemCounts.TryGetValue(itemId, out var count) == false || count == 0;
+            elt.GetComponent<ButtonAddOn>().ChangeGrayScale(isItemExist);
         }
 
         Utilities.DeactivateSurplus(eltExpItems, 3);
     }
 
-    public void OnClickExpItem(int idx)
+    public void OnClickUseExpItem(int idx)
     {
         int itemId = expItemIds[idx];
-        Singleton.gm.gameData.AddItems(new List<(int, long)>() { (itemId, 1) });
+        if (Singleton.gm.gameData.itemCounts.TryGetValue(itemId, out var count) == false || count == 0)
+            return;
 
         DataMergeItem dataMergeItem = DataMergeItem.Get(itemId);
         if(dataMergeItem == null)
@@ -98,7 +102,9 @@ public class HeroMemberInfoUI : WindowUI
             return;
         }
         infoHero.exp += dataMergeItem.price;
+        Singleton.gm.gameData.itemCounts[itemId]--;
         Observer.onRefreshHeroes?.Invoke();
+        Observer.onRefreshItems?.Invoke();
     }
 
     public void OnClickWeapon(int dummy)

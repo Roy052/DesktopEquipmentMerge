@@ -11,15 +11,23 @@ public class EltItem : MonoBehaviour
     int id = -1;
     int grade = -1;
     protected int idx = -1;
+    DataItem dataItem;
 
-    public void Set(int id, int idx)
+    public virtual void Set(int id, int idx)
     {
         this.idx = idx;
         this.id = id;
+
+        dataItem = DataItem.Get(id);
+        if (dataItem == null)
+        {
+            Debug.LogError($"Not Exist Data Item {id}");
+            return;
+        }
+        
         if (imgIcon != null)
         {
-            DataItem dataItem = DataItem.Get(id);
-            if (dataItem != null && Singleton.resourceManager.dicResourceSprites.TryGetValue(dataItem.resImage, out var sprite))
+            if (Singleton.resourceManager.dicResourceSprites.TryGetValue(dataItem.resImage, out var sprite))
             {
                 imgIcon.SetActive(true);
                 imgIcon.sprite = sprite;
