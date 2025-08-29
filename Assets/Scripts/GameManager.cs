@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton
 {
+    public GameObject objOptions;
+    public GameObject objMain;
     public GameData gameData;
 
     public void Awake()
@@ -26,14 +28,10 @@ public class GameManager : Singleton
 
     public void Update()
     {
-        if (Input.GetKeyUp(KeyCode.S))
-            GameData.Save(gameData);
-        if (Input.GetKeyUp(KeyCode.L))
+        if (Input.GetKeyUp(KeyCode.Escape))
         {
-            gameData = GameData.Load();
-            Observer.RefreshAll();
+            objOptions.SetActive(!objOptions.activeSelf);
         }
-
     }
 
     public void Set()
@@ -55,5 +53,20 @@ public class GameManager : Singleton
             gameData.RefreshInjury();
             yield return new WaitForSeconds(1f);
         }
+    }
+
+
+    public void OnClickLoadGameData()
+    {
+        gameData = GameData.Load();
+        Observer.RefreshAll();
+    }
+
+    public void OnClickPlay()
+    {
+        gameData = new GameData();
+        gameData.AddItems(new List<(int, long)>() { (0, 100) });
+        StartCoroutine(RefreshExpedition());
+        mainSM.Set();
     }
 }

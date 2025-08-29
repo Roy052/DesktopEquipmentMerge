@@ -172,6 +172,15 @@ public class GameData
         }
     }
 
+    public static bool ExistSaveData()
+    {
+        string path = Application.dataPath + "/Save";
+        if (File.Exists(path + "/" + "Save" + 0) == false)
+            return false;
+
+        return true;
+    }
+
     public static void Save(GameData gameData)
     {
         string json = JsonUtility.ToJson(new SerializedGameData(gameData));
