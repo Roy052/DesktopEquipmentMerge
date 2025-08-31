@@ -25,6 +25,7 @@ public class PairList<TKey, TValue>
 [System.Serializable]
 public class SerializedGameData
 {
+    public long saveTimeTick;
     public PairList<MergeItemCategory, List<int>> storedEquipmentList;
     public int row;
     public int col;
@@ -43,6 +44,7 @@ public class SerializedGameData
     {
         GameData data = new()
         {
+            saveTime = new DateTime(saveTimeTick),
             storedEquipmentList = storedEquipmentList.ToDictionary(),
             row = row,
             col = col,
@@ -66,6 +68,7 @@ public class SerializedGameData
 
     public SerializedGameData(GameData data)
     {
+        saveTimeTick = data.saveTime.Ticks;
         storedEquipmentList = PairList<MergeItemCategory, List<int>>.FromDictionary(data.storedEquipmentList);
         row = data.row;
         col = data.col;
@@ -92,6 +95,7 @@ public class GameData
     const int InjurySeconds = 120;
     const int SeriousInjurySeconds = 240;
 
+    public DateTime saveTime;
     public Dictionary<MergeItemCategory, List<int>> storedEquipmentList = new();
     public int row;
     public int col;
@@ -175,7 +179,7 @@ public class GameData
     public static bool ExistSaveData()
     {
         string path = Application.dataPath + "/Save";
-        if (File.Exists(path + "/" + "Save" + 0) == false)
+        if (File.Exists(path + "/Save") == false)
             return false;
 
         return true;
@@ -183,22 +187,23 @@ public class GameData
 
     public static void Save(GameData gameData)
     {
+        gameData.saveTime = DateTime.Now;
         string json = JsonUtility.ToJson(new SerializedGameData(gameData));
         string path = Application.dataPath + "/Save";
         Debug.Log(path);
-        File.WriteAllText(path + "/" + "Save" + 0, json);
+        File.WriteAllText(path + "/Save", json);
         Debug.Log(json);
     }
 
     public static GameData Load()
     {
         string path = Application.dataPath + "/Save";
-        if (File.Exists(path + "/" + "Save" + 0) == false)
+        if (File.Exists(path + "/Save") == false)
         {
             Debug.LogError("No File Exists");
             return null;
         }
-        string data = File.ReadAllText(path + "/" + "Save" + 0);
+        string data = File.ReadAllText(path + "/Save");
         Debug.Log(data);
         SerializedGameData seGameData = JsonUtility.FromJson<SerializedGameData>(data);
         GameData gameData = seGameData.ToGameData();

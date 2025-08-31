@@ -55,13 +55,6 @@ public class GameManager : Singleton
         }
     }
 
-
-    public void OnClickLoadGameData()
-    {
-        gameData = GameData.Load();
-        Observer.RefreshAll();
-    }
-
     public void OnClickPlay()
     {
         gameData = new GameData();

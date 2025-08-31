@@ -11,7 +11,7 @@ public class ButtonAddOn : MonoBehaviour, IPointerClickHandler, IPointerDownHand
     public SFX soundClick = SFX.Click;
     public bool scaling = false;
 
-    Button btn;
+    public Button btn;
     RectTransform rt;
 
     void Awake()
