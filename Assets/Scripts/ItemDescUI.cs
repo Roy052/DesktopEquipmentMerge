@@ -25,7 +25,8 @@ public class ItemDescUI : MonoBehaviour
             return;
         }
 
-        if(Singleton.resourceManager.dicResourceSprites.TryGetValue(dataItem.resImage, out var sprite) == false)
+        var sprite = Singleton.resourceManager.GetSprite(dataItem.resImage);
+        if (sprite == null)
         {
             Debug.Log($"Sprite Not Exst : {dataItem.resImage}");
             return;

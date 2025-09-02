@@ -17,4 +17,12 @@ public class ResourceManager : Singleton
             dicResourceSprites.Add(sprite.name, sprite);
         }
     }
+
+    public Sprite GetSprite(string name)
+    {
+        if (dicResourceSprites.TryGetValue(name, out var sprite))
+            return sprite;
+
+        return null;
+    }
 }

@@ -15,7 +15,8 @@ public class SlotItem : MonoBehaviour
             return;
         }
 
-        if (Singleton.resourceManager.dicResourceSprites.TryGetValue(dataItem.resImage, out var sprite))
+        var sprite = Singleton.resourceManager.GetSprite(dataItem.resImage);
+        if (sprite != null)
             imgItem.sprite = sprite;
         if (textCount)
             textCount.text = Utilities.CountUnitConversion(count);

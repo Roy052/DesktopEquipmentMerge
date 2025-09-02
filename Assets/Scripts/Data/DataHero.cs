@@ -19,6 +19,7 @@ public class DataHero : IRegistrable
     public RoleType role;
     public MergeItemType weapon;
     public MergeItemType armor;
+    public string resImage;
 
     public void Register()
     {

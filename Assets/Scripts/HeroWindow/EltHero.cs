@@ -20,6 +20,15 @@ public class EltHero : MonoBehaviour
             textName.text = info.strName;
 
         var data = DataHero.Get(info.heroId);
+        if(data != null)
+        {
+            Debug.LogError($"Not Exist Data Hero {info.heroId}");
+            return;
+        }
+
+        var sprite = Singleton.resourceManager.GetSprite(data.resImage);
+        if (sprite != null)
+            imgHero.sprite = sprite;
     }
 
 }

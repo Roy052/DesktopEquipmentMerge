@@ -27,7 +27,8 @@ public class EltItem : MonoBehaviour
         
         if (imgIcon != null)
         {
-            if (Singleton.resourceManager.dicResourceSprites.TryGetValue(dataItem.resImage, out var sprite))
+            var sprite = Singleton.resourceManager.GetSprite(dataItem.resImage);
+            if (sprite != null)
             {
                 imgIcon.SetActive(true);
                 imgIcon.sprite = sprite;

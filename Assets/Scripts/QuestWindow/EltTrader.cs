@@ -15,7 +15,8 @@ public class EltTrader : MonoBehaviour
 
     public void Set(DataTrader data, short lv)
     {
-        if (data != null && Singleton.resourceManager.dicResourceSprites.TryGetValue(data.resImage, out var sprite))
+        var sprite = Singleton.resourceManager.GetSprite(data.resImage);
+        if (data != null && sprite != null)
         {
             imgIcon.SetActive(true);
             imgIcon.sprite = sprite;
