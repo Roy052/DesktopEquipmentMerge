@@ -6,6 +6,9 @@ public class TitleUI : MonoBehaviour
     [Header("Button")]
     public ButtonAddOn btnLoad;
 
+    [Header("Option")]
+    public OptionUI optionUI;
+
     //[Header("Save List")]
     //public SaveElt saveElt;
     //List<SaveElt> saveEltList = new();
@@ -20,8 +23,6 @@ public class TitleUI : MonoBehaviour
             btnLoad.ChangeGrayScale(true);
             btnLoad.btn.enabled = false;
         }
-
-
     }
 
     public void OnClickPlay()
@@ -45,7 +46,8 @@ public class TitleUI : MonoBehaviour
 
     public void OnClickOption()
     {
-
+        optionUI.SetActive(true);
+        optionUI.Set();
     }
 
     public void OnClickQuit()

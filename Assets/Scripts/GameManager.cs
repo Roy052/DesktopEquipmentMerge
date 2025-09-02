@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton
 {
-    public GameObject objOptions;
+    public TitleUI titleUI;
     public GameObject objMain;
     public GameData gameData;
 
@@ -23,23 +22,19 @@ public class GameManager : Singleton
 
     public void Start()
     {
-        Set();
+        titleUI.SetActive(true);
+        titleUI.Open();
+        objMain.SetActive(false);
     }
 
     public void Update()
     {
         if (Input.GetKeyUp(KeyCode.Escape))
         {
-            objOptions.SetActive(!objOptions.activeSelf);
+            titleUI.SetActive(!titleUI.gameObject.activeSelf);
+            if (titleUI.gameObject.activeSelf)
+                titleUI.Open();
         }
-    }
-
-    public void Set()
-    {
-        gameData = new GameData();
-        gameData.AddItems(new List<(int, long)>() { (0, 100) });
-        StartCoroutine(RefreshExpedition());
-        mainSM.Set();
     }
 
     IEnumerator RefreshExpedition()
@@ -61,5 +56,17 @@ public class GameManager : Singleton
         gameData.AddItems(new List<(int, long)>() { (0, 100) });
         StartCoroutine(RefreshExpedition());
         mainSM.Set();
+        GameData.Save(gameData);
+
+        titleUI.SetActive(false);
+        objMain.SetActive(true);
+    }
+
+    public void OnSave()
+    {
+        if (gameData == null)
+            return;
+
+        GameData.Save(gameData);
     }
 }

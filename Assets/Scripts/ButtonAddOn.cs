@@ -1,17 +1,18 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 [RequireComponent(typeof(Button))]
 public class ButtonAddOn : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
-    readonly Vector3 scaleUp = new(1.2f, 1.2f, 1.2f);
-    readonly Vector3 scaleDown = Vector3.zero;
+    readonly Vector3 scaleUp = new(1.05f, 1.05f, 1.05f);
+    readonly Vector3 scaleDown = Vector3.one;
 
     public SFX soundClick = SFX.Click;
     public bool scaling = false;
 
-    public Button btn;
+    [NonSerialized] public Button btn;
     RectTransform rt;
 
     void Awake()
@@ -30,7 +31,8 @@ public class ButtonAddOn : MonoBehaviour, IPointerClickHandler, IPointerDownHand
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Singleton.soundManager.PlaySFX(soundClick);
+        if(btn.enabled)
+            Singleton.soundManager.PlaySFX(soundClick);
     }
 
     public void ToggleEnable(bool isOn)

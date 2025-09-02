@@ -63,6 +63,9 @@ public class TutorialManager : Singleton
         if (co_CurrentTutorial != null)
             return;
 
+        if (gm.gameData == null)
+            return;
+
         bool isAllCleared = true;
         for (int i = 0; i < (int)TutorialType.Max; i++)
         {

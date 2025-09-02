@@ -163,6 +163,7 @@ public class MergeWindow : GameWindow
     {
         //DEMO
         for (int i = 0; i < (int)MergeItemCategory.WeaponArcher + 1; i++)
-            eltChestList[i].Refresh();
+            if(eltChestList.Count > i)
+                eltChestList[i].Refresh();
     }
 }

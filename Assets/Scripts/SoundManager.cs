@@ -2,7 +2,7 @@ using UnityEngine;
 
 public enum BGM
 {
-
+    Main
 }
 
 public enum SFX
@@ -26,6 +26,11 @@ public class SoundManager : Singleton
     public void OnDestroy()
     {
         soundManager = null;
+    }
+
+    private void Start()
+    {
+
     }
 
     public void PlayBGM(BGM bgm)

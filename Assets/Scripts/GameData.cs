@@ -48,7 +48,7 @@ public class SerializedGameData
             storedEquipmentList = storedEquipmentList.ToDictionary(),
             row = row,
             col = col,
-            mergeItems = new int[row, col]
+            mergeItems = new int[row, col],
         };
         for (int i = 0; i < row; i++)
             for (int j = 0; j < col; j++)
@@ -72,7 +72,7 @@ public class SerializedGameData
         storedEquipmentList = PairList<MergeItemCategory, List<int>>.FromDictionary(data.storedEquipmentList);
         row = data.row;
         col = data.col;
-        List<int> mergeItems = new List<int>();
+        mergeItems = new List<int>();
         for (int i = 0; i < row; i++)
             for (int j = 0; j < col; j++)
                 mergeItems.Add(data.mergeItems[i, j]);
@@ -85,7 +85,6 @@ public class SerializedGameData
         isHeroRecruited = data.isHeroRecruited;
         recruitRefreshRemainTimeTick = data.recruitRefreshRemainTime.Ticks;
         buildingLvs = data.buildingLvs;
-
     }
 }
 

@@ -33,6 +33,10 @@ public class MsgBox : Singleton
     {
         this.funcYes = funcYes;
 
+        objYes.SetActive(true);
+        objNo.SetActive(true);
+        objConfirm.SetActive(false);
+
         textTitle.text = title;
         textMessage.text = msg;
     }
@@ -40,6 +44,10 @@ public class MsgBox : Singleton
     public void SetConfirm(string title, string msg, UnityAction funcConfirm = null)
     {
         this.funcConfirm = funcConfirm;
+
+        objYes.SetActive(false);
+        objNo.SetActive(false);
+        objConfirm.SetActive(true);
 
         textTitle.text = title;
         textMessage.text = msg;
