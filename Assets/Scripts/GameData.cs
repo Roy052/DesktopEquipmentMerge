@@ -39,6 +39,7 @@ public class SerializedGameData
     public bool[] isHeroRecruited;
     public long recruitRefreshRemainTimeTick;
     public short[] buildingLvs;
+    public bool[] isTutorialShowed;
 
     public GameData ToGameData()
     {
@@ -62,6 +63,7 @@ public class SerializedGameData
         data.isHeroRecruited = isHeroRecruited;
         data.recruitRefreshRemainTime = TimeSpan.FromTicks(recruitRefreshRemainTimeTick);
         data.buildingLvs = buildingLvs;
+        data.isTutorialShowed = isTutorialShowed;
 
         return data;
     }
@@ -85,6 +87,7 @@ public class SerializedGameData
         isHeroRecruited = data.isHeroRecruited;
         recruitRefreshRemainTimeTick = data.recruitRefreshRemainTime.Ticks;
         buildingLvs = data.buildingLvs;
+        isTutorialShowed = data.isTutorialShowed;
     }
 }
 

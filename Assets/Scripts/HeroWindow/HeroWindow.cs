@@ -13,6 +13,18 @@ public class HeroWindow : GameWindow
     public Toggle[] tabs;
     public WindowUI[] uis;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        heroWindow = this;
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        heroWindow = null;
+    }
+
     public override void Show()
     {
         base.Show();

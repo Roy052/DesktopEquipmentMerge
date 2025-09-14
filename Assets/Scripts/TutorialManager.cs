@@ -33,6 +33,7 @@ public enum TutorialType
 public class TutorialManager : Singleton
 {
     const float PosArrowY = 30f;
+    readonly Vector2 PosUpperBuilding = new Vector2(0, 90f);
 
     public Image[] imageStarts;
 
@@ -141,10 +142,11 @@ public class TutorialManager : Singleton
 
                 isClicked = false;
                 rtArrow.SetActive(true);
-                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[0].transform as RectTransform, mainCanvas) + new Vector2(0, 90f);
+                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[0].transform as RectTransform, mainCanvas) + PosUpperBuilding;
                 co_MovementArrow = StartCoroutine(MovementArrow());
 
                 objClick.SetActive(false);
+                yield return new WaitUntil(() => mergeWindow);
                 yield return new WaitUntil(() => mergeWindow.IsShow);
 
                 if (co_MovementArrow != null)
@@ -225,10 +227,11 @@ public class TutorialManager : Singleton
 
                 isClicked = false;
                 rtArrow.SetActive(true);
-                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(questWindow.eltTrader.transform as RectTransform, mainCanvas);
+                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[(int)BuildingType.Traderhall].transform as RectTransform, mainCanvas) + PosUpperBuilding;
                 co_MovementArrow = StartCoroutine(MovementArrow());
 
                 objClick.SetActive(false);
+                yield return new WaitUntil(() => questWindow);
                 yield return new WaitUntil(() => questWindow.IsShow);
 
                 if (co_MovementArrow != null)
@@ -341,6 +344,7 @@ public class TutorialManager : Singleton
                 co_MovementArrow = StartCoroutine(MovementArrow());
 
                 objClick.SetActive(false);
+                yield return new WaitUntil(() => heroWindow);
                 yield return new WaitUntil(() => heroWindow.IsShow);
 
                 if (co_MovementArrow != null)
@@ -392,6 +396,7 @@ public class TutorialManager : Singleton
                 co_MovementArrow = StartCoroutine(MovementArrow());
 
                 objClick.SetActive(false);
+                yield return new WaitUntil(() => expeditionWindow);
                 yield return new WaitUntil(() => expeditionWindow.IsShow);
 
                 if (co_MovementArrow != null)
@@ -409,6 +414,7 @@ public class TutorialManager : Singleton
                 co_MovementArrow = StartCoroutine(MovementArrow());
 
                 objClick.SetActive(false);
+                yield return new WaitUntil(() => expeditionWindow.expeditionMemberUI);
                 yield return new WaitUntil(() => expeditionWindow.expeditionMemberUI.IsShow);
 
                 if (co_MovementArrow != null)
@@ -472,6 +478,7 @@ public class TutorialManager : Singleton
         }
         yield return null;
 
+        gm.gameData.isTutorialShowed[(int)type] = true;
         rtArrow.SetActive(false);
         objTextBox.SetActive(false);
         isClicked = false;

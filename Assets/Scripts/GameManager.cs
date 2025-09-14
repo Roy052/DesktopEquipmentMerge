@@ -37,6 +37,7 @@ public class GameManager : Singleton
         }
     }
 
+    Coroutine co_RefreshExpedition = null;
     IEnumerator RefreshExpedition()
     {
         while (true)
@@ -54,7 +55,23 @@ public class GameManager : Singleton
     {
         gameData = new GameData();
         gameData.AddItems(new List<(int, long)>() { (0, 100) });
-        StartCoroutine(RefreshExpedition());
+        OnPlay(gameData);
+    }
+
+    public void OnClickLoad(GameData gameData)
+    {
+        OnPlay(gameData);
+    }
+
+    void OnPlay(GameData gameData)
+    {
+        this.gameData = gameData;
+        if (co_RefreshExpedition != null)
+        {
+            StopCoroutine(co_RefreshExpedition);
+            co_RefreshExpedition = null;
+        }
+        co_RefreshExpedition = StartCoroutine(RefreshExpedition());
         mainSM.Set();
         GameData.Save(gameData);
 

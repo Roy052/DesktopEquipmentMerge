@@ -9,10 +9,6 @@ public class TitleUI : MonoBehaviour
     [Header("Option")]
     public OptionUI optionUI;
 
-    //[Header("Save List")]
-    //public SaveElt saveElt;
-    //List<SaveElt> saveEltList = new();
-
     GameData save;
 
     public void Open()
@@ -23,6 +19,7 @@ public class TitleUI : MonoBehaviour
             btnLoad.ChangeGrayScale(true);
             btnLoad.btn.enabled = false;
         }
+        optionUI.SetActive(false);
     }
 
     public void OnClickPlay()
@@ -40,13 +37,13 @@ public class TitleUI : MonoBehaviour
 
     public void OnClickLoad()
     {
-        Singleton.gm.gameData = save;
+        Singleton.gm.OnClickLoad(save);
         Observer.RefreshAll();
     }
 
     public void OnClickOption()
     {
-        optionUI.SetActive(true);
+        optionUI.SetActive(!optionUI.gameObject.activeSelf);
         optionUI.Set();
     }
 
@@ -55,26 +52,4 @@ public class TitleUI : MonoBehaviour
         GameData.Save(Singleton.gm.gameData);
         Application.Quit();
     }
-
-    //void LoadList()
-    //{
-    //    var gameDataAuto = GameData.Load(true, 0);
-    //    if(gameDataAuto == null)
-    //    {
-    //        btnLoad.ChangeGrayScale(true);
-    //        btnLoad.btn.enabled = false;
-    //    }
-
-    //    if(saveEltList.Count == 0)
-    //    {
-    //        SaveElt tempElt = Instantiate(saveElt.gameObject, saveElt.transform.parent).GetComponent<SaveElt>();
-    //        saveEltList.Add(tempElt);
-    //    }
-    //    saveEltList[0].Set($"AutoSave {gameDataAuto.saveTime}", 0);
-
-    //    for(int i = 0; i < 3; i++)
-    //    {
-
-    //    }
-    //}
 }

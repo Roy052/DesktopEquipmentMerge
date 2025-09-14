@@ -18,6 +18,6 @@ public class DataTextTag : IRegistrable
     public static string FindText(string tag)
     {
         dictDataTexts.TryGetValue(tag, out var value);
-        return value.textKor;
+        return value.textEng;
     }
 }

@@ -9,6 +9,18 @@ public class StorageWindow : GameWindow
     public SlotItem slotItem;
     List<SlotItem> slotItemList = new List<SlotItem>();
 
+    protected override void Awake()
+    {
+        base.Awake();
+        storageWindow = this;
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        storageWindow = null;
+    }
+
     public override void Show()
     {
         base.Show();

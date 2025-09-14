@@ -57,6 +57,8 @@ public abstract class GameWindow : Singleton, IBeginDragHandler, IDragHandler
         gameObject.SetActive(true);
         if (rt.localPosition.x > 960f || rt.localPosition.x < -960f || rt.localPosition.y > 540f || rt.localPosition.y < -540f)
             rt.localPosition = PosOrigin;
+        buildingLvUpUI.SetActive(false);
+        RefreshLvUpBtn();
     }
 
     public virtual void Hide()

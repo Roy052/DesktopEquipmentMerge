@@ -1,8 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
-using System.Linq;
-using UnityEditor.Rendering;
 
 public class QuestWindow : GameWindow
 {
@@ -35,12 +33,14 @@ public class QuestWindow : GameWindow
     protected override void Awake()
     {
         base.Awake();
+        questWindow = this;
         Observer.onRefreshQuests += Set;
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
+        questWindow = null;
         Observer.onRefreshQuests -= Set;
     }
 

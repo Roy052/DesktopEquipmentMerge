@@ -50,6 +50,8 @@ public class EltBuilding : MonoBehaviour
 
             Utilities.DeactivateSurplus(slotRequireItems, dataBuilding.requireItems.Count);
         }
+        else
+            slotRequireItem.SetActive(false);
     }
 
     public void OnClick()

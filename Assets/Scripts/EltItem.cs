@@ -9,7 +9,6 @@ public class EltItem : MonoBehaviour
     public GameObject objSelect;
 
     int id = -1;
-    int grade = -1;
     protected int idx = -1;
     DataItem dataItem;
 
@@ -22,6 +21,8 @@ public class EltItem : MonoBehaviour
         if (dataItem == null)
         {
             Debug.LogError($"Not Exist Data Item {id}");
+            if (imgIcon != null)
+                imgIcon.SetActive(false);
             return;
         }
         
