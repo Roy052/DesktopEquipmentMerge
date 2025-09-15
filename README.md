@@ -1,7 +1,7 @@
 # DesktopEquipmentMerge
  <div>
     <h2> 게임 정보 </h2>
-    <img src = "https://img.itch.zone/aW1nLzE5OTMyMDI0LnBuZw==/315x250%23c/LM7onR.png"><br>
+    <img src = "https://img.itch.zone/aW1nLzIzMTc2MDE0LnBuZw==/315x250%23c/HkzNA8.png"><br>
     <img src="https://img.shields.io/badge/Unity-yellow?style=flat-square&logo=Unity&logoColor=FFFFFF"/>
     <h4> 개발 일자 : 2025.09 <br><br>
     게임 플레이 : 업로드 이전..
@@ -19,7 +19,7 @@
   <div>
     <h2> 게임 스크린샷 </h2>
       <table>
-        <td><img src = "https://img.itch.zone/aW1hZ2UvMzMxNjQwNi8xOTkzMjAyNS5wbmc=/250x600/yPSEIc.png"></td>
+        <td><img src = "https://img.itch.zone/aW1hZ2UvMzg4NDg1OS8yMzE3NjA1MS5qcGc=/347x500/M5BHm1.jpg"></td>
       </table>
   </div>
   <div>
