@@ -35,8 +35,7 @@
     </div>
     <h4> 참조한 코드 </h4>
     <h4> https://github.com/Benzino/ExcelToJsonConverter/tree/master </h4>
-```csharp
-
+    
       public bool ConvertExcelFileToJson(string filePath, string outputPath)
       {
           Debug.Log("Excel To Json Converter: Processing: " + filePath);
@@ -111,12 +110,11 @@
           // Serialze the data table to json string
           return Newtonsoft.Json.JsonConvert.SerializeObject(dataTable);
       }
-```
 
+<div>
 <h4> Json 데이터 로드 </h4>
     </div>
     
-```csharp
 
         void LoadFromJson<T>(SheetName sheet) where T : IRegistrable
         {
@@ -166,4 +164,3 @@
                 Debug.Log($"[JSON Load Error] {e.Message}");
             }
         }
-```
