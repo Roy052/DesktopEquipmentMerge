@@ -24,7 +24,7 @@
   </div>
   <div>
     <h2> 게임 플레이 영상 </h2>
-    https://youtu.be/pC8ZTxhjmpc
+    https://youtu.be/PeTBrqsl-yg
   </div>
   <div>
   </div>
