@@ -3,6 +3,8 @@ using UnityEditor;
 using System.Collections;
 using System.IO;
 
+#if UNITY_EDITOR
+
 public class ExcelToJsonConverterWindow : EditorWindow
 {
     public static string kExcelToJsonConverterInputPathPrefsName = "ExcelToJson.InputPath";
@@ -101,3 +103,5 @@ public class ExcelToJsonAutoConverter
         excelProcessor.ConvertExcelFilesToJson(inputPath, outputPath, onlyModifiedFiles);
     }
 }
+
+#endif

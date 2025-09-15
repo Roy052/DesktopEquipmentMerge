@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using UnityEditor;
 
+#if UNITY_EDITOR
+
 public class ExcelToJsonConverter
 {
     public delegate void ConversionToJsonSuccessfullHandler();
@@ -369,3 +371,5 @@ public class ExcelToJsonConverter
         return sheetNames;
     }
 }
+
+#endif

@@ -3,6 +3,15 @@ using System.Collections.Generic;
 
 public class MergeWindow : GameWindow
 {
+    const float BaseWidth = 280f;
+    const float BaseHeight = 380f;
+    const float BaseLayoutSize = 270f;
+    const float AddSpace = 85f;
+
+    [Header("Rect")]
+    public RectTransform rtStone;
+    public RectTransform rtLayout;
+
     [Header("Chest")]
     public EltChest eltChest;
     List<EltChest> eltChestList = new();
@@ -62,6 +71,10 @@ public class MergeWindow : GameWindow
 
         int row = mergeItems.GetLength(0);
         int col = mergeItems.GetLength(1);
+
+        rt.SetSize(BaseWidth + AddSpace * (row - 3), BaseHeight + AddSpace * (col - 3));
+        rtStone.SetSize(BaseLayoutSize + AddSpace * (row - 3), BaseLayoutSize + AddSpace * (col - 3));
+        rtLayout.SetSize(BaseLayoutSize + AddSpace * (row - 3), BaseLayoutSize + AddSpace * (col - 3));
 
         for (int i = 0; i < row * col; i++)
             if (stoneList.Count <= i)

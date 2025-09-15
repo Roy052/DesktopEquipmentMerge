@@ -9,7 +9,6 @@ public class ExpeditionMemberUI : WindowUI
     public EltHeroExpeditionMember eltHero;
     public Image imgGoExpedition;
     public Button btnGoExpedition;
-    public SlotItem slotCost;
     public Text textExpeditionCost;
 
     List<EltHeroExpeditionMember> eltHeroes = new List<EltHeroExpeditionMember>();
@@ -21,17 +20,18 @@ public class ExpeditionMemberUI : WindowUI
     public void Awake()
     {
         Observer.onRefreshHeroes += SetMember;
+        Observer.onRefreshInjuryHero += SetMemberOne;
     }
 
     public void OnDestroy()
     {
         Observer.onRefreshHeroes -= SetMember;
+        Observer.onRefreshInjuryHero -= SetMemberOne;
     }
 
     public override void Show()
     {
         base.Show();
-        slotCost.Set(DataItem.GoldId, 0);
         SetMember();
     }
 
@@ -64,6 +64,14 @@ public class ExpeditionMemberUI : WindowUI
         }
 
         Utilities.DeactivateSurplus(eltHeroes, list.Count);
+    }
+
+    public void SetMemberOne(int idx)
+    {
+        if (eltHeroes.Count <= idx)
+            return;
+
+        eltHeroes[idx].Set(Singleton.gm.gameData.infoHeroes[idx], idx, OnClickHero);
     }
 
     public void OnClickHero(int idx, bool isSelect)

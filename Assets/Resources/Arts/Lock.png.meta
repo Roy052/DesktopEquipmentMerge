@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a02b24425994c47409ce14a894b15c26
+guid: 306366f2d28df7b45927722bf682c750
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7465974812721621682
-    second: Res_Emblem_0
+      213: -5620155193319629329
+    second: Lock_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Res_Emblem_0
+      name: Lock_0
       rect:
         serializedVersion: 2
-        x: 83
-        y: 32
-        width: 941
-        height: 992
+        x: 255
+        y: 88
+        width: 511
+        height: 790
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e45d6b9d677836890800000000000000
-      internalID: -7465974812721621682
+      spriteID: feddd97e0a23102b0800000000000000
+      internalID: -5620155193319629329
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Res_Emblem_0: -7465974812721621682
+      Lock_0: -5620155193319629329
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

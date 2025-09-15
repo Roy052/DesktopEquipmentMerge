@@ -68,6 +68,9 @@ public class EltExpedition : MonoBehaviour
         bool canFullStorage = false;
         for (int i = 0; i < dataProb.types.Count; i++)
         {
+            if (dataProb.types[i] == MergeItemType.None)
+                break;
+
             int currentCount = 0;
             MergeItemCategory category = DataMergeItem.GetCategory(dataProb.types[i]);
             if (Singleton.gm.gameData.storedEquipmentList.TryGetValue(category, out var list))

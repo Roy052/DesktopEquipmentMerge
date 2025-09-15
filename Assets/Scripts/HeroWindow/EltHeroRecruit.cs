@@ -12,7 +12,7 @@ public class EltHeroRecruit : EltHero
     {
         base.Set(info);
         this.idx = idx;
-        textBtnHeroPrice.text = $"°í¿ë {info.hireCost}";
+        textBtnHeroPrice.text = $"{info.hireCost}";
         objDisable.SetActive(isDisable);
     }
 

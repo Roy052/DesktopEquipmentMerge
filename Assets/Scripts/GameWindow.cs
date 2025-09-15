@@ -12,7 +12,7 @@ public abstract class GameWindow : Singleton, IBeginDragHandler, IDragHandler
 
     public bool IsShow => gameObject.activeSelf;
 
-    RectTransform rt;
+    protected RectTransform rt;
     Canvas canvas;
     Vector2 offset;
 

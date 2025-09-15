@@ -87,4 +87,10 @@ public static class Utilities
 
         return false;
     }
+
+    public static void SetSize(this RectTransform rect, float width, float height)
+    {
+        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+    }
 }

@@ -13,6 +13,7 @@ public class MainSM : Singleton
         mainSM = this;
         mainCanvas = GetComponent<Canvas>();
         Observer.onRefreshBuilding += RefreshBuilding;
+        Observer.onRefreshItems += RefreshBuilding;
     }
 
     private void OnDestroy()
@@ -20,6 +21,7 @@ public class MainSM : Singleton
         mainSM = null;
         mainCanvas = null;
         Observer.onRefreshBuilding -= RefreshBuilding;
+        Observer.onRefreshItems -= RefreshBuilding;
     }
 
     public void Set()

@@ -238,8 +238,9 @@ public class GameData
     public void RefreshInjury()
     {
         List<int> removeList = new();
-        foreach (var info in infoHeroes)
+        for (int i = 0; i < infoHeroes.Count; i++)
         {
+            var info = infoHeroes[i];
             if (info.state != HeroState.InInjury)
                 continue;
 
@@ -252,11 +253,10 @@ public class GameData
                     info.state = HeroState.None;
                     info.injury = InjuryType.None;
                     info.injuredTimeTicks = 0;
+                    Observer.onRefreshInjuryHero?.Invoke(i);
                 }
             }
         }
-
-        Observer.onRefreshHeroes?.Invoke();
     }
 
     public void RefreshAlreadyExpeditionHero()
@@ -585,30 +585,27 @@ public class GameData
             foreach(var value in dataInjury.injuryProbs)
                 totalInjuryWeight += value;
 
-            if(totalInjuryWeight == 0)
+            if (totalInjuryWeight > 0)
             {
-                Debug.LogError($"totalInjuryWeight is 0");
-                return;
-            }
-
-            int pickValue = UnityEngine.Random.Range(0, totalInjuryWeight);
-            int acc = 0;
-            for(int i = 0; i < dataInjury.injuryProbs.Count; i++)
-            {
-                if (dataInjury.injuryProbs[i] == 0)
-                    continue;
-
-                acc += dataInjury.injuryProbs[i];
-                if(pickValue < acc)
+                int pickValue = UnityEngine.Random.Range(0, totalInjuryWeight);
+                int acc = 0;
+                for (int i = 0; i < dataInjury.injuryProbs.Count; i++)
                 {
-                    injuryType = (InjuryType)i;
-                    break;
-                }
-            }
+                    if (dataInjury.injuryProbs[i] == 0)
+                        continue;
 
-            infoHeroes[idx].injury = injuryType;
-            if (injuryType != InjuryType.None)
-                infoHeroes[idx].injuredTime = DateTime.Now;
+                    acc += dataInjury.injuryProbs[i];
+                    if (pickValue < acc)
+                    {
+                        injuryType = (InjuryType)i;
+                        break;
+                    }
+                }
+
+                infoHeroes[idx].injury = injuryType;
+                if (injuryType != InjuryType.None)
+                    infoHeroes[idx].injuredTime = DateTime.Now;
+            }
 
             //Exps
             exps.Add(infoHeroes[idx].exp);

@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-public class EltMergeItem : EltItem, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class EltMergeItem : EltItem, IPointerDownHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public UnityAction<int> funcMerge;
 
@@ -14,6 +14,7 @@ public class EltMergeItem : EltItem, IPointerClickHandler, IBeginDragHandler, ID
     List<RaycastResult> raycastResults = new List<RaycastResult>();
     RectTransform rectTransform;
     Vector3 originalPosition;
+    bool isDragged = false;
 
     void Awake()
     {
@@ -28,6 +29,7 @@ public class EltMergeItem : EltItem, IPointerClickHandler, IBeginDragHandler, ID
             return;
 
         originalPosition = rectTransform.anchoredPosition;
+        isDragged = true;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -64,6 +66,8 @@ public class EltMergeItem : EltItem, IPointerClickHandler, IBeginDragHandler, ID
         {
             rectTransform.anchoredPosition = originalPosition;
         }
+
+        isDragged = false;
     }
 
     public void OnMerge()
@@ -80,6 +84,12 @@ public class EltMergeItem : EltItem, IPointerClickHandler, IBeginDragHandler, ID
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        OnClick();
+        if(isDragged == false)
+            OnClick();
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        isDragged = false;
     }
 }

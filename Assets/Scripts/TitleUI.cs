@@ -49,7 +49,8 @@ public class TitleUI : MonoBehaviour
 
     public void OnClickQuit()
     {
-        GameData.Save(Singleton.gm.gameData);
+        if(Singleton.gm.gameData != null)
+            GameData.Save(Singleton.gm.gameData);
         Application.Quit();
     }
 }

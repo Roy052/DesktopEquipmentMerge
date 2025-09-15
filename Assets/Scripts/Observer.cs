@@ -11,6 +11,8 @@ public static class Observer
     public static UnityAction onRefreshQuests;
     public static UnityAction onRefreshItems;
 
+    public static UnityAction<int> onRefreshInjuryHero; //idx
+
     public static void RefreshAll()
     {
         onRefreshExpedition?.Invoke();

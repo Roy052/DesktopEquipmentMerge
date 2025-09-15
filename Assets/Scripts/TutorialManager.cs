@@ -75,7 +75,9 @@ public class TutorialManager : Singleton
                 switch ((TutorialType)i)
                 {
                     case TutorialType.ClickExpeditionReward:
-                        if (gm.gameData.dictInfoExpeditions.Count == 0 || gm.gameData.dictInfoExpeditions[0].state != ExpeditionState.Reward)
+                        if (gm.gameData.dictInfoExpeditions.Count == 0 || 
+                            gm.gameData.dictInfoExpeditions.ContainsKey(1) == false ||
+                            gm.gameData.dictInfoExpeditions[1].state != ExpeditionState.Reward)
                             continue;
                         break;
                 }
@@ -248,6 +250,7 @@ public class TutorialManager : Singleton
                 co_MovementArrow = StartCoroutine(MovementArrow());
 
                 objClick.SetActive(false);
+                yield return new WaitUntil(() => questWindow);
                 yield return new WaitUntil(() => questWindow.GetTraderType() != TraderType.None);
 
                 if (co_MovementArrow != null)
@@ -260,10 +263,12 @@ public class TutorialManager : Singleton
 
                 isClicked = false;
                 rtArrow.SetActive(true);
+                yield return new WaitUntil(() => questWindow);
                 rtArrow.localPosition = Utilities.GetLocalPosInCanvas(questWindow.eltQuest.transform as RectTransform, mainCanvas);
                 co_MovementArrow = StartCoroutine(MovementArrow());
 
                 objClick.SetActive(false);
+                yield return new WaitUntil(() => questWindow);
                 yield return new WaitUntil(() => questWindow.GetInfoQuest() != null);
 
                 if (co_MovementArrow != null)
@@ -280,6 +285,7 @@ public class TutorialManager : Singleton
                 co_MovementArrow = StartCoroutine(MovementArrow());
 
                 objClick.SetActive(false);
+                yield return new WaitUntil(() => questWindow);
                 yield return new WaitUntil(() => questWindow.GetInfoQuest().state == QuestState.Progress);
 
                 if (co_MovementArrow != null)
@@ -296,6 +302,7 @@ public class TutorialManager : Singleton
                 co_MovementArrow = StartCoroutine(MovementArrow());
 
                 objClick.SetActive(false);
+                yield return new WaitUntil(() => questWindow);
                 yield return new WaitUntil(() => questWindow.GetInfoQuest().state == QuestState.Reward);
 
                 if (co_MovementArrow != null)
@@ -312,6 +319,7 @@ public class TutorialManager : Singleton
                 co_MovementArrow = StartCoroutine(MovementArrow());
 
                 objClick.SetActive(false);
+                yield return new WaitUntil(() => questWindow);
                 yield return new WaitUntil(() => questWindow.GetInfoQuest().state == QuestState.Clear);
 
                 if (co_MovementArrow != null)
@@ -340,7 +348,7 @@ public class TutorialManager : Singleton
 
                 isClicked = false;
                 rtArrow.SetActive(true);
-                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[(int)BuildingType.HeroInn].transform as RectTransform, mainCanvas) + new Vector2(0, 90f);
+                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[(int)BuildingType.HeroInn].transform as RectTransform, mainCanvas) + PosUpperBuilding;
                 co_MovementArrow = StartCoroutine(MovementArrow());
 
                 objClick.SetActive(false);
@@ -357,14 +365,14 @@ public class TutorialManager : Singleton
 
                 isClicked = false;
                 rtArrow.SetActive(true);
+                objClick.SetActive(false);
+                yield return new WaitUntil(() => heroWindow);
                 RectTransform rtRecruit = (heroWindow.uis[(int)HeroUI.HeroRecruit] as HeroRecruitUI).eltHeroRecruit.transform.parent as RectTransform;
                 rtArrow.localPosition = Utilities.GetLocalPosInCanvas(rtRecruit, mainCanvas);
                 co_MovementArrow = StartCoroutine(MovementArrow());
 
                 objClick.SetActive(false);
-                Observer.onRefreshHeroes += ChangeIsClicked;
-                yield return new WaitUntil(() => isClicked);
-                Observer.onRefreshHeroes -= ChangeIsClicked;
+                yield return new WaitUntil(() => gm.gameData.infoHeroes.Count > 0);
 
                 if (co_MovementArrow != null)
                     StopCoroutine(co_MovementArrow);
@@ -376,7 +384,7 @@ public class TutorialManager : Singleton
 
                 isClicked = false;
                 rtArrow.SetActive(true);
-                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[(int)BuildingType.HeroInn].transform as RectTransform, mainCanvas);
+                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[(int)BuildingType.ExpeditionCamp].transform as RectTransform, mainCanvas);
                 co_MovementArrow = StartCoroutine(MovementArrow());
 
                 objClick.SetActive(false);
@@ -392,7 +400,7 @@ public class TutorialManager : Singleton
 
                 isClicked = false;
                 rtArrow.SetActive(true);
-                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[(int)BuildingType.ExpeditionCamp].transform as RectTransform, mainCanvas) + new Vector2(0, 90f);
+                rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mainSM.buildings[(int)BuildingType.ExpeditionCamp].transform as RectTransform, mainCanvas) + PosUpperBuilding;
                 co_MovementArrow = StartCoroutine(MovementArrow());
 
                 objClick.SetActive(false);
@@ -407,6 +415,8 @@ public class TutorialManager : Singleton
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
+                objClick.SetActive(false);
+                yield return new WaitUntil(() => expeditionWindow);
                 isClicked = false;
                 rtArrow.SetActive(true);
                 RectTransform rtExpedition = expeditionWindow.expeditionUI.eltExpedition.btnSelectExpeditionMember.transform as RectTransform;
@@ -425,6 +435,9 @@ public class TutorialManager : Singleton
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
 
+                objClick.SetActive(false);
+                yield return new WaitUntil(() => expeditionWindow);
+                yield return new WaitUntil(() => expeditionWindow.expeditionMemberUI);
                 isClicked = false;
                 rtArrow.SetActive(true);
                 RectTransform rtExpeditionHero = expeditionWindow.expeditionMemberUI.eltHero.transform as RectTransform;
@@ -512,7 +525,7 @@ public class TutorialManager : Singleton
                 rtArrow.localPosition = Vector2.Lerp(originPos, endPos, time);
                 time += Time.deltaTime * 2f;
                 yield return null;
-                Debug.Log($"{rtArrow.localPosition} : {time}");
+                //Debug.Log($"{rtArrow.localPosition} : {time}");
             }
 
             while(time > 0f)
@@ -520,7 +533,7 @@ public class TutorialManager : Singleton
                 rtArrow.localPosition = Vector2.Lerp(originPos, endPos, time);
                 time -= Time.deltaTime * 2f;
                 yield return null;
-                Debug.Log($"{rtArrow.localPosition} : {time}");
+                //Debug.Log($"{rtArrow.localPosition} : {time}");
             }
         }
     }

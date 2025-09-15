@@ -20,7 +20,7 @@ public class EltHero : MonoBehaviour
             textName.text = info.strName;
 
         var data = DataHero.Get(info.heroId);
-        if(data != null)
+        if(data == null)
         {
             Debug.LogError($"Not Exist Data Hero {info.heroId}");
             return;

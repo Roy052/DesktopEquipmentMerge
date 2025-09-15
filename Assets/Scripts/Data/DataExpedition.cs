@@ -27,6 +27,7 @@ public class DataExpedition : IRegistrable
     public int expeditionTime;
     public int equipmentCount;
     public int rewardProbId;
+    public int buildingLv;
     public int missionConditionId;
     public int exp;
     public int recommendLv;
@@ -58,6 +59,7 @@ public class TempDataExpedition : IConvertable<DataExpedition>
     public int expeditionTime;
     public int equipmentCount;
     public int rewardProbId;
+    public int buildingLv;
     public int missionConditionId;
     public int exp;
     public int recommendLv;
@@ -81,6 +83,7 @@ public class TempDataExpedition : IConvertable<DataExpedition>
             expeditionTime = expeditionTime,
             equipmentCount = equipmentCount,
             rewardProbId = rewardProbId,
+            buildingLv = buildingLv,
             missionConditionId = missionConditionId,
             exp = exp,
             recommendLv = recommendLv,

@@ -26,8 +26,12 @@ public class ExpeditionUI : WindowUI
     void RefreshExpedition()
     {
         var dataList = DataExpedition.GetAll();
+        short lv = Singleton.gm.gameData.buildingLvs[(int)BuildingType.ExpeditionCamp];
         for (int i = 0; i < dataList.Count; i++)
         {
+            if (lv < dataList[i].buildingLv)
+                break;
+
             var elt = Utilities.GetOrCreate(eltExpeditionList, i, eltExpedition.gameObject);
             elt.Set(dataList[i]);
             elt.SetActive(true);
