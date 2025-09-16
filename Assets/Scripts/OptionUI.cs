@@ -5,15 +5,15 @@ using UnityEngine.UI;
 
 public class OptionUI : MonoBehaviour
 {
-    const float VolumeDefault = 0.3f;
+    const float VolumeDefault = 0.5f;
     const string BGMKey = "BGMKey";
     const string SFXKey = "SFXKey";
 
     public Slider sliderBGMVolume;
     public Slider sliderSFXVolume;
 
-    float bgmVolumeValue;
-    float sfxVolumeValue;
+    float bgmVolumeValue = 1f;
+    float sfxVolumeValue = 1f;
 
     private void OnDisable()
     {
@@ -38,13 +38,13 @@ public class OptionUI : MonoBehaviour
 
     public void ChangeBGMVolume(float value)
     {
-        Singleton.soundManager.bgmAudioSource.volume = VolumeDefault * value;
+        Singleton.soundManager.ChangeBgmVolume(VolumeDefault * value);
         bgmVolumeValue = value;
     }
 
     public void ChangeSFXVolume(float value)
     {
-        Singleton.soundManager.sfxAudioSource.volume = VolumeDefault * value;
+        Singleton.soundManager.ChangeSfxVolume(VolumeDefault * value);
         sfxVolumeValue = value;
     }
 }

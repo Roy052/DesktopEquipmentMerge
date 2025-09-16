@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TaskbarInfo : MonoBehaviour
 {
+    const float DefaultHeight = 1080f;
+
     public static int taskBarHeight = 0;
 #if !UNITY_EDITOR
     // SHAppBarMessage 관련 상수와 구조체
@@ -41,7 +43,9 @@ public class TaskbarInfo : MonoBehaviour
             RECT rect = abd.rc;
             int taskbarWidth = rect.right - rect.left;
             int taskbarHeight = rect.bottom - rect.top;
-            TaskbarInfo.taskBarHeight = taskbarHeight;
+
+            Debug.Log($" {DefaultHeight} / {Screen.height}");
+            TaskbarInfo.taskBarHeight = (int) (taskbarHeight * (DefaultHeight / Screen.height));
 
             // 작업 표시줄이 화면의 어느 위치에 있는지에 따라 높이나 너비가 의미가 달라질 수 있음
             Debug.Log($"Taskbar Rect: left={rect.left}, top={rect.top}, right={rect.right}, bottom={rect.bottom}");

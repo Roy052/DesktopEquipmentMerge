@@ -13,7 +13,8 @@ public class HeroMemberUI : WindowUI
     {
         base.Show();
         infoHeroes = Singleton.gm.gameData.infoHeroes;
-        
+
+        eltHeroMember.SetActive(false);
         for(int i = 0; i < infoHeroes.Count; i++)
         {
             var elt = Utilities.GetOrCreate(eltHeroMemberList, i, eltHeroMember.gameObject);

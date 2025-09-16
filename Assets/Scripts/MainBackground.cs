@@ -8,6 +8,7 @@ public class MainBackground : Singleton
 
     public void Start()
     {
+        Debug.Log($"TaskBarHeight = {TaskbarInfo.taskBarHeight}");
         rt.offsetMin = new Vector2( rt.offsetMin.x, TaskbarInfo.taskBarHeight);
     }
 }

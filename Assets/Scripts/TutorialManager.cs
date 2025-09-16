@@ -160,6 +160,8 @@ public class TutorialManager : Singleton
                 objTextBox.SetActive(false);
 
                 isClicked = false;
+                objClick.SetActive(false);
+                yield return new WaitUntil(() => mergeWindow);
                 rtArrow.SetActive(true);
                 rtArrow.localPosition = Utilities.GetLocalPosInCanvas(mergeWindow.eltChest.transform as RectTransform, mainCanvas);
                 co_MovementArrow = StartCoroutine(MovementArrow());
@@ -174,6 +176,9 @@ public class TutorialManager : Singleton
                 yield return StartCoroutine(PlayDialog(type));
                 yield return new WaitUntil(() => isClicked);
                 objTextBox.SetActive(false);
+
+                objClick.SetActive(false);
+                yield return new WaitUntil(() => mergeWindow);
 
                 isClicked = false;
                 rtArrow.SetActive(true);
@@ -597,8 +602,11 @@ public class TutorialManager : Singleton
             textName.text = DataTextTag.FindText(dataDialog.tagName);
 
             string text = DataTextTag.FindText(dataDialog.tagText);
+
+            soundManager.PlaySFXLoop(SFX.Text);
             textTyper.Play(text);
             yield return new WaitUntil(() => textTyper.isTyping == false);
+            soundManager.StopSFX();
             yield return new WaitForSeconds(0.3f);
             yield return new WaitUntil(() => isClicked);
         }

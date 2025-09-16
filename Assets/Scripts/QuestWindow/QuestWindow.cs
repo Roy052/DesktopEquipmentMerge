@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class QuestWindow : GameWindow
 {
+    const float HeightProgress = 60f;
+
     public EltTrader eltTrader;
     public EltQuest eltQuest;
 
@@ -137,9 +139,14 @@ public class QuestWindow : GameWindow
             }
 
             Utilities.DeactivateSurplus(questProgresses, count);
-            layoutProgress.preferredHeight = count * 50f;
+            layoutProgress.preferredHeight = count * HeightProgress;
         }
-        
+        else
+        {
+            Utilities.DeactivateSurplus(questProgresses, 0);
+            layoutProgress.preferredHeight = 0;
+        }
+
         objBtnAccept.SetActive(info.state == QuestState.NotAccept);
         objBtnReward.SetActive(info.state == QuestState.Reward);
 

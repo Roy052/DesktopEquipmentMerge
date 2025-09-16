@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class EltQuestProgress : MonoBehaviour
 {
-    const float MaxWidth = 100f;
+    const float MaxWidth = 110f;
 
     public SlotItem slotItem;
     public Text textRequireItem;
