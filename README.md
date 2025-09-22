@@ -22,7 +22,7 @@
   <div>
     <h2> 게임 스크린샷 </h2>
       <table>
-        <td><img src = "https://img.itch.zone/aW1hZ2UvMzg4NDg1OS8yMzE3NjA1MS5qcGc=/347x500/M5BHm1.jpg"></td>
+        <td><img src = "https://img.itch.zone/aW1hZ2UvMzg4NDg1OS8yMzI3MDY2MC5wbmc=/250x600/xrHnBJ.png"></td>
       </table>
   </div>
   <div>
