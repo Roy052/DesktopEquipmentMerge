@@ -4,7 +4,7 @@
     <img src = "https://img.itch.zone/aW1nLzIzMTc2MDE0LnBuZw==/315x250%23c/HkzNA8.png"><br>
     <img src="https://img.shields.io/badge/Unity-yellow?style=flat-square&logo=Unity&logoColor=FFFFFF"/>
     <h4> 개발 일자 : 2025.09 <br><br>
-    게임 플레이 : 업로드 이전..
+    게임 플레이 : https://goodstarter.itch.io/desktopequipmentmerge
   </div>
   <div>
     <h2> 게임 설명 </h2>
